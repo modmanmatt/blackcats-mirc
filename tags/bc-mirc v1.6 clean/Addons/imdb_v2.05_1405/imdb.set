@@ -1,0 +1,33 @@
+[set]
+msgmode=1
+trigger=!imdb
+networks=example
+max=10
+maxcast=3
+.example=#example
+online=1
+flood_number=3
+flood_seconds=15
+all=1
+
+[outp]
+error_1=[&b^IMDb&b^] Error: &error^!
+none_1=[&b^IMDb&b^] No results found for: &search^.
+miss_1=Only &b^&found^&b^ results were returned out of a possible &b^&limit^&b^.
+list_1=#&num^: &b^&title^ (&year^)&b^ ( &url^ )
+cast_1=[&b^IMDb&b^] &b^&name^&b^ ( &url^ )
+cast_2=&b^Born&b^: &born^
+cast_3=&b^Biography&b^: &mini_biography^
+cast_4=&b^Quote&b^: &personal_quote^
+cast_5=&b^Alternate Names&b^: &alternate_names^
+movie_1=[&b^IMDb&b^] &b^&title^ (&year^)&b^ ( &url^ )
+movie_2=&b^Box Office&b^: &opening_weekend_value^ (&opening_weekend_region^) (&opening_weekend_screens^ screens) (&opening_weekend_date^)
+movie_3=&b^Directed By&b^: &directed_by^
+movie_4=&b^Genre&b^: &genres^
+movie_5=&b^Cast&b^: &cast^
+movie_6=&b^Tagline&b^: &taglines^
+movie_7=&b^Runtime&b^: &runtime^
+movie_8=&b^Rating&b^: &!rating_bar^ &rating^ (&rating_votes^) &!rating_extra^
+
+[ban]
+1=example!ban@fake.host

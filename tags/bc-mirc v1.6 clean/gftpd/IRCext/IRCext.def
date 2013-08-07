@@ -1,0 +1,8 @@
+; IRCext.def : Declares the module parameters for the DLL.
+
+LIBRARY      "IRCext"
+DESCRIPTION  'IRCext Windows Dynamic Link Library'
+
+EXPORTS
+  HandleEventHook @1
+  HandleGFTPDEventHook @2

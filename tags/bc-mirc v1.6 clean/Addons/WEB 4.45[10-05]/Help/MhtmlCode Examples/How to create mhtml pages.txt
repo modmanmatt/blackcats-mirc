@@ -1,0 +1,59 @@
+This new type of files are based in Mhtml code that was implemented before by rkzad (thanks for all your patiente :p)
+Now me, Oracel and Rkzad got together to reimplement it to be more fast and flexible (mhtml2.txt file)
+
+Some fast tips:
+The mhtml file format consists in a normal html file, but where we can add mirc script code by adding some special tags
+Here you have an example...
+
+        >>>Sample code from index.mhtlm in recursion folder<<<
+
+<html>
+<head><title>mIRC Web Server</title></head>
+<body bgcolor=white text=black link=blue alink=blue vlink=blue>
+<font face=tahoma size=-1><center><img src=mws.png><br><br>
+<?mhtml                                            <- here we notice the webserver that we are adding script code
+  if ($isset(hello)) mhtml.print Hello, $getform(hello) $+ !<br>
+?>                                                 <- here we notice that the script code has finished
+<table border=2 bordercolor=#DADADA cellpadding=0 cellspacing=0><tr><td bgcolor=#EAEAEA>  <- then continue with the html code
+
+;We can also include mhtml files inside of other mhtml files by doing
+<?mhtml.inc include.mhtml      ;  <- notices the webserver that we are including a new mhtml file
+                               ;   (same format has before), if the files doesn't exist it's like if it wasn't included
+
+;For this last case you don't need to close nothing since the <?mhtml and the ?> are in the file include.
+;Included files must not have </html> or the page will not apear the way you want it!!!
+
+;You can add almost all type of mirc instructions in the mhtml code, but don't forget this code only runs in
+;    server side, one example is this while loop
+
+Nickname:<br>Address:<br>Idle:<br>Active channels:<br>Uptime:<br></font></div></td><td><font size=-1>
+<?mhtml
+  mhtml.print $+($iif(!$server,Not Connected,$server),<br>,$me,<br>,$iif($server,$host,-),<br>,$duration($idle),<br>)
+  if ($chan(0)) {
+    var %num = $chan(0)
+    while %num {
+      mhtml.print $chan(%num) $+ $iif(%num != 1,$chr(44))
+      dec %num
+    }
+  }
+  else mhtml.print None
+  mhtml.print $+(<br>,$uptime(system,1))
+?>
+</font></td></tr></table></td></tr></table><br>
+
+
+The mhtml.print command must be used if you want to write something in the html page that is going to be sent to 
+  the user that requested it.
+
+more detailed information (with other commands) about mhtml v2 check the file mhtml2.txt
+
+In this package i also provide code to upload files requiring. 
+That code is in Upload code folder and it starts with the index.mhtml inside of that folder.
+
+Notice that to run this type of files you need some extra processing power, i recomend 500Mz and 256MB ram
+Also notice that antivirus software slow this type of processing like 
+   hell (about 2 to 4 times slower)
+
+Enjoy
+Tontito
+

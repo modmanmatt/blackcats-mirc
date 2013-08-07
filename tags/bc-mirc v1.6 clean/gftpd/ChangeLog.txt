@@ -1,0 +1,146 @@
+---
+
+0.998-2.0.5
+
+Fixed nicklist ban /w msg only using first word in kick msg
+Added kick msg to ban time(?) popup...forgot this in last version :(
+Added double click in nicklist opens query window
+Fixed color dialog giving writeini error if no colors were selected after a clean install
+Added mass msg, mass notice, and mass kick functions to nicklist popup
+Added remote admin via dcc chat, cmds currently: list users, list bans, kick, ban, and unban. more to come.
+
+
+---
+
+0.998-2.0.4
+
+Fixed problem with mutliport not displaying correctly caused by dialog updates.
+Updated connslist with new dde cmds, only new unused logins should display NA now.
+
+
+---
+
+0.998-2.0.3
+
+Fixed clone problem with nicklist removing wrong line when a clone logged off.
+Fixed/Readded Multiport operation to new dialogs, was a few missing dids.
+Moved around a few things in dialogs to make them look less globbed together.
+Added popup menu item to unload scripts.
+Changed installer to STOP installation if install is attempted on mIRC 5.x versions. Script will no longer function on them. Any version 6.x will still install but upgrading to newest mirc version is strongly encouraged. (Please do not post bugs/problems on msg board if you are not running the latest mIRC version, Thank You)
+
+
+---
+
+0.998-2.0.2
+
+Updated dialogs to tabbed dialogs from mrlitil.
+Fixed (hopefully) everything that was broken from move to new dialogs :)
+Added "grace period" option to allow for netsplits, etc. Had to change nicklist 3rd item from hostmask to ip in order to do this. Sorry :(
+
+
+---
+
+0.998-2.0.1
+
+Busted who calls to update ial. Thanks to koppe for identifying this.
+
+
+---
+
+0.998-2.0.0
+
+First pub release of mulit-server:
+Fixed nicklist and passhoper bugs from beta test
+Rename silly $ial msgs to something more appropriate
+
+
+---
+
+0.998-1.1.0 (rls to beta testers only)
+
+Added kick msgs to nicklist admin popups
+Rewrote gftpd.mrc installer to generate gftpd.ini on install instead of packaging file with distibution. The ini is only created if none exists in the gftpd folder, so upgrades/reinstalls will not erase current settings anymore.
+Rewrote script to allow multi-server operation.
+Added dde cmd to refresh $gc and $gm on connect.
+Added dde cmd to get bandwidth stats on the fly instead of just from status update.
+Added dde cmd to get list of connects for use with bandwidth stats.
+Removed existing dde cmd for passhopper and replaced with new cmd. Passhopper is now completely contained in mirc, passes are sent to guildftpd via dde.
+Fixed FastUser colors, not sure how long since this had worked.
+Removed flashing ftpd icon from config windows, too buggy.
+More changes to differnt odds and ends, too many too list.
+
+renamed:
+
+oftpstart to GFTPDstart 
+oftpConnection to GFTPDConnection  
+oftplogon to GFTPDlogon 
+oftplogoff to GFTPDlogoff 
+oftpupdate to GFTPDupdate 
+oftpbannedip to GFTPDbannedip 
+oftpunbannedip to GFTPDunbannedip 
+oftpportchange to GFTPDportchange 
+oftpportupdate to GFTPDportupdate 
+oftpconnupdate to GFTPDconnupdate 
+
+REMOVED: oftpNewPass / GFTPDNewPass
+
+
+---
+
+0.997-1.0.6
+
+"Ban in not in channel" was not using the duration set in the ban duration box but instead using the hammer ban time. Thanks to Paled for identifying this.
+
+
+---
+
+0.997-1.0.5
+
+Fixed bug in "leave after login" not kicking anyone. Thanks to RobotMan for identifying this.
+
+
+---
+
+0.997-1.0.4
+
+Increased max channels to 10 for mirc 6.0 multiserver functionality. (Running guildscripts while connecting to multiple servers is not functional, but the extra channels have been added to make way for it.)
+Added query to nicklist admin and check to only allow menu to function if nick is selected.
+Fixed bug that would kick ops whose voice mode could not be seen.
+Temporarily removed "real Words" from password hopping because v997 does not support it.
+Fixed ban forever bug that made the ban time set to guilds hammer ban. It now bans forever.
+
+
+---
+
+0.996-1.0.3
+
+Fixed problem in stats.txt if mirc was exited badly/uncleanly.
+
+
+---
+
+0.996-1.0.2
+
+Fixed an error in the port change dialog that caused guildftpd not to change ports properly. Thanks to jesper for identifying this problem.
+
+
+---
+
+0.995-1.0.1
+
+Fixed a problem with kicking users with ips for hostmasks whose hosts actually did resolve and return a hostmask from guild in DDE, but did not have a hostmask listed on IRC. I had fixed this before, but I broke it again when I added the priveledged users section, my bad :( Absolutely no one should be kicked because of a host problem now. Thanx to Ahaukin for identifying this problem.
+
+Fixed a error in the $gpa variable returning NA because some fewl mistakenly put GFTPPassHopList instead of PasswordList. Sorry Guys :( Thanks to FalconX for identifying this.
+
+Added a check in the install to check the mirc version and warn if version is < 5.8, certain features dont not work well under older mirc versions.
+
+Installer automatically genereates stats.txt and gftpd.users on load instead of packaging the empty files in the distribution.
+
+
+---
+
+0.995-1.0.0
+
+First release of script after I tangled with it, too many changes to list
+
+---

@@ -1,0 +1,53 @@
+<html>
+<?mhtml
+   if ($mhtml.isset(nome)) mhtml.print Hello $mhtml.get(nome)
+   if ($mhtml.isset(delete)) {
+        mhtml.include delete.mhtml
+   }
+
+   if ($mhtml.isset(uploaded_name)) {
+     mhtml.include write.mhtml
+   }
+   if ($mhtml.isset(view)) {
+        mhtml.include view.mhtml
+   }
+   else { 
+?>
+<table border="1" align="center">
+<tr>
+<td><p align="center"><b>Nº</b></td>
+<td><p align="center"><b>File</b></td>
+<td></td>
+</tr>
+<?mhtml
+if ($hget(testings)) hfree testings
+var %i = $findfile($mhtml.rootdir $+ uploads,*,0,1, hadd -m testings $calc($hget(testings,0).item + 1) $nopath($longfn($1-))).shortfn
+var %h = 1
+while (%h <= %i) {
+  mhtml.print <form method="POST" action="">
+  ?>
+  <tr>
+  <td><p align="center"><input name="id" type="hidden" value=
+  <?mhtml
+  mhtml.print $replace($hget(testings ,%h),$chr(32),s_p_a_c_e) > %h
+  ?>
+  </td>
+  <td><p>
+  <?mhtml
+  mhtml.print $hget(testings ,%h)
+  ?>
+  </td>
+  <td><input type="submit" value="View" name="View"></td>
+  <td><input type="submit" value="Delete" name="delete"></td>
+  </tr>
+  </form>
+  <?mhtml
+  inc %h
+}
+  mhtml.include upload.mhtml
+  mhtml.print </table>
+}
+if ($hget(testings)) hfree testings
+?>
+</form>
+</html>

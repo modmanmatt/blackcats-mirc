@@ -1,0 +1,32 @@
+Main Configure Window
+
+This window allows you to configure the main options in GuildFTPD
+
+The banlist shows the current IP's that are banned from your server.  Note that this list is only
+updated when a ban is added or removed.
+
+In the Kick and Ban box, you can enter up to 5 IRC channels for GuildFTPD to monitor.  If you
+select kick or ban if not in channel(s).  Any user that logs in will be kicked and/or banned if
+he or she is not currently in one of channel(s).  If you select User Can Leave After Login, the user
+must be in one of the channel(s) to login but is then free to leave and won't get kicked on updates.
+
+In the Ad box, enter the text of the message you wish to be displayed as the ad for your
+server.  See the Variables help for information on using various variables in your message to
+display settings in GuildFTPD such as current users logged in and current port.  The text of
+the message will be automatically sent to the channel you select to monitor at a rate which
+you enter in the rate box.
+
+Any user that is downloading at a speed faster than that in the Fast User DL Speed box will
+be shown in the @GuildFTPD window in a different colour (see Colour Config Help)
+
+If you enter logins in the Check Only These Logins box and check enable, only those logins
+will be checked and kick/banned if they are not in the channel.  Any other logins are free
+to use the server regardless of whether they are in the channel.
+
+Password hopping will automatically change the password of any number of logins at a rate
+you select in the Hop Rate Box.  Any login you enter into the list will be given a random
+password corresponding to the password mask.  The mask can consist of any number of
+lower and upper case c's, v's and n's.  mIRC will generate a password, replacing any
+c or C with the corresponding upper or lower case consonant, any v or V with a vowel and 
+any n or N with a number.  If you check Real Words, mIRC will ignore the mask and read a
+random line from the passhop.txt file.

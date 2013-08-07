@@ -1,0 +1,126 @@
+*******************************************************************************************************************
+__________________________________________________________________________
+[A] Introduction
+
+AFP is designed to protect you from ALL types of common flooding, and does it fast. This includes Self and Channel Protection.  Self protection can be used by anyone. Channel protection however requires you to have OPS on a channel for Channel Protection features to work. For the definition of OPS see Definitions section below under the heading Other.
+
+BTW if you think this script will protect you from being banned or nuked, think again!
+
+AFP settings are GLOBAL. In other words, all users are subjected to flood protection settings in AFP when settings are enabled. Eventually I may add a feature of flood control settings which will bypass protected users.
+
+AFP is almost completely dialog based. I will only add command line parameters and/or complete popup menu controls if I get alot of requests.
+
+
+_____________________________________________________________________________
+[B] Requirements
+
+ - mIRC 5.7 (5.6 should still work fine with this script)
+ - 32 bit mIRC
+ - afp.ini
+ - afp2.ini
+ - afp-hlp.txt
+
+_______________________________________________________________________
+[C] Starting AFP
+
+You can start AFP by pressing one of the AFP buttons located in the Status, Channel and Menubar popup menus or by simply typing /afp in any editbox.
+
+For default settings press 'Reset' in AFP dialog window.
+
+_____________________________________________________________________________
+[D] Types of Protection
+
+Channel
+ - Text(+ov Exempt)
+ - Action(+ov Exempt)
+ - Notice(+ov Exempt)
+ - CTCP (all types)(+ov Exempt)
+ - Nick (multiple nick changes)(+ov Exempt)
+ - Join/Part (multiple join/parts)
+
+Self Protection
+ - Msg/Ntc (private message & notice)
+ - CTCP (all types)
+ - Invite
+ - DCC Get
+ - DCC Chat
+
+_____________________________________________________________________________
+[E] Definitions
+
+General:
+
+Unchecking a box will disable that perticular flood control.
+
+Checking a box will enable that perticular flood control.
+
+Mask Type - This allows you set set the default ban/ignore type of a users address. The default is [2] *!*@host.domain.
+
+CPL - CPL means Charactors Per Line. 300 (which is default) means a maximum of 300 letters, numbers or any other symbols are allowed in each individual sentence. Anything over 300 will trigger the penalty. If you don't want to use CPL then type in 999 as this number disables the CPL control.
+
+Please note that you can't set CPL below 50. The reason is that almost everyone would be kicked and/or banned for saying very short sentences if AFP is enabled. This is just a security setting.
+
+For Channel Protection area: (NOTE: Channel Protection requries OPS)
+
+TEXT - This refers to text typed in a channel by a user. Users exceeding maximum number of channel messages allowed in the set amount of time will trigger the penalty.
+
+ACTION - This refers to the actions typed in a channel by a user. Users exceeding maximum number of channel messages allowed in the set amount of time will trigger the penalty.
+
+NOTICE - This refers to private notices sent from a user to the channel. Users exceeding maximum number of channel notices allowed in the set amount of time will trigger the penalty.
+
+CTCP -  This refers to CTCP's sent from a user to the channel. Users exceeding maximum number of channel ctcp's allowed in the set amount of time will trigger the penalty.
+
+NICK -  This refers to multiple nickname changes of a user in all channels you're in. Users exceeding maximum number of nickname changes allowed in the set amount of time will trigger the penalty.
+
+JOIN/PART  - This refers to multiple joining and parting of a channel by a user. Users exceeding maximum number of join/parts allowed in the set amount of time will trigger the penalty.
+
+Penalty for exceeding max  - This option allows you to set the penalty for a flood detected by a user in a channel. Kick and Ban will do just so.... AFP will kick user out of the channel and ban the user with the specified Mask Type. It will also show the Kick Msg set. Selecting Kick Only will kick the user out of the channel and show the Kick Msg set.
+
+Kick Msg - This is where you can type in a custom Kick message which is used with Kick/Ban feature. This will be added before all kick reasons in the kick msg itself.
+
+For Self Protection area:
+
+MSG/NTC - This refers to private messages and notices sent from a user to you. Users exceeding maximum number of private messages and/or notices allowed in the set amount of time will trigger the penalty.
+
+CTCP -  This refers to CTCP's sent from a user to you. Users exceeding maximum number of ctcp's allowed in the set amount of time will trigger the penalty.
+
+INVITE -  This refers to private invites sent from a user to you. Users exceeding maximum number of private invites allowed in the set amount of time will trigger the penalty.
+
+DCC SEND -  This refers to DCC send requests from a user to you. Users exceeding maximum number of DCC send requests allowed in the set amount of time will trigger the penalty.
+
+DCC CHAT -  This refers to DCC chat requests from a user to you. Users exceeding maximum number of DCC chat requests allowed in the set amount of time will trigger the penalty.
+
+Ignore Type - There are two options to choose from. The first will let you choose the length of time (in minutes) to ignore a user after a flood has been detected, afterwhich the users address will be removed from mIRC's internal ignore list. The second option however will permanently ignore a user. If you want to remove the user from the ignore list, you will manually have to do so in mIRC's options.
+
+Buttons:
+
+Apply -  This button applies new settings for Channel Protection, Self Protection, ignore, CPL and Kick Msg editboxes.
+
+Enable All -  This button enables all Channel and Self Protection.
+
+Disable All -  This button disabled all Channel and Self Protection.
+
+Reset -  This button resets everything to original configuration. Note: When you press the 'Reset' button all editbox text is automatically saved therefore 'Apply' button is unavailable untill further changes are made manually.
+
+Clear All -  This button clears all editboxes. If you pressed this button by mistake don't worry. As long as you have made no further editbox changes and haven't pressed the 'Apply' button afterwards it isn't saved. Re-open AFP if you don't want to loose current configuration and want to adjust other settings.
+
+Close -  This button closes AFP. Be aware that closing AFP does not save all modified settings. You must Apply any settings beforehand if you have changed any editbox data.
+
+Shortcuts:
+
+/afp          Runs AFP
+Enter        Apply button
+Alt + A      Apply button
+Alt + R      Reset button
+Alt + C      Close button
+Alt + L      Clear All button
+Alt + E      Enable All button
+Alt + D      Disable All button
+
+
+_____________________________________________________________________________
+[F] Technical Notes
+
+Variables - This script uses variables (%var) in mIRC to store settings. I may impliment a ini file to save settings in the next version of AFP. There are no useless floating variables. The only variables stored are ones necessary, all others clean themselves up. And please don't mess around with AFP variables, especially when AFP is running.
+
+*******************************************************************************************************************

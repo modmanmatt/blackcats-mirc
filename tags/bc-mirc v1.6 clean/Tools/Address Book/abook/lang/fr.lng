@@ -1,0 +1,121 @@
+[info]
+lang=Français
+author=Nico aka Silverbird
+
+[abook]
+titlebar=Carnet d'adresses
+new=Nouveau contact
+del=Supprimer contact
+list=Liste de contact:
+tab1=Contact
+name=Nom:
+surname=Prénom:
+title=Titre:
+firm=Firme:
+phone=Téléphone:
+send=Envoyer
+email=E-Mail:
+note=Note:
+place=Détails
+city=Localité:
+street=Rue:
+zip=Code postal:
+location=Département:
+location2=<pas de sélection>|En plus de beaucoup représenter, par main veuillez enregistrer.
+save=Enregistrer
+clipboard=Copier les informations vers le presse-papiers
+clear=Vider
+tab2=Liste des contacts
+tab3=Chercher contact
+for=Recherche:
+search=Chercher
+bday=Date naissance:
+month=Janvier,Février,Mars,Avril,Mai,Juin,Juillet,Août,Septembre,Octobre,Novembre,Décembre
+
+[error]
+version=mIRC 6.15 est nécessaire pour cette fonction
+nolist=ne contient pas de liste de contact valable.
+systemdir=Ceci est un répertoire Système!
+evilchars=Le nom du répertoire contient des signes non valables.
+cantcreate=Le répertoire: $+ $crlf $+ $crlf $+ %x $+ $crlf $+ $crlf $+ ne peut être créé.
+
+[question]
+overwrite=Le fichier choisi existe déjà. Êtes-vous sûr que vous soulez remplacer le fichier existant?
+loading=Veuillez choisir un répertoire avec une liste de contact sauvegardée.
+loading1=Chargement
+selpic=Veuillez choisir une image
+selpic1=Choisir
+save=Veuillez choisir le répertoire exact
+save1=Nouvelle liste de contact
+save2=Veuillez indiquer le nom du dossier pour la sauvegarde: $crlf $crlf $+ Le nom du dossier ne peut pas contenir: ' $+ $chr(92) $chr(124) $chr(47) $chr(58) $chr(42) $chr(63) $chr(34) $chr(60) $chr(62) $+ ' 
+save3=Dossier
+deldir=Le dossier $nopath(%x) existe déjà. $+ $crlf $+ Voulez-vous remplacer ce dossier? $+ $crlf $+ Attention: Tous les fichiers dans ce dossier seront supprimés!
+export=Choisir le répertoire de sauvagarde pour $did(4).seltext
+export1=Sauvegarder
+
+[abook.menu]
+file=&Fichier
+new=&Nouveau
+open=O&uvrir
+unset=F&ermer
+lang=&Language
+close=&Quitter
+edit=&Editer
+newcon=&Nouveau contact
+delcon=&Suprimer contact
+export=E&xporter...
+view=&Vue
+tab1=&Contact
+tab2=&Liste des contacts
+tab3=C&hercher Contact
+help=&?
+help1=&Aide...
+about=A &propos...
+
+[head]
+1=Numéro
+2=Nom
+3=Prénom
+4=Rue
+5=Code postal
+6=Ville
+7=Titre
+8=Firme
+9=Téléphone
+10=E-Mail
+11=Département
+12=Note
+13=Date de naissance
+14=Age
+;; Nr 12 is not needed. Only for the export option!
+
+[pic]
+title=Pour insérer une image,
+title2=cliquez ici
+warn=Image pas trouvée.
+
+[about]
+titlebar=Carnet d'adresses
+text=Carnet d'adresses $!+ $!crlf $!+ $!crlf $!+ Développé par Christopher Ruß $!+ $!chr(44) En cas de questions ou commentaires: Sephiroth@leech-world.de
+
+[clip]
+titlebar=Copier vers le presse-papier
+up=Haut
+down=Bas
+select=Choisir les détails
+preview=Aperçu
+copy=Copier
+cancel=Annuler
+break=<break>
+
+[export]
+titlebar=Exporter...
+export=Exporter
+cancel=Annuler
+text=Veuillez choisir un format pour l'export:
+format0=fichier texte
+format1=format CSV MS-DOS (compatible Microsoft Excel)
+
+[help]
+titlebar=Aide
+close=Fermer

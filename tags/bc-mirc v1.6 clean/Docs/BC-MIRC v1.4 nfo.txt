@@ -1,0 +1,174 @@
+ BC-MIRC v1.4 Info
+ BlackCats Custom MIRC version 
+ Camaro350 ;) MIRC v6.12 Modded ver of TSZ package (RIP:Bombermangriff)
+
+ ~Features:
+
+ * BlackCats Tools (Update system,Snarf info tools)
+ * Blackcats Styles (themes,Graphics and styles for BlackCats)
+ * Intgrated Console Tools (collection of tools for modding consoles Ps1,Ps2,Ps3,Psp,Wii,Xbox1,360,Ds,etc.)
+ * Integrated Games (Games for Emulation system,MIRC games,Website Games,etc)
+ * Integrated Sound Board (Duke Nukem Sound Effects)
+ * Standalone Scripts (modtools,snarftools,etc.. to be used with other version of Mirc,invision,icechat,etc..)
+ * Classic MIRC tools & Classic MIRC scripts (webserver,nickalert,etc..)
+ * DukeNukem Sound Board
+ * auto login to blackcats mirc channel
+ * integrated utorrent client and more
+
+#################################################
+
+ ~Integrate Console tools included:
+
+ General------------------
+ * Xbins standalone auto login FTP downloader 
+
+ Ps2 tools added-----------------
+ * WinHIIP_V1.7.6
+ * USBExtreme
+ * Ps2SaveBuilder08x
+ * FAPLink
+ * cdgenPS2
+
+ Psp tools added-----------------
+ * cisoplus_1_0_11
+ * compressor1.3-installer
+ * CustomTheme_620
+ * CWcheat_DBE182
+ * Eboot Patcher
+ * ImpalerPSX
+ * PSP Pandora Deluxe v3.3
+ * PopstationGUI 221beta
+ * PSP Compressor
+ * psp_iso_compressor_1.4
+ * PSPgraderv008
+ * PSPHost[2]0 - PC Pack
+ * RainsUltraLiteMMS500v12
+ * UMDGen_v4.00
+
+ Wii tools added-----------------
+ * App Viewer
+ * Bannertool
+ * CustomizeMii 3.11
+ * English wbfs intelligent
+ * HCM 2.1
+ * IsoPacher
+ * NUSD v1.1a
+ * RawDump 2.0
+ * TransmitMii 1.0
+ * WaadMaker v1.1
+ * Wadtool 1.1b
+ * WDS_tool v1.2
+ * Wii BrickBlocker
+ * Wii ISO Renamer v3
+ * Wii Scrubber 1.3 final
+ * Wii Update Manager v1.2
+
+ PS3 tools added-----------------
+ * PS3 Game Updater 1.41
+ * ps3_list_v1.4
+ * PS3Index
+ * PS3SaveUnlocker
+ * split4G
+
+ 360 tools added-----------------
+-Firmware-
+ * JungleFlasher v0.1.84 Beta (250)
+-HDD Tools-
+ * xboxdumper
+ * xplorer
+ * Xplorer360.beta6
+-Info-
+ * XVal
+-Managers-
+ * Altus
+ * Xbox Live DLC Sorter_1.1
+-XDVDfs-
+ * Exiso-GUI
+ * GUI Game Dump Extractor
+ * Schtrom360Xtract
+ * wxRipper
+ * x360Scrub
+ * Xbox Backup Creator
+ * Xbox Image Browser
+ * XBOX360 SS Merger
+ * XDVDMulleter
+ * XDVDRebuilder
+- * -
+ * x360Scrub_0.2b
+ * USB XTAF GUI VERSION 31 beta
+
+ Xbox1 tools added
+ -----------------
+ * C-XBox Tool 2
+ * ISOCraxtion-v31
+ * Xbox_Backup_Creator_v2.5.0.230
+
+#################################################
+
+ ~Integrated Emulators included:
+
+ Atari 2600------------------
+ * Stella 3.4.1_32-bit
+ * Stella 3.4.1_64-bit
+
+ Commadore 64------------------
+ * CCS64 V3.4 Offical
+
+ Dreamcast------------------
+ * ChankastAlpha025
+ * darkman_dinput40b
+
+ DS------------------
+ * desmume-0.9.7-win32
+ * no$gba-w.2.6a
+
+ GameCube------------------
+ * Dolwin010
+
+ Psp------------------
+ * pcsp v0.5.2
+
+ supernintendo------------------
+ * Bsnes 32bitwin 
+ * Bsnes 64bitwin 
+ * snes9x-1.53-win32
+ * snes9x-1.53-x64
+ * includes top 20 snes games
+
+ Nintendo------------------
+ * Jnes
+ * Nestopia140
+ * includes top 100 nes games
+
+ N64------------------
+ * Project64k 0.25
+ * includes top 10 N64 games
+
+ GBA------------------
+ * VisualBoyAdvance-1.8.0-beta3
+
+ Sega------------------
+ * gens-win32-bin-2.14
+ * Fusion364
+
+ Saturn------------------
+ * satourne_beta_3
+ * SSF_012_beta_R1
+
+ Ps1------------------
+ * epsxe v1.7.0
+
+ Ps2------------------
+ * pcsx2
+
+ Wii------------------
+ * dolphin-3.0-win32
+ * dolphin-3.0-win64
+ * ^install Needed to make work^- vcredist_x64
+ * ^install Needed to make work^- vcredist_x86
+
+ Xbox1------------------
+ * Xeon_10
+
+#################################################
+

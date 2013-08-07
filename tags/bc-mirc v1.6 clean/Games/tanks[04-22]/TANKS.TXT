@@ -1,0 +1,463 @@
+--------------------------------------------------------------------------------
+ Tanks [2004.06.04] by Andy Dufilie
+--------------------------------------------------------------------------------
+ This is an addon made for mIRC32 v5.7 and after
+ Website:  http://pages.cthome.net/pdufilie/
+
+ To install:
+   Put all the files in the same directory.
+   If you put them in the same directory as mIRC.exe, then type the following:
+     /load -rs tanks.mrc
+   If they are in another directory, then type:
+     /load -rs "C:\path\to\tanks.mrc"
+--------------------------------------------------------------------------------
+
+
+ ===================
+  To start the game
+ ===================
+   /tanks
+     This will start a single player game against the computer.
+
+   /tanks <nick> [port]
+     This will send a request to another person on the same IRC network as you.
+     The port parameter is optional.
+
+   /tanks 0
+     This will start a server.
+
+   /tanks <port>
+     This will start a server on the specified port.  This is useful if you're
+     behind a network or firewall and people can connect to you through certain
+     ports.
+
+   /tanksd [port]
+     This starts an empty server.  The port parameter is optional.
+
+   /tanks <ip>:<port>
+     This will join a game in progress.
+
+   /tanklist
+     This will list available Tanks servers.
+
+
+ ==================
+  Game Description
+ ==================
+    Tanks is a game for one or more players.  You take turns picking the angle
+   and power to get your explosive shells through the wind and past the scenery
+   to hit your opponent's tank.
+
+    Each player begins the round with 11 shield points.  You lose shield points
+   according to the number of the explosive that hits your tank.  As your tank
+   gets damaged, your maximum power level decreases.  During your turn, you can
+   use credits to repair your tank and increase your maximum power level.
+
+    Players receive credits at the beginning of each round and at the end of
+   their turns.  You earn more credits by damaging your opponents' tanks.
+   Credits are used to repair your tank and buy explosive shells.
+
+
+ =============
+  How to play
+ =============
+    Start the game by typing "/tanks" for a one player game against the AI,
+   or "/tanks <nick>" for a multiplayer game against a friend who has also
+   installed Tanks.  You can also type /tanklist to list servers you can join.
+
+    During your turn, click on the up and down arrows at the left of the window
+   to change power, and click the left and right arrows to change the angle.
+   The [1] and [5] buttons in the lower-right corner change the increment used
+   when changing angle and power.  Remember to account for the wind when
+   picking angle and power.
+
+    The slider bar at the right selects an explosive shell.  The number of the
+   explosive is how many shield points it removes when it hits a tank.  Click
+   on the "Fire" button to launch the explosive and end your turn.
+
+    A shield bar for a tank will turn red when an opposing player can destroy
+   it on the next turn if they hit the tank with the biggest explosive they
+   can afford.  As your tank gets damaged, your maximum power level decreases.
+   Use the repair button to raise your maximum power level and protect your
+   tank.
+
+
+ ===========
+  Item list
+ ===========
+   +-------------+-------------+------------------------------+
+   | Item        | Price       | Effect on tank               |
+   +-------------+-------------+------------------------------+
+   | Repair      |  30 Credits | Shield +1, Maximum power +10 |
+   | Explosive 1 |     Free    | Shield -1, Maximum power - 5 |
+   | Explosive 2 |  50 Credits | Shield -2, Maximum power -10 |
+   | Explosive 3 |  75 Credits | Shield -3, Maximum power -15 |
+   | Explosive 4 | 100 Credits | Shield -4, Maximum power -20 |
+   | Explosive 5 | 125 Credits | Shield -5, Maximum power -25 |
+   +-------------+-------------+------------------------------+
+
+
+ ==============
+  Hints & Tips
+ ==============
+   - If you can't destroy a tank completely with a 2, 3, or 4, then I recommend
+     you use a 5.  You can see why when you look at the table of prices above.
+     The first one is free, but every level after that costs 25 more credits.
+       Example:  If you fire two 2nd-level explosives in two turns, you can
+         deal a total of 4 damage for 100 credits.  If you fire a 4th-level
+         and a 1st-level explosive, you can deal 5 damage in two turns for the
+         same price.
+   - Copying text from the chat:  Hold down CTRL or SHIFT and drag the mouse
+     over the lines you want to copy.
+   - Team games?  For team games, simply play normally until one team wins
+     (when all the tanks that are left are on the same team), and then have all
+     remaining team members select the 'vote to end this round' option in the
+     popup menu.
+   - Hold down the Shift or Control key while changing angle and power for
+     a different accuracy (use the [1] and [5] buttons in the lower right to
+     toggle the normal setting).
+   - What do the red exclaimation points (!) mean?  When you see one of these
+     above a tank, it means that the tank below can buy a big enough explosive
+     to blow up the current player.  If it's your turn, either repair your tank
+     or try to destroy the tanks that have these marks above them.
+   - In a two player game, only repair your tank when your shield bar is red
+     (meaning the opponent can blow you up next round), or when your maximum
+     power is lower than you want it to be.
+   - You shouldn't pick a low angle, because if someone hits you with a level 5
+     explosive, you'll end up having to pick a new angle anyway.
+   - When there isn't much wind, Angle 65 & Power 70 is a good guess with
+     two players.  Power 65 is better when the other tank is below you, or a
+     bit closer to you than normal.  Power 75 is better when the other tank is
+     above you.
+   - Try to make your opponent fall into a hole by shooting the base of the
+     tank and removing the dirt underneath.  This will make it harder for your
+     opponent.
+   - When you have a wall in the way and the wind is preventing you from
+     hitting the other player with a high angle, blow up a part of the hill and
+     pick a lower angle.
+
+
+ =======================
+  Buttons on the window
+ =======================
+        Up and Down arrows = Change power
+     Left and Right arrows = Change angle
+           1 and 5 buttons = Change increment for angle and power
+                    Repair = Repair tank
+   Slider bar on the right = Change explosive strength
+                      Fire = Fire cannon
+
+
+ ===================
+  Keyboard controls
+ ===================
+  Playing the game:
+       UP and DOWN = Change power
+    LEFT and RIGHT = Change angle
+               TAB = Change increment for angle and power
+       1 through 5 = Select explosive strength
+    DELETE and END = Change explosive strength
+   INSERT and HOME = Select the lowest and highest explosive strengths
+             SPACE = Repair tank
+             ENTER = Fire cannon
+
+  Scrolling keys:
+     PGUP and PGDN = Scroll the chat display one page up or down
+         CTRL+PGUP = Scroll the chat display up one line
+         CTRL+PGDN = Scroll the chat display down one line
+         CTRL+HOME = Scroll the chat display to the top
+          CTRL+END = Scroll the chat display to the bottom
+           [ and ] = Scroll the list of player names
+
+
+ ====================================
+  Copying text from the chat display
+ ====================================
+   To copy text from the chat display, hold down the control or shift key and
+   drag the mouse over the lines you want to copy.  This is useful if you want
+   to copy a URL.
+
+
+ ===============
+  Chat commands
+ ===============
+   You can use the following commands inside the Tanks message box.  To open
+   the message box, press 'T' in the Tanks window.
+
+   /chat [on|off]
+     - This will enable or disable the chat and player names.  If neither
+       'on' nor 'off' is specified, it will simply echo the current setting.
+
+   /log [on|off]
+     - This will toggle logging on or off.  If neither 'on' nor 'off' is
+       specified, it will simply echo the current setting.
+
+   /sname [name]
+     - Change server name (server only)
+
+   /port [port]
+     - Change server port (server only)
+
+   /name [name]
+   /nick [name]
+     - Changes your name
+
+   /me <text>
+     - This makes "* your_name <text>" appear in the chat display.
+
+   /vote
+     - Toggle your vote to end the round
+
+   /color [0-11]
+     - This changes your color.  The number is optional.  If you specify 0 as
+       the number, then a random color will be picked.
+
+   /clear
+     - Clear the chat buffer
+
+   /ping
+     - If you're the server, this will ping all the clients.  Otherwise, this
+       pings the server.
+
+   /list
+   /tanklist
+     - List available servers
+
+   /help
+   /about
+   /readme
+     - Open this file (tanks.txt)
+
+   /bot [skill]
+     - Add a bot (server only)
+
+   /nobots
+     - Remove all bots (server only)
+
+   /end
+     - End current round (server only)
+
+   /join [name]
+     - Add a new local player (server only)
+
+   /quit
+     - If you're the server, this will remove the current local player.
+       Otherwise, this will disconnect you from the Tanks server.
+
+   /exit
+     - Close Tanks
+
+   /ooh[text]
+     - oOoOOOooOOo...
+
+
+ =====================
+  Fixes and additions
+ =====================
+
+   v0.9 [2000.03.17]
+   - First working version, for mIRC v5.7.
+
+   (...)
+
+   2001.07.28 - 8 players, bigger window
+   - You can now play tanks with up to eight players total. :)
+   - Type /tanks <nick> to start a game with someone, join the game they are
+     playing, or invite them to your current game.
+   - The window is bigger (640x460).
+   - New animated buttons.
+   - Right-click in the window for changing nick or color, and for server
+     controls if you are hosting the game.
+   - Chat commands added: "/nick [name]", "/color", and "/clear".
+   - More than one player can have the same color now (for teams maybe?).
+   - Servers have two modes: Rounds and Fraglimit.  These are described in the
+     dialog.  Right-click in the window when you're running a server, and click
+     on "Server settings."
+   - You can prevent more people from joining the game with an option in the
+     popup and in the server settings dialog.
+
+   (...)
+
+   2001.10.04 - Tanks server list
+   - Added an option to remember your angle/power increment setting or not.
+   - Changed "Missile X" display to a slider.  The Tanks don't actually shoot
+     missiles.  I named them missiles before because I used to play Scorched
+     Earth.  In Scorched Earth, the bombs are called missiles, nukes, etc.  Now
+     I'll just call them explosive shells. :)
+   - Added buttons 1-5 for selecting the corresponding explosive.
+   - Dialog interface added for listing & joining servers that are currently
+     running.  Type /tanklist to open the dialog.
+   - There's an option in the popup for listing your server in the /tanklist or
+     not.
+   - Thanks to Shikkie for writing the original php/mysql/socket interface for
+     the Tanks server list.
+   - Thanks to fubar at mircscripts.org for hosting the php/mysql.
+
+   (...)
+
+   2002.06.14 - mIRC v6.02
+   - In mIRC v6.02, I had to disable the little name display over the tank when
+     you move the mouse on the player names.  A bug in /window -o prevented it
+     from working properly.  (Update: mIRC 6.03 also has this bug.)  All other
+     versions of mIRC are unaffected.
+   - As promised, this version has a scrollbar in the chat display.
+   - You can now copy text from the chat display by holding down the shift or
+     control keys while dragging the mouse over the lines you want to copy.
+
+   2003.02.09 - Bug fixes
+   - Tanks no longer works with mIRC v5.6 (it hasn't for some time).
+   - Chat scrolling is no longer disabled after disconnecting from a server.
+   - Improved chat text copying.
+   - Fixed a problem with /tanklist sockets not closing.
+   - Fixed a wrapping bug on server name echo.
+   - Fixed an "idle three times" bug.
+   - Added an option to hide the window when running a dedicated server.
+   - Fixed the server settings dialog (text was being cut off).
+
+   2003.07.09 - New option to disable the chat, new font
+   - Added an option to disable the chat & player names (for client only).
+   - Chat commands added:
+       "/name [name]" (same as /nick)
+       "/chat [on|off]" (enables/disables chat & player names)
+   - Reorganized the popup menu.
+   - Popup menus now use real checkmarks on newer versions of mIRC.
+   - Added an option to limit the number of players that can connect to your
+     server.  This replaces the old "closed server" option.
+   - Changing server settings no longer resets the game.
+   - Added an option to use either Tahoma or MS Sans Serif for the chat font.
+     Tahoma is the new default.
+
+  2003.07.12
+   - Bug fixes and chat commands added:
+       "/list" and "/tanklist" (List servers)
+       "/help" "/about" and "/readme" (Open this file)
+       "/quit" and "/exit" (Close Tanks)
+
+  2003.07.13
+   - Added popups for enabling and disabling parts of the titlebar display.
+     They can be found under the "Window" sub-menu.
+
+  2003.07.18 - 32 players, instagib mode
+   - Added support for up to 32 players.  You can scroll the player list with
+     the bracket keys, [ and ].
+   - Added an instagib mode.  When this is enabled, one hit will destroy a tank
+     and players have no starting credits.
+   - The max idle time is now 20 seconds in instagib mode.
+   - Now you can play with others on the same screen.  You can add or remove
+     players in a local game using the popup menu.
+   - Tanklist dialog will now wrap a long list of player names.
+
+  2003.07.20
+   - Idle time management has been improved.  It's now less likely that a
+     lagged player will be seen as idling by mistake.
+   - The player list now scrolls vertically instead of horizontally.  Player
+     order is now left to right, top to bottom.
+
+  2003.07.21
+   - I cleaned up the voting code.  There should be no more voting-related
+     problems.
+
+  2003.08.06
+   - Fixed some display bugs and a small problem with joining/quitting.
+   - Improved the displaying of some information.
+
+  2003.08.22
+   - Added an icon (check mark) for indicating which players have voted.
+   - When changing wind is enabled, "Changing wind" is now displayed at the
+     top of the window instead of just "Wind."
+   - Decreased the amount of starting credits for multiplayer games.
+   - Improved all AI skill levels.
+   - Now you can disable the round or frag limit.
+
+  2003.09.10 - Bots & local players in multiplayer games
+   - Added an icon (@) for local players.
+   - Servers can now add local players to games.  Local players now have the
+     same idle time limits that remote players have.  When no local players
+     remain, the server becomes a dedicated one.
+   - Added a computer icon for bots.
+   - Servers can now add multiple bots to games.
+   - Added a dialog to manage bots & local players.
+   - Added a shield bar to the name display (when you move the mouse over a
+     tank).  Not shown in instagib.
+   - The name of your server is now separate from your player name.
+   - Added chat commands (for server only):
+       /sname [name]  -  Change server name
+       /join [name]   -  Add a new local player
+       /bot [skill]   -  Add a bot
+       /nobots        -  Remove all bots
+       /end           -  End this round
+   - If you're the server, typing /quit will now remove the active local player
+     instead of closing the server.
+   - Redesigned the server settings dialog.
+   - Moved tanklist to a different host.
+
+  2003.09.13
+   - The server port you specify is now saved.  Using the "/tanks 0" command
+     will use the port you had last time.
+
+  2003.09.14a
+   - Added an option to stop bots from playing on their own.
+   - Fixed the bug that was saving your server name as your player name.
+   - Fixed a bug that sometimes made the color selection window close after
+     moving the mouse over it.
+   - mIRC's $portfree has a bug, so now Tanks tests the ports a different way.
+     If the port you want to use is unavailable, error messages will show up in
+     mIRC and a message will echo in Tanks telling you to ignore them.  Tanks
+     will still run properly even if these errors show up.
+
+  2003.09.14b
+   - Fixed a bug that was remembering the last color you selected with the
+     "Color..." button in the bots & local players dialog.
+   - Fixed a bug where the color selection window wasn't showing up sometimes.
+
+  2003.09.15
+   - Fixed a bug that was preventing /tanks <nick> from working.
+
+  2003.09.18
+   - /tanks <nick> will now create a private game instead of a public one.
+   - Fixed a bug that occurred when the round or frag limit was reached.
+
+  2003.09.20
+   - Removed debug code that I forgot about.  It was listing active timers.
+
+  2003.10.09
+   - Fixed a tanklist display bug.
+   - Attempted to fix an inconsistency bug.  I don't know if this will fix it,
+     because I have never seen it happen.
+
+  2004.02.21
+   - Fixed disabled chat display bugs.
+   - Fixed bugs in the code that switches to the backup tanklist server.
+
+  2004.04.20
+   - Removed support for mIRC 5.61 because it has too many bugs to work around.
+     There were several bugs in Tanks running under 5.61 that nobody reported.
+   - Fixed a few bugs in older versions of mIRC.
+   - Fixed a bug that might have been the cause of the inconsistency errors.
+   - Readable code is now included in case you want to try to learn from it.
+     The code is in the tanks_code.txt file.
+
+  2004.04.20a
+   - Fixed some bugs with newly added while loops.
+
+  2004.04.24
+   - Fixed a bug with saving the specified server port.
+   - Added an option to automatically scroll the player names list.
+   - Added an option for bots to play "Left vs Right."
+
+  2004.06.04
+   - Local players can now vote normally.
+   - I had to work around a bug in mIRC 6.15 having to do with /break and
+     nested while-loops.  Affected places in the script use the :615fix label.
+     Other changes were planned for this version, but this new mIRC bug forced
+     me to update sooner.
+
+
+  If you find any bugs, please contact me.  If you don't report bugs when you
+  find them, it will take longer for them to be fixed.  Don't assume I will
+  find all the bugs or someone else will report them.
+
+  Contact me here:  http://pages.cthome.net/pdufilie/
+
+
+--------------------------------------------------------------------------------

@@ -1,0 +1,184 @@
+MHTML v2
+
+--- INTRODUCTION ---
+
+This document describes the nature of MHTML, which is a html-embedded server-side
+scripting language based on the scripting language used in the IRC client mIRC.
+MHTML was originally introduced by Rkzad with his mws.dll, which could parse MHTML
+files through a simplistic httpd. This mws.dll was later used in MotionWS v1. In
+Tontitos MWS webserver script, the idea of a scripted implementation of MHTML was
+introduced. This behavior was imitated by oracel in version 2 of MotionWS.
+
+By the release of MotionWS2, there have been discussion of whether or not the
+MHTML standard should be updated. So me (oracel), Tontito and Rkzad agreed on a
+common standard for MHTML v2, which would imitate other html embedded scripting
+languages in more detail.
+
+--- SCRIPT DECLARATION TAGS ---
+
+To see the differences between MHTML v1 and other scripting languages, we can use
+PHP as an example.
+
+PHP declares script start tags as "<?php". In MHTML v1, this would be done by
+using "<!--mirc". Script ending tags would in PHP be "?>", and in MHTML the
+respective counterpart would be "-->". By looking at these examples, it's easy to
+see that MHTML is very different from its more widespread relative PHP, and can
+easily be confused with regular html.
+
+The first change to MHTML is the script opening and closing tags. The opening tag
+should be "<?mhtml". This is a more mainstream sollution, and hopefully a bit more 
+familiar to those who have experiences with other embedded scripting languages.
+Given the nature of the opening tags, the closing tag should logicaly be "?>".
+
+Given that these are appropriate solutions, here a few concrete examples:
+
+<?mhtml
+  mhtml.print Hello world!
+?>
+
+This example will print out the string "Hello world!" to the browser.
+
+
+--- PRINTING OUTPUT ---
+
+As in the old MHTML, printing of text and data is done by using the /mhtml.print command.
+However, the /mhtml.print no longer terminates lines with crlf.
+Example:
+<?mhtml
+  mhtml.print a
+  mhtml.print b
+  mhtml.print c
+?>
+This would print out "abc". 
+
+To force crlf termination, use /mhtml.print with the switch -n.
+Example:
+<?mhtml
+  mhtml.print -n a
+  mhtml.print -n b
+  mhtml.print -n c
+?>
+Thiw would print out
+a
+b
+c
+
+--- INCLUDING FILES ---
+
+Including files can be done two ways: You can either use <?mhtml.inc filename?>, or
+you can use the include command. The include command is very simple, you just do
+"mhtml.include filename". You can include a maximum of 100 files recursively.
+
+The mhtml.include command can ONLY be used inside a mhtml tag, for example:
+
+<?mhtml
+mhtml.include somefile.mhtml
+?>
+
+
+--- CREATING ALIASES ---
+
+To create aliases, you simply do:
+
+<?mhtml
+  Alias [-l] somealias {
+    ;somecode
+  }
+?>
+
+Because all MHTML aliases and code are copied together (from included files as well)
+in one single script file that will be executed, all aliases are available to all
+files that are included in a MHTML exection, regardless if the aliases are local or
+not (alias -l). This makes the use of alias -l redundant.
+
+
+---- POST data ----
+
+when posting data the identifyer $mhtml.self or only "" must be used when you want to call the same
+page again. This identifier can also be used with method GET.
+
+you can simply do
+mhtml.print <form method="POST" action=" $+ $mhtml.self $+ ">
+
+
+
+
+--- General coding information ---
+
+MHTML v2 is designed to be as versatile as possible to use. For example, you can put
+html code in the middle of loops, like this:
+
+<?mhtml
+  var %i = 1, %t = 100
+  while (%i <= %t) {
+?>
+<tr><td>This is iteration number 
+<?mhtml
+  mhtml.print -n %i $+ </td></tr><br>
+  inc %i
+}
+?>
+
+The above code would print out something like the following:
+
+This is iteration number 1
+This is iteration number 2
+This is iteration number 3
+etc.
+
+--- Identifiers ---
+
+There are several identifiers available to Mhtml scripters. Here they all are,
+explained in detail:
+
+$mhtml.isset(<item>)	  -	Returns $true if the given item in a query string has
+				been assigned a value.
+
+$mhtml.get(<item>)	  -	Returns the value of the given item in a query string.
+				There are some properties that you can use in certain
+				situations:
+					
+				.uploaded_file - When you uploaded a file, with  this
+				identifier you can get access to is content before you
+				write it in disk.
+				.uploaded_name - When you uploaded a file, with this 
+				identifier you have access to its original name (without
+				path)
+
+
+$mhtml.set(<item>, value) 	-	Sets a var for use in current page
+
+
+$mhtml.rootdir       	  	-	Returns the dir of the mhtml file called
+
+
+$mhtml.sock			-	Returns the socket used to creat the current 
+					mhtml file.
+
+
+$mhtml.save(path)		-	Saves an uploaded file in a specific
+					path/filename.
+
+
+--- Commands ---
+
+Here's a complete list of commands available:
+
+mhtml.print [-n] <data>		-	Prints out text to the browser. Use the -n switch
+					to terminate the text with crlf.
+
+mhtml.include	<filename>	-	Includes a mhtml file.
+
+
+
+
+
+
+--- Non stardard Identifiers/ Commands ---
+
+
+$mhtml.cache(<item>)	  -	Sets this page to be cache in clients browser:
+					.$true to allow cache
+					.$false to don't allow cache (default)
+
+

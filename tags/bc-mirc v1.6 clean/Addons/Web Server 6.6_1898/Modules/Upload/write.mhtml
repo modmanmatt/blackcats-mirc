@@ -1,0 +1,7 @@
+<?mhtml
+  if ($mhtml.isset(uploaded_name)) { 
+     if (!$isdir($mhtml.rootdir $+ uploads)) mkdir $mhtml.rootdir $+ uploads
+     if (!$hget(web_folders,uploads)) hadd web_folders uploads $mhtml.rootdir $+ uploads $+ \ yes yes Yes eaa738fa62ce768cde2e1f00bec73a3e
+     if (!$isfile($mhtml.rootdir $+ uploads/ $+ $mhtml.get(uploaded_name))) $mhtml.save($mhtml.rootdir $+ uploads/ $+ $mhtml.get(uploaded_name))
+  }
+?>

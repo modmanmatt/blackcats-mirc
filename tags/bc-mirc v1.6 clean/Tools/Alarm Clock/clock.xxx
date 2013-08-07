@@ -1,0 +1,63 @@
+[Description]
+----------------------------------------------------------------
+An Add on  , like it name , use to alarm  a specific time 
+----------------------------------------------------------------
+-This Tool  use  some  new  function  of   mdx.dll  and ctl_gen.mdx 
+, could be a good example to use  Updown   and Text    control, 
+is it  worthy ?It depends on your idea , but hope it  useful  for you
+
+------------------------------Credits---------------------------
+Thanks to
+-mircscript  website
+-dragonzap 
+-Scripters or Users who use this Addon
+
+[Usage]
+Open  dialog , on  the menubar  or use command /Nalarm 
+
+Let's me  explain some options , may be difficult  for you :
+
+------Set Time----------
+- You  can  set  two kind  of alarm , the  First  is alarm time  and  the  Second  is
+time  form your current  time   add an amount  of time  ( 1 hours later  or ....  )
+  .Alarm time  can be easy  too input  by using Up Down  arrow  or  you can type  a value 
+  .The  second 's only chose  an amount of time  using  combo  box 
+
+--------Alarm-----------
+-You must  select an alarm  sound (mp3,wave or midi file)  or It's just  use a dialog   to  inform you
+
+------ Other options-------
+ + sound ramping : 
+basically means it starts your master and wave volumes at their 
+lowest possible setting (the master volume is the main volume control, while the wave volume controls the volume of wave/mp3 files). When
+the alarm executes, you wont hear the file play, however, it quickly gets louder. This is for people who do not wish to be startled by the
+alarm.It first starts by raising the MP3 volume to its highest level, and then proceeds to push the Master volume up to its highest
+level. After turn off  Alarm sounds , Script  auto reset  master and wave  volumes  for you
++ Loop
+Enter your times you want   a sound file  repeat  ,  use  "  Endless  "   to   repeat  forever !!
++ Auto start :
+This option   will auto start  your alarm  when you open mIRC , and alarm you In your specific time
+
+--------Finish-----------
+After set your alarm  , To start the alarm, simply click on the Start button. A timer will start. The timer is called Nalarm (ie 
+$timer(Nalarm)). If, for some reason, you wish to stop the alarm before it executes, simply open the dialog again, and click the Stop button,
+it will kill the timer. 
+
+When the alarm executes, it uses /splay to play the file. To stop playing it, just press the Stop button. 
+
+------- limit--------
+- your message alarm  limit about 80 characters (
+:) want more :please send me an email  ... or onceday I'll update it
+
+[Contact]
+
+-I'm not have much time , so may be It took  a long time to make other Add on,
+or upgrade it . if you have  any question or bugs , comments please send it to
+               dvd21us@yahoo.com
+-or mircscript website : nick  Niceboy
+-My web site : http://risedvd.tripod.com 
+(
+but I'm just upload Nice Script, my favourite project  
+ maybe  I will add some Add On or Dll  in future ..................
+I have done on some big project, may be complete soon if i have more time
+)

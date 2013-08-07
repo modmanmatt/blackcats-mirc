@@ -1,0 +1,64 @@
+				Tontito’s Web Server (TnTWS) Features
+
+01 . Normal file downloading and static page view
+
+02 . Resume capabilities for all Web based programs
+
+03 . Allows auto start and port changing on the fly (set by admin)
+
+04 . Allows optional folder listing
+
+05 . Allows unlimited number of virtual folders (set by admin)
+
+06 . Allows optional file Downloads (set by admin)
+
+07 . Allows virtual folder to be invisible (set by admin)
+
+08 . Allows login and password on virtual folders (set by admin)
+
+09 . Allows Ip blocking or only works for specific Ips (set by admin)
+
+10 . Allows connection limit control based on max number of total connections and connections by IP (set by admin)
+
+11 . Single shoutcast song
+
+12 . Allows several styles for folder listing and shoutcast listing (set by admin)
+
+13 . Runs MHTML server side scripting language
+
+14 . Allows chan advertising where current playing song can be displayed and a customizable message (set by admin)
+
+15 . Allows control of maximum upload speed, to save some for something the admin may need (set by admin)
+
+16 . Live mp3 streaming of a list of mp3 edited by the server admin
+
+17 . Listing of files queued in streaming list
+
+18 . Runs PHP cgi and fastcgi language if set enable (set by admin)
+
+19 . Protection for all known exploits
+
+20 . Nice interface to easily setup all your options
+
+21 . Multi-language support (10 languages added) (set by admin)
+
+22 . Full control of current connections made to server with /list_con and /list_con1 commands (usable by admin)
+
+23 . All access to web server are logged in files organized by days
+
+24 . Allows Smart Ip blocking in case of detected attack to server (set by admin)
+
+25 . Contains complete and detailed documentation to allow the use and/or solving some of the most current problems
+
+26 . Faster Web server, mirc based, that you can find (try it, compare and you will see)
+
+27 . Addon 100% scripted in mirc with no use of Dlls
+
+28 . Includes version check (autochecks if autostart is on or you can make it check in management options)
+
+29 . Allow selective access to server using diferent logins (unlimited nº) and passwords, each one with diferent permissions set in
+     config dialog (Extra Options section) by admin
+
+30 . Allow connection reusage
+
+31 . Support for Authentication Digest

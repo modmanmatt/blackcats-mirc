@@ -1,0 +1,120 @@
+;Please don't edit this file.
+;This file is generated automatical!
+dialog addressbook $chr(123)
+  title " $+ $lng(abook,titlebar) $+ "
+  size -1 -1 1 1 
+  option dbu
+  icon abook\abook.ico, 0
+  tab " $+ $lng(abook,tab1) $+ ", 12, 4 25 291 170
+  text " $+ $lng(abook,name) $+ ", 16, 10 46 40 8, tab 12 right
+  link " $+ $lng(abook,send) $+ ", 22, 10 96 20 8, tab 12
+  icon 33, 225 46 60 60, $!mircexe, 1, tab 12
+  box " $+ $lng(abook,place) $+ ", 42, 8 126 285 44, tab 12
+  text " $+ $lng(abook,surname) $+ ", 17, 10 56 40 8, tab 12 right
+  edit "", 26, 55 45 150 10, tab 12 autohs
+  edit "", 27, 55 55 150 10, tab 12 autohs
+  text " $+ $lng(abook,title) $+ ", 18, 10 66 40 8, tab 12 right
+  edit "", 28, 55 65 150 10, tab 12 autohs
+  text " $+ $lng(abook,firm) $+ ", 19, 10 76 40 8, tab 12 right
+  edit "", 29, 55 75 150 10, tab 12 autohs
+  text " $+ $lng(abook,phone) $+ ", 20, 10 86 40 8, tab 12 right
+  edit "", 30, 55 85 150 10, tab 12 autohs
+  text " $+ $lng(abook,email) $+ ", 21, 30 96 20 8, tab 12 right
+  edit "", 31, 55 95 150 10, tab 12 autohs
+  text " $+ $lng(abook,bday) $+ ", 62, 10 106 40 8, tab 12 right
+  combo 63, 55 105 35 50, tab 12 drop
+  combo 64, 90 105 70 50, tab 12 drop
+  combo 65, 160 105 45 50, tab 12 drop
+  text " $+ $lng(abook,note) $+ ", 23, 10 116 40 8, tab 12 right
+  edit "", 32, 55 115 235 10, tab 12 autohs limit 700
+  text " $+ $lng(abook,city) $+ ", 36, 110 146 30 8, tab 12 right
+  text " $+ $lng(abook,street) $+ ", 34, 10 136 40 8, tab 12 right
+  text " $+ $lng(abook,zip) $+ ", 35, 10 146 40 8, tab 12 right
+  text " $+ $lng(abook,location) $+ ", 37, 10 156 40 8, tab 12 right
+  edit "", 39, 55 135 235 10, tab 12
+  edit "", 40, 55 145 50 10, tab 12
+  edit "", 41, 145 145 145 10, tab 12
+  combo 38, 55 155 235 100, tab 12 sort size edit drop
+  button " $+ $lng(abook,save) $+ ", 57, 45 174 105 12, tab 12
+  button " $+ $lng(abook,clipboard) $+ ", 43, 155 174 135 12, tab 12
+  button " $+ $lng(abook,clear) $+ ", 59, 10 174 30 12, tab 12
+  tab " $+ $lng(abook,tab2) $+ ", 11
+  list 44, 10 45 280 145, tab 11 size
+  tab " $+ $lng(abook,tab3) $+ ", 13
+  list 45, 10 60 280 130, tab 13 size
+  text " $+ $lng(abook,for) $+ ", 46, 10 46 40 8, tab 13 right
+  edit "", 47, 55 45 190 10, tab 13
+  button " $+ $lng(abook,search) $+ ", 58, 253 44 37 12, tab 13 default
+  button " $+ $lng(abook,new) $+ ", 14, 5 5 50 12
+  button " $+ $lng(abook,del) $+ ", 15, 60 5 50 12
+  combo 24, 162 6 110 120, sort size vsbar drop
+  text " $+ $lng(abook,list) $+ ", 25, 121 7 40 8, right
+  menu " $+ $lng(abook.menu,file) $+ ", 1
+  item " $+ $lng(abook.menu,new) $+ ", 9, 1
+  item break, 10, 1
+  item " $+ $lng(abook.menu,open) $+ ", 4, 1
+  item " $+ $lng(abook.menu,unset) $+ ", 5, 1
+  item break, 1000, 1
+  item " $+ $lng(abook.menu,lang) $+ ", 6, 1
+  item break, 7, 1
+  item " $+ $lng(abook.menu,close) $+ ", 8, 1, ok
+  menu " $+ $lng(abook.menu,edit) $+ ", 2
+  item " $+ $lng(abook.menu,newcon) $+ ", 48, 2
+  item " $+ $lng(abook.menu,delcon) $+ ", 49, 2
+  item break, 60, 2
+  item " $+ $lng(abook.menu,export) $+ ", 61, 2
+  menu " $+ $lng(abook.menu,view) $+ ", 50
+  item " $+ $lng(abook.menu,tab1) $+ ", 51, 50
+  item " $+ $lng(abook.menu,tab2) $+ ", 52, 50
+  item " $+ $lng(abook.menu,tab3) $+ ", 53, 50
+  menu " $+ $lng(abook.menu,help) $+ ", 3
+  item " $+ $lng(abook.menu,help1) $+ ", 54, 3
+  item break, 56, 3
+  item " $+ $lng(abook.menu,about) $+ ", 55, 3
+$chr(125)
+dialog about $chr(123)
+  title " $+ $lng(about,titlebar) $+ "
+  size -1 -1 150 34
+  option dbu
+  icon abook\abook.ico, 0
+  icon 1, 2 9 16 16,abook\about.ico
+  text $lng(about,text) , 2, 20 2 132 27
+$chr(125)
+dialog clip $chr(123)
+  title " $+ $lng(clip,titlebar) $+ "
+  size -1 -1 265 95
+  option dbu
+  icon abook\abook.ico, 0
+  list 1, 5 10 50 65, size sort vsbar
+  list 2, 70 10 50 65, size vsbar
+  button ">>", 11, 56 10 12 12
+  button ">", 3, 56 25 12 12
+  button "<", 4, 56 40 12 12
+  button "<<", 12, 56 55 12 12
+  button " $+ $lng(clip,up) $+ ", 5, 122 10 25 12
+  button " $+ $lng(clip,down) $+ ", 6, 122 25 25 12
+  box " $+ $lng(clip,select) $+ ", 7, 2 1 150 77
+  box " $+ $lng(clip,preview) $+ ", 8, 153 1 110 77
+  button " $+ $lng(clip,copy) $+ ", 9, 100 80 37 12,ok
+  button " $+ $lng(clip,cancel) $+ ", 10, 140 80 37 12,cancel
+  text "", 13, 160 10 95 67
+$chr(125)
+dialog export $chr(123)
+  title " $+ $lng(export,titlebar) $+ "
+  size -1 -1 162 40
+  icon abook\abook.ico, 0
+  option dbu
+  button " $+ $lng(export,export) $+ ", 1, 40 25 37 12,default
+  button " $+ $lng(export,cancel) $+ ", 2, 85 25 37 12,cancel
+  text " $+ $lng(export,text) $+ ", 3, 2 2 158 8
+  combo 4, 2 12 158 40, size drop
+$chr(125)
+dialog ahelp $chr(123)
+  title " $+ $lng(help,titlebar) $+ "
+  size -1 -1 257 145
+  option dbu
+  list 1, 2 2 50 125, size
+  edit "", 2, 55 2 200 125, read multi return
+  button " $+ $lng(help,close) $+ ", 3, 217 130 37 12,cancel
+  text "mIRC Abook v1.1 (multilang)", 4, 2 132 212 8,disabled
+$chr(125)

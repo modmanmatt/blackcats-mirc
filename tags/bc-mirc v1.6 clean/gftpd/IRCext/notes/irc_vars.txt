@@ -1,0 +1,27 @@
+
+Following is a list of variables which can be used in the IRC messages.
+These only apply to the built-in IRC client, but were made to sort of match
+those of the scripts.
+
+== ANYWHERE ==
+  $ip				Local IP address
+  %GFTPmainport		Default global port.
+  %GFTPpass<login>	Password for the <login> account.
+  %GFTPport<login>	Port for the <login> account.
+  %GFTPconns<login>	Current connection count for the <login> account.
+  %GFTPmaxconns<login>	Max connections allowed for the <login> account.
+
+== LOGIN/LOGOUT/UPLOAD/DOWNLOAD EVENTS ==
+  %GFTPloginip		IP of the user that generated the event.
+  %GFTPloginname	Account of the user that generated the event.
+  %GFTPlogingroup	Group of the user that generated the event.
+  %GFTPloginnick	IRC Nick of the user that generated the event.
+
+== UPLOAD/DOWNLOAD/MAKEDIR EVENTS ==
+  %GFTPfilename		Short filename that just got transferred.
+  %GFTPpathname		Long filename (real full path) that just got transferred.
+  %GFTPvpathname	Long filename (virtual full path) that just got transferred.
+  %GFTPfileduration	Number of seconds the transfer took.
+  %GFTPfilesize		Size of the file in bytes.
+
+
