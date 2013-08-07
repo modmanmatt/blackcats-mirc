@@ -1,0 +1,5 @@
++XbinsNfo+
+
+xbins has been removed because it is repeatedly found by different protection systems (spy/antivir..etc)to be malicious content i have tried to fiend a version of xbins that does not do this but i have not had success.. if i do find 1 it will be added back into back as default but untill then for those who know its safe and still want to use it it can be added via the update system in bcbins...:
+
+ <:Camaro350:>
