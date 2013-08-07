@@ -1,0 +1,121 @@
+[info]
+lang=English (United Kingdom)
+author=Christopher 'Sephiroth' R.
+
+[abook]
+titlebar=Addressbook
+new=New Contact
+del=Del Contact
+list=Contactlist:
+tab1=Contact
+name=Name:
+surname=Surname:
+title=Title:
+firm=Firm:
+phone=Telephone:
+send=Send
+email=E-Mail:
+note=Note:
+place=Statements of Place 
+city=City:
+street=Street:
+zip=ZIP Code:
+location=Location:
+location2=<Nothing selected>|England|Northern Ireland|Scotland|Wales
+save=Save information
+clipboard=Copy informationen to the clipboard
+clear=Clear
+tab2=Contactlist
+tab3=Search Contact
+for=Search criterion:
+search=Search
+bday=Birthday:
+month=January,February,March,April,May,June,July,August,September,October,November,December
+
+[error]
+version=mIRC 6.15 is needed for this option
+nolist=doesn't contains a valid contact list.
+systemdir=This is a System Directory!
+evilchars=The Directory contains invalid chars!
+cantcreate=Unable to create directory: $+ $crlf $+ $crlf $+ %x
+
+[question]
+overwrite=This file already exists. Are you sure you want to overwrite it?
+loading=Please select a directory to where you have a saved contact list.
+loading1=load
+selpic=Choose a pic
+selpic1=Select
+save=Select a path for saving:
+save1=New contact list
+save2=Enter a directory Name: $crlf $crlf $+ Invalid chars are: ' $+ $chr(92) $chr(124) $chr(47) $chr(58) $chr(42) $chr(63) $chr(34) $chr(60) $chr(62) $+ '
+save3=Diretory Name
+deldir=The directory $nopath(%x) already exists. $+ $crlf $+ Should this directory be replaced? $+ $crlf $+ Warning: All files in this directory will be removed!
+export=Where do you want to save $did(4).seltext
+export1=Save
+
+[abook.menu]
+file=&File
+new=&New
+open=O&pen
+unset=&Close
+lang=&Language
+close=E&xit
+edit=&Edit
+newcon=&New Contact
+delcon=&Remove Contact
+export=&Export...
+view=&View
+tab1=&Contact
+tab2=Contact&list
+tab3=&Search &contact
+help=&?
+help1=&Help...
+about=A&bout...
+
+[head]
+1=Number
+2=Name
+3=Surname
+4=Street
+5=ZIPCode
+6=City
+7=Title
+8=Firm
+9=Phone
+10=E-Mail
+11=Region
+12=Note
+13=Birthday
+14=Age
+;; Nr 12 is not needed. Only for the export option!
+
+[pic]
+title=To insert a pic,
+title2=please click here.
+warn=Picture not found.
+
+[about]
+titlebar=Addressbook
+text=Addressbook $!+ $!crlf $!+ $!crlf $!+ Written by Christopher Ruﬂ $!+ $!chr(44) if you have Questions about it send a mail to Sephiroth@leech-world.de
+
+[clip]
+titlebar=Copy to clipboard
+up=Up
+down=Down
+select=Select parts
+preview=Preview
+copy=Copy
+cancel=Cancel
+break=<Break>
+
+[export]
+titlebar=Export...
+export=Export
+cancel=Cancel
+text=Select a format for the export:
+format0=Simple Text File
+format1=CSV MS-DOS Format (Microsoft Excel compatibel)
+
+[help]
+titlebar=Help
+close=Close

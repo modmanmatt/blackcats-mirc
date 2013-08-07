@@ -1,0 +1,142 @@
+ww_1 --> 13/11/2006, 18:34:02, Connection from IP 65.35.174.74 and port 1694
+GET / HTTP/1.1
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; InfoPath.1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_2 --> 13/11/2006, 18:34:06, Connection from IP 65.35.174.74 and port 1696
+GET / HTTP/1.1
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, */*
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; InfoPath.1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+Authorization: Basic dHN6OnRzeg==
+
+ww_3 --> 13/11/2006, 18:34:06, Connection from IP 65.35.174.74 and port 1697
+GET /-_icons_-/folder.gif HTTP/1.1
+Accept: */*
+Referer: http://thesharingzone.sytes.net:100/
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Mon, 25 Aug 2003 01:31:38 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; InfoPath.1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+Authorization: Basic dHN6OnRzeg==
+
+ww_1 --> 13/11/2006, 19:34:47, Connection from IP 65.35.174.74 and port 2635
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://www.imvu.com/catalog/web_mypage.php
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Sat, 11 Nov 2006 16:33:04 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_2 --> 13/11/2006, 19:35:12, Connection from IP 65.35.174.74 and port 2650
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://www.imvu.com/catalog/web_mypage.php
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Sat, 11 Nov 2006 16:33:04 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+Authorization: Basic Og==
+
+ww_1 --> 13/11/2006, 19:51:29, Connection from IP 66.55.228.33 and port 61998
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/Guest_sweetpea49
+Accept-Language: en-us
+UA-CPU: x86
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_2 --> 13/11/2006, 19:57:58, Connection from IP 66.55.228.33 and port 60144
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/Guest_sweetpea49
+Accept-Language: en-us
+UA-CPU: x86
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_3 --> 13/11/2006, 20:11:59, Connection from IP 65.35.174.74 and port 1818
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/sweetpea49
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Sat, 11 Nov 2006 16:33:04 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_4 --> 13/11/2006, 20:13:58, Connection from IP 65.35.174.74 and port 1845
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/catalog/web_mypage.php?delete_message=35960424
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Sat, 11 Nov 2006 16:33:04 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_5 --> 13/11/2006, 20:16:41, Connection from IP 65.35.174.74 and port 1921
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/sweetpea49
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Sat, 11 Nov 2006 16:33:04 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_6 --> 13/11/2006, 20:17:25, Connection from IP 65.35.174.74 and port 1938
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/catalog/web_mypage.php?delete_message=35967073
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Sat, 11 Nov 2006 16:33:04 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_7 --> 13/11/2006, 20:17:44, Connection from IP 71.77.43.175 and port 2391
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/Guest_sweetpea49
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; FunWebProducts; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+
+ww_1 --> 13/11/2006, 21:55:10, Connection from IP 207.216.52.36 and port 3902
+GET /Spare/(documents)/secludedbeach.jpg HTTP/1.1
+Accept: */*
+Referer: http://avatars.imvu.com/Guest_sweetpea49
+Accept-Language: en-us
+UA-CPU: x86
+Accept-Encoding: gzip, deflate
+If-Modified-Since: Sat, 11 Nov 2006 16:33:04 GMT
+User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)
+Host: thesharingzone.sytes.net:100
+Connection: Keep-Alive
+

@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Dialog Maker: Control Editor</title>
+           
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+</head>
+  <body bgcolor="#FFFFFF" text="#999999">
+     
+<table width="100%" border="0">
+  <tbody>
+    <tr bgcolor="#C4DCF7"> 
+      <td width="18%"> <div align="center"><font size="3" color="#3A4F6C"><b>Control</b></font></div></td>
+      <td width="82%" bgcolor="#C4DCF7"> <div align="center"><font size="3" color="#3A4F6C"><b>Description</b></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"><div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>Common</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Text</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Sets the text of 
+        the selected control</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Size 
+          (1,2,3,4)</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Sets the postition 
+        and size of the selected control (First - X, Second - Y, Third - W and 
+        Forth - H)</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Disable</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Disables the selected 
+        control (The control can't be used)</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Hide</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Hides the selected 
+        control (The control is hidden and you can't show it and hide it again 
+        with commands: /did -v [dialog] [control id] to show and /did -h [dialog] 
+        [control id] to hide </font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Result</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The setted function 
+        of the selected control will be done after closing the whole dialog</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Group</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The control is 
+        a part of a group - that means if it's check,radio box or something else 
+        when you click on it to set some option you have first to click on the 
+        button with OK option to save it.</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Type</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Some kind of control 
+        have different additional options - Type. These controls are: Buttons, 
+        Combo boxes, Check buttons, Radio buttons and Scrollbars</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Align</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The Editboxes, 
+        Texts, Check buttons, Radio buttons and Icons have an align of the text 
+        or the image. The aligns are: Left, Right and Center</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Tab</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Set the tab there 
+        to show the selected control </font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Controls</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Select control 
+        from the list, which you will edit</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Copy</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Copies and after 
+        that pastes the selected control from the list above</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Delete</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Deletes the selected 
+        control from the list above</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Save</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Saves the edited 
+        options and settings</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"> <div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#666666"><strong>Button</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Default</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Sets selected button 
+        as default (When you open the dialog this button is auto selected and 
+        whatever you select, when you press enter the marked button is clicking)</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Flat</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The button has 
+        a flat style</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Multi-Line</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000"><em></em></font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"> <div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#666666"><strong>Editbox</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Password 
+          Entry </strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The letters of 
+        the text in the editbox are as stars (*). Usuallyused for passwords</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Allow 
+          Return </strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">If the editbox 
+        is bigger than one line and you want to go to the next line with pressing 
+        'Enter' use this option</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Read-Only</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">This option is 
+        like 'Disable' but if you use this option the text from the editbox can 
+        be copied and the text color is normal (If the editbox is disabled the 
+        color of the text is gray)</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Auto 
+          H Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Auto horizontal 
+        scrolling (If the text is longer than the editbox length use this option 
+        to increase text length)</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Auto 
+          V Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Same as the option 
+        above but now the auto scrolling is vertical</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Horizontal 
+          Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"> <div align="left"><font color="#000000">Shows 
+          horizontal scrollbar in the editbox</font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Vertical 
+          Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Shows vertical 
+        scrollbar in the editbox</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Limit</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Limits the length 
+        of the symbols entered in the editbox</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"> <div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>Text</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><strong><font color="#000000">No 
+          Wordwrap</font></strong></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">On default the 
+        text in Text Control is divided in words. If this option is on, every 
+        symbol is shown independently of the control size</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"> <div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>Scroll</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Minimum</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Sets the minimum 
+        value of the scroll</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Maximum</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Sets the maximum 
+        value of the scroll</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"> <div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>Icon</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>No 
+          Border</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">Shows the selected 
+        picture or icon without border (The effect that is around the picture 
+        or icon)</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"> <div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>Check</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"> <div align="center"><font color="#000000"><strong>Flat</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The check button 
+        has a flat style</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>3 
+          State</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">On clicking on 
+        the check button, he has three states instead two</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"><div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>Radio</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><strong><font color="#000000">Flat</font></strong></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The radio button 
+        has a flat style</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"><div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>List</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><strong><font color="#000000">Sorted</font></strong></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The items in the 
+        list are sorted by name</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Extended 
+          Select</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Multi 
+          Select</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">You can select 
+        a few lines at a same time by holding Shift or Control</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Force 
+          Size</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">When you click 
+        on the list even if there aren't any lines it's size is as it is set</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Horizontal 
+          Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The list has a 
+        horizontal scrollbar</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Vertical 
+          Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The list has a 
+        vertical scrollbar</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#EEF2F7"><div align="center"><font color="#666666"><strong>Control</strong></font></div></td>
+      <td valign="top" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>Combo</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Sorted</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The items in the 
+        list are sorted by name</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Editable</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Force 
+          Size</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">When you click 
+        on the combo even if there aren't any lines it's size is as it is set</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Horizontal 
+          Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The list has a 
+        horizontal scrollbar</font></td>
+    </tr>
+    <tr> 
+      <td height="21" valign="top" bgcolor="#00FFFF"><div align="center"><font color="#000000"><strong>Vertical 
+          Scroll</strong></font></div></td>
+      <td valign="top" bgcolor="#EEF2F7"><font color="#000000">The list has a 
+        vertical scrollbar</font></td>
+    </tr>
+  </tbody>
+</table>
+   </body>
+</html>

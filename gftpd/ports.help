@@ -1,0 +1,13 @@
+Port Configure Window
+
+Here you can set various options having to do with the ports used by GuildFTPD
+
+If you use the port hopper, GuildFTPD will automatically change the port of your server at a
+rate you specify in the Hop Rate box.  Your server will not kick any users but will be set to a
+random port between the minimum and maximum you choose.  When using the port hopper,
+make sure you use the $gp variable. (See Variables help)
+
+Multiport allows you to select different ports for different users.  This way, you could have
+one or more ports for private user accounts and have a different main system port to use the
+port hopper with.  To use multiport, just add the login and port you wish to change to the list.
+

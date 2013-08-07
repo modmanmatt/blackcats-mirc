@@ -1,0 +1,11 @@
+<?mhtml 
+  if ($mhtml.get(nome) == peter && $mhtml.get(pass) == xxx) {
+     mhtml.print Hello Peter
+     $mhtml.set(logged,$mhtml.get(nome))
+  }
+  elseif ($mhtml.get(nome) == guest && $mhtml.get(pass) == xxx) {
+     mhtml.print hello guest
+     $mhtml.set(logged,$mhtml.get(nome))
+  }
+  else { mhtml.print Login or password not valid! }
+?>

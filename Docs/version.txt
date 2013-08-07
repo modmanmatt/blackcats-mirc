@@ -1,0 +1,162 @@
+
+ Author: TsZ Crew 2005
+ Name: TSZ Script 1.8.9
+ Date: 25-01-2005
+
+ Script help: http://tsz-mirc.tripod.com/
+
+ History:
+
+ v1.8.9 27-01-2005
+ -----------------
+ * Bug fixes
+ * Added NickAlert script
+ * Added Acronym script
+ * Added GuildFTPD script
+
+ v1.8.7 01-08-2004 @Izzzo & BombermanGriff
+ -----------------
+ * Select match... in income queue works for partXX.rar files now.
+ * Remove selected in income queue works with files containing [ and ] now.
+ * Filesize is displayed in income queue now.
+ * Updated the settings dialog.
+ * Updated the away system
+ * Added auto-join feature for channels in menu.
+ * Added flashfxp stats
+ * Added access rights to 10th trigger.
+
+ v1.8.6 05-07-2004 @Izzzo
+ -----------------
+ * XDCC script -> enabled multiple serving channels, 
+ * XDCC script -> allowed options to be changed in dialog
+ * XDCC script -> Enabled the button "Remove file" in dialog
+ * FServ explorer -> Fixed a bug that made it update the income queue constatly
+ * Fserv explorer -> Made the update of the incoming queue alot faster
+ * Fserv explorer -> Added a "tab" in the XDCC bots section for XDCC servers.
+ * Added fserv,xdcc,ftp setup in channel menu.
+ * Added some websites
+ * Removed the need to debug setup
+ * Fixed a bug that made the queue not send.
+
+ v1.8.5 25-06-2004 @Izzzo
+ -----------------
+ * Did so that you could actually see the files it found when you did a search.
+ * Made it search through triggers 6-10 also and not just 1-5 on @find
+ * Fixed a bug in the 'read nfo' in the trigger browser
+ * Fixed a problem with the incoming trigger.
+ * Changed nickserv->tsznickserv chanserv->tszchanserv etc.
+
+ v1.8.4 12-06-2004 @Izzzo
+ -----------------
+ * Made #tsz topic history include more topic changes.
+ * Updated the mp3 player so that it can control winamp aswell
+ * Added a dialog for ignores
+ * Mereged the dialogs for nick colors, user modes and ignores
+
+ v1.8.3 04-06-2004 @Izzzo
+ -----------------
+ * Fixed a bug in the updating proccess
+ * Fixed a bug in the queuemanager that made it really slow
+ * Rearranged some buttons and stuff in the queumanager
+
+ v1.8.2 05/01/2004 @Izzzo
+ -----------------
+ * Added compabilty with the move script
+ * Added stuff to the channel menu
+ * Changes some stuff in the queue manager
+ * Removed the automatic flood protection
+ * Made the script catch the invision triggers
+
+ Change in 1.6a
+ --------------
+ * Upgrade Adrenalin patcher 0.3 > 0.4
+ * Added a simple MP3 player in tools menu ( no external player )
+ * Added a Burning prg with menu Burn *.cue & *.iso ( all Windows )
+ * Release in viewable directly in menu now !!
+
+ * Removed 2 bugs:
+ * 1- @find command run 2 times ( solved )
+ * 2- in menu "transfer now"> send indicate wrong information ( solved ) 
+
+ V1.5 01/31/2002
+ ---------------------
+ * Changed irc.server
+ * System orginized
+ * Autosend nfo & sfv without queue
+ * Add rank newbie, approved, distro, op
+ * Add emotions
+ * All dialogs fixed
+ * VOP fixed
+ * Menu edit
+ * Fserve secure
+ * Shoutcast removed
+ * Add text reader
+ * Intro compleated
+ * Add tank multiplayer game
+ * Lot of Bugs fixed 
+
+ V1.41 01/11/2002
+ ---------------------
+ * Changed irc.server
+
+ V1.4 12/16/2001
+ ---------------------
+ * Away Fixed F7
+ * Removed Beta F10
+ * Auto update when exit triggers, no need to restart script.
+ * Fast OP status
+ * Fserve Explore fix
+
+ V1.4 12/14/2001
+ ---------------------
+ * New file Explore
+ * Update own fserve triggers
+ * User Speedtest
+ * Codetalk
+ * Add netsplit detector
+ * Updated triggerbrowser
+ * Updated queue Manager
+ * Smaller bugs in the script fixed
+ * New channel key
+
+ V1.3 10/28/2001
+ ---------------------
+ * Channel Protection
+ * Add some useful websites, for finding stuff
+
+ V1.2a 10/28/2001
+ ---------------------
+ * moo.dll updated
+
+ V1.2 Final 10/18/2001
+ ---------------------
+ * Back to mIRC v5.82
+ * File send error corected.
+ * Fixed Search Fservers (@find)  
+ * Fixed FTP Add
+ * Fixed Advanced Away
+ * Fixed System Information
+ * FIxed Shoutcast Advertiser
+ * Fixed Random Jokes
+ * Fixed Four Wins Multiplayer Game
+ * Fixed mICQ v1.0
+ * Add a few type commands
+ * Websites
+
+
+ V1.1 10/17/2001
+ ---------------
+ * Update mIRC v5.91
+ * Moderator version started
+ * +OP Yourself
+ * Moderator/Channel Tools
+ * Clear Window
+ * Websites
+ * Help Menu
+
+
+ V1.0 10/13/2001
+ ---------------
+ * mIRC v5.82
+ * Modified CgZ Script to Fit TpA
+

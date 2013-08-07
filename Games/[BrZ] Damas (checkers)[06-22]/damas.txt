@@ -1,0 +1,101 @@
+
+  ;----------- -- -- -- -- - - -
+  ;
+  ;   [BrZ] Damas v1.0
+  ;   by O_Rei_Da_Praia
+  ;
+  ;   BrZ Team - www.brz.rg3.net
+  ;   
+  ;--------------------- -- -- -- -- - - -
+
+
+  !WARNING! Before playing for the 1st time, read topic (3)-Catching
+
+     ....................
+     :
+     :  (1) Loading
+     :
+     :...................
+
+  - Extract all files to any folder and after type //load -rs $+(",$$dir damas.mrc,")
+
+
+
+     ....................
+     :
+     :  (2) Movement
+     :
+     :...................
+
+  - It's not possible to move backward, unless the piece is a king
+
+  - kings can jump more than one square, even when you catch a piece
+
+
+
+     ....................
+     :
+     :  (3) Catching
+     :
+     :...................
+
+
+  - It's possible to catch backward using any piece
+
+  !!WARNING!!
+
+  - You have to catch pieces. If you try to move any piece and it doesn't
+    move, see if it's possible to catch any of your opponent piece
+
+  - If it's possible to catch 3 piece in 1 turn you'll have to do it
+
+  - If you catch with a king, and if you still can catch another piece in the same
+  turn, you'll have to do it.  Example: You catch an opponent  piece and there are
+  still 3 free  squares but if another catch is  possible, you must catch, or your
+  turn won't finnish.
+    
+    If you don't follow the rules, you won't be able to move your pieces. So don't
+ think it's a bug.
+
+
+
+     ....................
+     :
+     :  (4) Menu 
+     :
+     :...................
+
+
+  New			  - Restart game. If you are playing online, your opponent will be requested.
+  -
+  Waiting for connections - Wait for connection to play online. You will be the server
+  Connect	  	  - Connect to someone that is waiting for connection. You will be the client
+  Disconnect	  	  - Disconnect
+  -
+  Options 
+  .Mark movements    	- Turn on/off the option that marks the last movement
+  .Timestamp	  	- Turn on/off the timestamp of the chat
+  .Flash	  	- Turn on/off flash (highlight when someone move)
+  - 
+  .Beep the opponent	- If you're playing online, opponent's mIRC will beep
+  .Theme		- Change theme
+  .Board Size   	- Change the size of the board
+  .Chat Font    	- Change chat font
+  .Clear chat		- Clear chat
+
+
+
+     ....................
+     :
+     :  (5) Thanks
+     :
+     :...................
+
+
+  _LuSeC_, nonick_h15, Tio_PatinhasS - Tests
+  pixelman - Tests and suggestions
+  Nap  - translation, tests and suggestions
+
+
+
+  #BrZ - brasIRC - www.brz.rg3.net

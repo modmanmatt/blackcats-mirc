@@ -1,0 +1,29 @@
+BC-MIRC Installation Instructions 
+
+  Just run the installer and follow directions.
+Note=Dont change the installation directory c:\mirc_server....
+changing this will cause many of the scripts to not function!
+  
+  after installation allow the client to launch:
+  BC-MIRC will now auto connect to the Blackcats IRC Server.... you should now find yourself in the waiting room channel this is because you need to 
+1:change your nickname and 
+2: add your site pass to perform line
+
+first go to mirc options by clicking the small folder with hammer icon in top left... now under the connnect tab on left u will have options to set your nicknames use the nick name you use on the blackcats games torrent site
+
+second in the same mirc options menu goto options tab on left then u will se a perform button, click this and u will see a menu with this text in the box>
+
+/bcg
+/msg snarfer letmein xxpasswordxx
+
+you need to change this line so xxpasswordxx has your site password in it... this site password is not the pass u use to loggin site, it is a irc password controlled by the blackcats torrent site.... to find this password just go to your details page. "click on your user name on site"
+once u add your perform pass over the xxpasswordxx line save this and also 
+
+"important = MAKE SURE YOU CHECK THE ENABLE PERFORM ON CONNECT CHECK BOX!"
+
+now save by pressing ok...
+
+Thats it all done now just restart the client and it will auto log you into the Main BlackCats chan
+
+
+ Camaro350 :)

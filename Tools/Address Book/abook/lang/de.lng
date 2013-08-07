@@ -1,0 +1,121 @@
+[info]
+lang=Deutsch
+author=Christopher 'Sephiroth' R.
+
+[abook]
+titlebar=Kontaktadressen
+new=Neuer Kontakt
+del=Kontakt löschen
+list=Kontaktliste:
+tab1=Kontakt
+name=Name:
+surname=Vorname:
+title=Anrede:
+firm=Firma:
+phone=Telefon:
+send=Senden
+email=E-Mail:
+note=Notiz:
+place=Ortsangaben
+city=Stadt:
+street=Straße:
+zip=Postleitzahl:
+location=Bundesland:
+location2=<Nichts ausgewählt>|Baden-Württemberg|Bayern|Berlin|Brandenburg|Bremen|Hamburg|Hessen||Mecklenburg Vorpommern|Niedersachsen|Nordrhein-Westfalen|Rheinland-Pfalz|Saarland|Sachsen|Sachsen-Anhalt|Schleswig-Holstein|Thüringen
+save=Kontaktinformationen speichern
+clipboard=Informationen in die Zwischenablage kopieren
+clear=Leeren
+tab2=Kontaktliste
+tab3=Kontakt suchen
+for=Suchbegriff:
+search=Suchen
+bday=Geburtstag:
+month=Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember
+
+[error]
+version=mIRC 6.15 wird für diese Funktion benötigt
+nolist=enthällt keine gültige Kontaktliste.
+systemdir=Dies ist ein Systemverzeichnis!
+evilchars=Der Verzeichnisname enthällt ungültige Zeichen.
+cantcreate=Verzeichnis: $+ $crlf $+ $crlf $+ %x $+ $crlf $+ $crlf $+ kann nicht erstellt werden.
+
+[question]
+overwrite=Die Datei die sie gewählt haben existiert bereits. Sind sie sicher das sie die Datei überschreiben wollen?
+loading=Bitte das Verzeichnis einer gespeicherten Kontaktliste auswählen.
+loading1=Laden
+selpic=Bitte Bild auswählen
+selpic1=Wählen
+save=Bitte Pfad zum Speichern auswählen
+save1=Neue Kontaktliste
+save2=Bitte Ordnernamen für die Speicherung angeben: $crlf $crlf $+ Der Ordnername darf: ' $+ $chr(92) $chr(124) $chr(47) $chr(58) $chr(42) $chr(63) $chr(34) $chr(60) $chr(62) $+ ' nicht enthalten
+save3=Ordnername
+deldir=Der Ordner $nopath(%x) besteht bereits. $+ $crlf $+ Soll dieser Ordner ersetzt werden? $+ $crlf $+ Warnung: Alle Dateien in diesem Ordner werden gelöscht!
+export=Pfad zum Speichern auswählen für $did(4).seltext
+export1=Speichern
+
+[abook.menu]
+file=&Datei
+new=&Neu
+open=Ö&ffnen
+unset=&Schließen
+lang=&Sprache
+close=&Beenden
+edit=&Bearbeiten
+newcon=&Neuer Kontakt
+delcon=&Kontakt Löschen
+export=&Exportieren...
+view=&Ansicht
+tab1=&Kontakt
+tab2=Kontakt&liste
+tab3=Kontakt &suchen
+help=&?
+help1=&Hilfe...
+about=Ü&ber...
+
+[head]
+1=Nummer
+2=Name
+3=Vorname
+4=Strasse
+5=Postleitzahl
+6=Stadt
+7=Anrede
+8=Firma
+9=Telefon
+10=E-Mail
+11=Bundesland
+12=Notiz
+13=Geburtstag
+14=Alter
+;; Nr 12 is not needed. Only for the export option!
+
+[pic]
+title=Um ein Bild einzufügen,
+title2=bitte hier klicken
+warn=Bild nicht gefunden.
+
+[about]
+titlebar=Adressbuch
+text=Adressbuch $!+ $!crlf $!+ $!crlf $!+ Geschrieben von Christopher Ruß $!+ $!chr(44) bei Fragen oder Problemen eine E-Mail an Sephiroth@leech-world.de
+
+[clip]
+titlebar=In die Zwischenablage kopieren
+up=Hoch
+down=Runter
+select=Bestandteile auswählen
+preview=Vorschau
+copy=Kopieren
+cancel=Abbrechen
+break=<Bruch>
+
+[export]
+titlebar=Exportieren...
+export=Exportieren
+cancel=Abbrechen
+text=Bitte ein Format zum exportieren auswählen:
+format0=Einfache Textdatei
+format1=CSV MS-DOS Format (Microsoft Excel kompatibel)
+
+[help]
+titlebar=Hilfe
+close=Schliessen

@@ -1,0 +1,384 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>g5x-poker designed and coded by gorefiend.</title>
+<meta name="generator" content="gorefiend htmlzditor 0.69">
+<style>
+.none{ font-family: arial, verdana, san-serif;
+ font-size: 11px;
+}
+body {   
+scrollbar-3dlight-color:#666666;
+scrollbar-arrow-color:silver;
+scrollbar-base-color:#333333;
+scrollbar-face-color:black;
+scrollbar-darkshadow-color:silver;
+scrollbar-highlight-color:#111111;
+scrollbar-shadow-color:#111111;
+scrollbar-track-color:#111111;
+}
+</style>
+</head>
+<body bgcolor="#111111" text="#939393" link="#999999" vlink="#999999" alink="red">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" height="100%" style="line-height:100%; margin-top:0; margin-bottom:0;">
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="line-height:100%; margin-top:0; margin-bottom:0;">
+<tr>
+<td width="1" bgcolor="#888888" rowspan="8"></td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;" align="right"><span class="none" style="text-decoration:none;"><b><font color="#CCCCCC">g5x-poker version 2.69</font></b> <font color="#CCCCCC">designed and coded by gorefiend</font>.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;" align="right"><span class="none" style="text-decoration:none;">[</span><a href="##"><span class="none" style="text-decoration:none;">Installation guide</span></a><span class="none" style="text-decoration:none;">] &nbsp;[</span><a href="#game"><span class="none" style="text-decoration:none;">Game info</span></a><span class="none" style="text-decoration:none;">] &nbsp;[</span><a href="readme.html#version"><span class="none" style="text-decoration:none;">Game version history</span></a><span class="none" style="text-decoration:none;">] &nbsp;[</span><a href="#pokerrules"><span class="none" style="text-decoration:none;">Poker rules info</span></a><span class="none" style="text-decoration:none;">] &nbsp;</span></p>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="1" bgcolor="#888888" rowspan="8"></td>
+</tr>
+
+<tr>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<b>Installation Guide</b> :</span></p>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;Unzip all the files of the .zip&nbsp;to your mIRC directory, keeping the "Use folder names" option enabled.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;Type //load -rs " $+ $mircdirg5x-poker\g5x-poker.mrc $+ "&nbsp;&nbsp;or &nbsp;use your mIRC Editor to browse and load the script.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<a name="game"><b>Game Info</b> :</a></span></p>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<u>I</u>mportant Notes :-</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;* Requirements : mIRC 6.03 or above.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;* Game performance : Disabling the game sounds greatly speeds up the game performance!</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<u>H</u>ow to play :</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Type /g5x-poker to start the game.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;* More options are available through&nbsp;the drop down menu on&nbsp;right-click...</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;">&nbsp;</p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;1. Press the "DEAL Now!" button to start a new deal, a new series of cards will&nbsp;be displayed.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;2. You may now drop some bad cards if there are any, this can be done by a single click on the desired card(s),</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then/else press the "DEAL Now!" button again.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;3. You will be rewarded according to the combination of cards you get.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;4. Restart again... for a new deal!</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;<u>G</u>rade Rewards are as follows :</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;grade 1 » $ 2000 &nbsp;(if the strip poker mode is enabled, you should get your picture no.1)</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;grade 2&nbsp;» $ 4000</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;grade 3&nbsp;» $ 7000</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;grade 4&nbsp;» $ 10000</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;<u>I</u>nfo on the Strip Poker mode :</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Strip Poker mode must be turned ON, so as to enable the "Check for New Girls" button of the Game Options.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Then select your girl and Deal again! you shall be rewarded.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;<u>I</u>nfo on the Keyboard Shortcuts keys :</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Esc »&nbsp;&nbsp;minimizes the game's window, this might be useful &nbsp;;-)</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;n &nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;starts a new game.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;c &nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;closes the game.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;o &nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;opens the game options dialog.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;p &nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;opens the picture manager dialog.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;a &nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;switches the strip poker mode to on.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;z &nbsp;&nbsp;&nbsp;» &nbsp;switches the strip poker mode to off.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;e &nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;enables all the game sounds.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;d &nbsp;&nbsp;&nbsp;» &nbsp;disables all the game sounds.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;w &nbsp;&nbsp;»&nbsp;&nbsp;enables/disables the win sound.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;f &nbsp;&nbsp;&nbsp;» &nbsp;&nbsp;enables/disables the card flip&nbsp;sound.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="line-height:100%; margin-top:0; margin-bottom:0;">
+<tr>
+<td width="600" height="16">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<a name="version"><b>Game version History</b></a> :</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="600">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<u>3</u>rd release version 2.69.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;* fixed some minor bugs.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;! &nbsp;changed the place bet money range to $ 5&nbsp;- $ 10 - $ 15 - $ 25&nbsp;- $ 50.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;! &nbsp;return for the royal flush is now to 1 : 500.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;+ added a Picture Manager to view/manage downloaded pictures (keyboard shortcut key is&nbsp;p).</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;+ added popups menu in menubar, channel, query and status.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;- removed the ontop setting for the @windows.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<u>2</u>nd release version 1.69.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;* more optimised coding for faster game performance.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;+ added keyboard shorcuts keys.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;+ sound options to enable/disable sounds, which greatly speeds up the game performance if disabled.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<u>1</u>st release version 0.69.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+</table>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600" height="30">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;<a name="pokerrules"><b>Poker Rules Info</b> :</a></span></p>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+<td width="600">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="line-height:100%; margin-top:0; margin-bottom:0;">
+<tr>
+<td width="110" valign="top" bgcolor="#380000">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Royal Flush</span></p>
+</td>
+<td bgcolor="#380000">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Ace, king, queen, jack and 10 all of the same suit. The highest possible straight flush.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;"><img src="images/A-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/K-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/Q-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/J-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/10-S.jpg" width="60" height="92" border="0"></span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#330000">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Straight Flush</span></p>
+</td>
+<td bgcolor="#330000">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Five cards of the same suit in sequence.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/9-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/8-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/7-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/6-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/5-H.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Four of a Kind</span></p>
+</td>
+<td bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Four cards of the same rank and any other card.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/8-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/8-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/8-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/8-D.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/10-S.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Full House</span></p>
+</td>
+<td bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Three cards of one rank and two cards of another rank.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/K-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/K-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/K-D.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/2-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/2-D.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#330000">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Flush</span></p>
+</td>
+<td bgcolor="#330000">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Any of five cards of the same suit.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/K-C.jpg" width="60" height="92" border="0">&nbsp;&nbsp;<img src="images/8-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/5-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/3-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/2-C.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Straight</span></p>
+</td>
+<td bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Any five cards in sequence.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/5-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/4-D.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/3-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/2-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/A-H.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Three of a Kind</span></p>
+</td>
+<td bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Three cards of same rank and two unmatched cards.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/Q-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/Q-D.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/Q-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/3-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/10-C.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Two pairs</span></p>
+</td>
+<td bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><font face="Verdana,Arial,Helvetica,sans-serif" size="2"><span class="none" style="text-decoration:none;">Two cards of one rank, two cards of second rank, and an unmatched fifth card.</span></font></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/J-H.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/J-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/5-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/5-D.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/7-H.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+
+<tr>
+<td width="110" valign="top" bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;&nbsp;Jacks or better</span></p>
+</td>
+<td bgcolor="#222222">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">One pair of Jacks or Queens or Kings or Aces.</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;"><img src="images/K-D.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/K-C.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/4-S.jpg" width="60" height="92" border="0"> &nbsp;<img src="images/2-S.jpg" width="60" height="92" border="0"> <img src="images/10-H.jpg" width="60" height="92" border="0"></span></p>
+
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+</table>
+</td>
+<td width="10">
+<p style="line-height:100%; margin-top:0; margin-bottom:0;"><span class="none" style="text-decoration:none;">&nbsp;</span></p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

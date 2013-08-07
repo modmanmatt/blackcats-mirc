@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Dialog Maker: Features</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF">
+<table width="100%" border="0">
+  <tbody>
+    <tr> 
+      <td height="21" bgcolor="#C4DCF7"><div align="center"><strong><font color="#3A4F6C">Own 
+          System for Variables</font></strong></div>
+        <div align="center"></div></td>
+    </tr>
+    <tr> 
+      <td height="97" bgcolor="#EEF2F7"><p><font color="#000000">Dialog Maker 
+          has it's own system for setting, changing, unsetting and reading variables. 
+          The main thing which make me to do this system is that I wanted Dialog 
+          Maker to save it's variables in another file. Mirc saves it's variables 
+          in Remote.ini and Dialog Maker saves it's in Variables.ini which is 
+          in DialogMaker\Data\. And that's why if you unset all mIRC variables 
+          or delete the file Remote.ini Dialog Maker's variables and options are 
+          not deleted. Commands which are used for working with Dialog Maker variables 
+          are (These commands can be used only by Dialog Maker. I mention them 
+          here only because you may like them and after that I can put them into 
+          a snippet):</font></p></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>1. 
+          Set Variable</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#EEF2F7"><p><font color="#000000">Command: /var.set 
+          [Section] [Variable] [Value]</font></p>
+        <p><font color="#000000">Explanation: [Section] is the section of the 
+          INI file where the variable will be set. [Variable] is the variable 
+          which you want to set/change value of.</font></p>
+        <p><font color="#000000">Hint: If [Value] is not setted, the command unsets 
+          the following variable.</font></p>
+        <p><font color="#000000">Example: /var.set Global Welcome 5</font></p>
+        <p><font color="#000000">The example will set the variable <em>Welcome</em> 
+          to value <em>5 </em>in the section <em>Global</em> of the INI file.</font></p></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>2. 
+          Unset Variable</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="956" bgcolor="#EEF2F7"><p><font color="#000000">Commands:</font></p>
+        <ol>
+          <li><font color="#000000"> 1. /var.unset [Section] [Variable1], [Variable2], 
+            [Variable3], [Variable4], ...</font></li>
+          <li><font color="#000000">2. /var.unset [Section] [Variable]*</font></li>
+          <li><font color="#000000">3. /var.unset [Section] *[Variable]</font></li>
+          <li><font color="#000000">4. /var.unset [Section]</font></li>
+        </ol>
+        <p align="center"><font color="#000000"><strong>1. /var.unset [Section]</strong> 
+          <strong>[Variable1], [Variable2], [Variable3], [Variable4]</strong></font></p>
+        <p><font color="#000000">Explanation: [Variable1-X] is the the variable 
+          which you want to delete from the variables list.</font></p>
+        <p><font color="#000000">Hint: You can unset a lot of variables only with 
+          one command. Just after every entered variable type comma (,).</font></p>
+        <p><font color="#000000">Example: /var.unset First Welcome, Hello, Color, 
+          Options</font></p>
+        <p><font color="#000000">The example will unset variables <em>Welcome</em>, 
+          <em>Hello</em>, <em>Color</em> and <em>Options </em>from the section 
+          <em>First</em> of the INI file.</font></p>
+        <p align="center"><font color="#000000"><strong>2. /var.unset</strong> 
+          <strong>[Section] [Variable]*</strong></font></p>
+        <p><font color="#000000">Explanation: This command deletes all variables 
+          starting with [Variable] from the variables list. The * at the end means 
+          that all variables starting with [Variable] will be deleted.</font></p>
+        <p><font color="#000000">Hint: You can use this command only for one variable.</font></p>
+        <p><font color="#000000">Example: /var.unset Registry Key*</font></p>
+        <p><font color="#000000">The example will unset all variables in the section 
+          <em>Registry</em> of the INI file which start with the string<em> Key</em>.</font></p>
+        <p align="center"><font color="#000000"><strong>3. /var.unset [Section]</strong> 
+          <strong>*[Variable]</strong></font></p>
+        <p><font color="#000000">Explanation: This command deletes all variables 
+          ending on [Variable] from the variables list. The * at the beginning 
+          means that all variables ending on [Variable] will be deleted.</font></p>
+        <p><font color="#000000">Hint: You can use this command only for one variable.</font></p>
+        <p><font color="#000000">Example: /var.unset Variables *time</font></p>
+        <p><font color="#000000">The example will unset all variables in the section 
+          <em>Variables</em> of the INI file which end on the string <em>time</em>.</font></p>
+        <p align="center"><font color="#000000"><strong>4. /var.unset [Section]</strong></font></p>
+        <p><font color="#000000">Explanation: This command unsets all variables 
+          in specified section of the INI file.</font></p>
+        <p><font color="#000000">Example: /var.unset Common</font></p>
+        <p><font color="#000000">The example will unset all variables in the section 
+          <em>Common</em> of the INI file.</font></p></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>3. 
+          Increase Variable</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#EEF2F7"><p><font color="#000000">Command: /var.inc 
+          [Section] [Variable] [Value]</font></p>
+        <p><font color="#000000">Explanation: [Variable] is the variable which 
+          you want to increase. The [Variable] will be increased with entered 
+          [Value].</font></p>
+        <p><font color="#000000"> Hint: If [Value] is not entered, the command 
+          will increase the following variable with 1.</font></p>
+        <p><font color="#000000">Example: /var.inc Vars Times</font></p>
+        <p><font color="#000000">The example will increase variable <em>Time</em>'s 
+          value with 1. The variable is in the <em>Vars </em>section of the INI 
+          file.</font></p></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>4. 
+          Decrease Variable</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#EEF2F7"><p><font color="#000000">Command: /var.dec 
+          [Section] [Variable] [Value]</font></p>
+        <p><font color="#000000">Explanation: [Variable] is the variable which 
+          you want to decrease. The [Variable] will be decreased with entered 
+          [Value].</font></p>
+        <p><font color="#000000"> Hint: If [Value] is not entered, the command 
+          will decrease the following variable with 1.</font></p>
+        <p><font color="#000000">Example: /var.dec Beginning Start 3</font></p>
+        <p><font color="#000000">The example will decrease variable <em>Start</em>'s 
+          value with 3. The variable is in the <em>Beginning </em>section of the 
+          INI file.</font></p></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#00FFFF"><div align="center"><font color="#666666"><strong>5. 
+          Read Variable</strong></font></div></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#EEF2F7"><p><font color="#000000">Command: /var.read 
+          [Section] [Variable] or $var.read([Section],[Variable])</font></p>
+        <p><font color="#000000">Explanation: [Variable] is the variable which 
+          will be read from the variables list.</font></p>
+        <p><font color="#000000"> Hint: $var.read([Variable]) often is used when 
+          you have some command before it.</font></p>
+        <p><font color="#000000">Example: /echo $var.read(Info,Nick)</font></p>
+        <p><font color="#000000">The example will read and show the variable <em>Nick</em> 
+          from the variables list. The variable will be read from the section 
+          <em>Info </em>from the INI file.</font></p></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#C4DCF7"><div align="center"><strong><font color="#3A4F6C">Future 
+          Modules</font></strong></div></td>
+    </tr>
+    <tr> 
+      <td height="21" bgcolor="#EEF2F7">1. Menu Creator Module</td>
+    </tr>
+    <tr>
+      <td height="21" bgcolor="#EEF2F7">2. Open Dialog From File Module</td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

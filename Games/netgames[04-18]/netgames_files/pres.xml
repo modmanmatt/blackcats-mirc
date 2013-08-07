@@ -1,0 +1,51 @@
+<xml xmlns:v="urn:schemas-microsoft-com:vml"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
+ xmlns:oa="urn:schemas-microsoft-com:office:activation">
+ <p:presentation sizeof="custom" slidesizex="2304" slidesizey="1094"
+  gridspacingx="49152" gridspacingy="49152">
+  <p:master id="8" slidesn="1C00D9F,B834F90" type="main" href="master08.htm"
+   xmlhref="master08.xml" template="Echo" layout="title_body"
+   slots="title,body,dateTime,footer,slideNumber">
+   <p:schemes>
+    <p:colorscheme
+     colors="#000000,#9999FF,#25252F,#FFFFFF,#3366FF,#003399,#009999,#B2B2B2"/>
+    <p:colorscheme
+     colors="#0B1E45,#FFFFFF,#314183,#FFFFFF,#6666FF,#0066FF,#006699,#B2B2B2"/>
+    <p:colorscheme
+     colors="#006666,#FFFFCC,#194349,#FFFFFF,#99CC00,#00B6B2,#669900,#666699"/>
+    <p:colorscheme
+     colors="#0000FF,#FFFFCC,#194349,#FFFFFF,#0099FF,#33CC33,#CC9900,#B2B2B2"/>
+    <p:colorscheme
+     colors="#72A497,#FFFFCC,#194349,#000000,#805D32,#7D2F3C,#CC9900,#B2B2B2"/>
+    <p:colorscheme
+     colors="#710F0F,#FFFFFF,#1C1C1C,#FFFFFF,#FF9900,#FF3300,#666699,#996633"/>
+    <p:colorscheme
+     colors="#FFFFFF,#336666,#666699,#000000,#99CCCC,#CCCCCC,#006666,#B2B2B2"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#666699,#000000,#FF9900,#FF0000,#336699,#808080"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#666699,#000000,#CC3300,#CC9900,#CC6600,#808080"/>
+    <p:colorscheme
+     colors="#FFFFFF,#000000,#666699,#000000,#666699,#9999FF,#3366FF,#808080"/>
+   </p:schemes>
+  </p:master>
+  <p:master id="9" slidesn="1C00D9F,B834F90" type="title" href="master09.htm"
+   xmlhref="master09.xml" layout="title_subtitle"
+   slots="centerTitle,subTitle,dateTime,footer,slideNumber"/>
+  <p:slide id="1" slidesn="1C2F68A,B6A79170" href="slide0001.htm"
+   layout="title_only" slots="title"/>
+  <p:viewstate type="slideView" restoredleft="156" restoredtop="946"
+   manualadjustleft="t" manualadjusttop="t" hideoutlineicons="t"/>
+  <p:guide type="horizontal" position="547"/>
+  <p:guide type="vertical" position="1154"/>
+  <p:font name="Arial" charset="0" type="4"/>
+  <p:font name="Times New Roman" charset="0" type="6" family="18"/>
+  <p:font name="Wingdings" charset="2" type="6" family="2"/>
+  <p:headersfooters noheader="t"/>
+  <p:headersfooters notes="t" slidenumber="t"/>
+  <p:pptdocumentsettings framecolors="WhiteTextOnBlack" hideslideanimation="t"
+   browsersupport="v4"/>
+ </p:presentation>
+ <o:shapedefaults v:ext="edit" spidmax="34820"/>
+</xml>

@@ -1,0 +1,111 @@
+General rules - Breaking these rules will get you banned!
+
+    Do not defy the Moderators expressed wishes! If you encounter problems with a Moderator or are unsatisfied with a warning,
+    you may address it in #complaints of our IRC network or Staffbox. But make sure you have a good reason to challenge the warning, otherwise the warning can be increased.
+    Staff decisions are final. No correspondence will be entered into nor will there be any "special" treatment given to any member,
+    regardless of user level, membership, or tracker stats. If you break the Rules, you will be warned or in a worst case scenario, Banned.
+    Disruptive behaviour in the forums, torrent comments, PMs or on the IRC channel will result in a warning ( ).
+    No language other than English is to be used on the site, forum (except designated forum sections) and IRC.
+    Be patient with newcomers.
+    After your first warning we will consider whether to ban you or not based on how critical the warning has been.
+    Only 1 account per user.
+    Trading accounts or referrals is strictly forbidden as well as sharing or giving away your account! The corresponding accounts will be disabled.
+    Do NOT try to cheat. We will catch you sooner or later and don't give second chances. We also share this info with other private trackers.
+    Asking for or trading of invites is not allowed anywhere on the site.
+    We respect the wishes of other sites here. Please refrain from posting full names of sites that want not to be mentioned here.
+    Do NOT advertise or link to any other site that contains warez, games, cracks, or any pirated materials anywhere on the site. This includes filenames, NFOs, readme files, pictures, signatures, etc. This includes torrent descriptions and comments, forum posts, IRC, etc. Violating this will result in torrent deletion, warnings, and your uploading privileges being revoked. This is a torrent site; if you want to share something, upload it as a torrent.
+    The use of proxy sites is not allowed (VPNs are considered being a proxy).
+    Do NOT sign up using a proxy, VPN or your seedbox. Also please make sure to sign up using your actual home IP address to avoid confusion and suspicion.
+    If you encounter anything that is against the rules, ie. torrent comment, forum post, bad request, bad upload, use the report button.
+    Failure to download regularly or participate in other areas of the community can result in disablement of account.
+    It's called football
+
+ 
+Downloading rules - By not following these rules you will lose download privileges!
+
+    Global ratio is not as important as individual torrent ratios!
+    We expect you to seed every completed torrent to a ratio of 0.7.
+    If you can't seed it naturally by uploading, then you need to use Seed Points.
+    After you download more than 20 GB, if your ratio falls below 0.4 you will receive a warning for low ratio. If you do not raise your ratio over 0.75 after 4 weeks your account will be disabled.
+    New members should not download too much too soon. We have a high seed to leech ratio and you will find it difficult to upload on older torrents.
+    We do not tolerate Hit & Runs here. Any complete and inactive torrent with a ratio less than 0.7 is counted as a Hit & Run.
+    Excessive Hit & Runs will result in being limited to 0 download slots. Continue to Hit & Run and your account will be disabled. You are expected to seed back as much you take at Blackcats. Slow uploads/Over Seeding/Too Many Seeds are not valid excuses (See Seed Points FAQ).
+    Check if your client is banned in the Allowed Clients List. And remember to follow the rules in that forum topic mentioned in the first post.
+    You are only allowed to use 1 IP and client per torrent, ie. you can DL/UL 1 torrent from home and another torrent from your seedbox for example.
+    Partial leeching is not allowed. Either try to download the torrent fully or don't try at all. You will only disturb the complete system. Packs are an exception to this (like DS packs).
+
+ 
+General Posting Guidelines - Please follow these guidelines on the site (Shoutbox, Forum, Tracker and IRC) or else you might end up with a warning!
+
+    Some sections of the forums may have their own sets of rules. You must read and follow these.
+    Please, feel free to answer any questions but leave the moderating to staff.
+    Stay on topic and don't post if it doesn't add anything to the topic.
+    No referral or pyramid schemes. Or any other similar scheme in which the poster gains profit from users clicking the link.
+    Use the search feature before opening a new topic in the forums.
+    Do not discuss other trackers, ie. their torrents, comparing them to other trackers, etc.
+    No aggressive behaviour or flaming.
+    Do not post potentially offensive material involving porn, religious material, animal / human cruelty or ideologically charged images. Staff has wide discretion on what is acceptable. If in doubt PM staffbox.
+    No trashing of other peoples topics (i.e. SPAM).
+    No language other than English (except for the foreign language sections in forums).
+    No links to any offensive material.
+    No systematic foul language (and none at all on titles).
+    No requests are allowed in the Forums or Torrent Comments or Chat.
+    No requesting if there has been no 'scene' release in the last 14 days after the official release date. You may request a scene release once it has been Pre'd.
+    Only game related requests are allowed, ie. a movie coming as a bonus to the game is NOT allowed but a Making of the game is allowed.
+    If you can't provide any link or proof that the Undub exists, don't request it.
+    No bumping... (All bumped threads will be deleted).
+    No images larger than 800x600, and preferably web-optimised.
+    No double posting. If you wish to post again, and yours is the last post in the thread please use the EDIT function, instead of posting a double.
+    Please ensure all questions are posted in the correct section!
+    (Game questions in the correct platform section, Site questions in the Site section, etc.).
+    Last, please read the FAQ before asking any questions!
+    If you are unsure about your topic or any issue ask about it either in IRC or direct it to the Forum Moderators responsible in that section.
+
+ 
+Torrent Comments rules - Breaking these rules will get you banned!
+
+    Keep all posts in the torrent comments related to the torrent or game, ie. info about the game, how to make it run, critical errors, etc.
+    You may state your opinion about the game as long as you leave the arguments for it as well. Only saying that it sucks doesn't count.
+    Read through the previous comments to see if your question has been asked/answered, before posting. Not doing so will result in a warning.
+    Time has shown that users will post which languages the game contains, which region it runs on, etc. so you just have to be patient.
+    The answer will not come sooner the more people ask.
+    Posts about you waiting for another version or not downloading the torrent are unnecessary as well as posts about you seeding this for longer.
+    Do not complain about the uploader or the torrent. If you have nothing nice to say, don't say anything at all.
+    Don't ask for more seeds.
+    Don't complain about speed.
+    Don't post how much you have completed of the torrent already.
+    Do NOT remove edited messages made by Staff.
+
+ 
+Avatar Guidelines - Please try to follow these guidelines
+
+    The allowed formats are .gif, .jpg and .png.
+    Be considerate. Resize your images to a width of 150 px and a size of no more than 150 KB. If your avatar is larger than 250 KB it can be removed without notice.
+    Do not use potentially offensive material involving porn, religious material, animal / human cruelty or ideologically charged images. Mods have wide discretion on what is acceptable. If in doubt PM one.
+
+ 
+IRC Guidelines - The same rules as in other site areas apply here!
+
+    Respect Staff. Staff members have an %, @, &, or ~ in front of their nick and you should listen to them.
+    The main channel is #blackcats.
+    Read the topic when entering the main channel.
+    Before trying to enter the main channel read the IRC Login Instructions.
+    No excessive swearing, spamming or testing the bots.
+    Do not post anything offensive.
+    Do NOT PM Staff without asking for it first.
+    Account related questions can be posted in #help.
+    Complaints about Staff may be posted in #complaints.
+    For a more detailed list of the IRC rules please read IRC Rules.
+
+ 
+Uploading rules - Torrents violating these rules may be deleted without notice
+
+    We accept scene releases as well as custom archives. Be sure you've tested a custom release before you upload it.
+    Before uploading check if your torrent meets the requirements in the Uploader Tutorial.
+    No porn is allowed on this tracker. If you are not sure, ask before you upload.
+    Make sure not to include any serial numbers, CD keys or similar in the description (you do not need to edit the NFO!).
+    Make sure your torrents are well-seeded for at least 24 hours or until there are 4 seeds.
+    Do not include the release date in the torrent name. Feel free to do so in the description.
+    If you have something interesting that somehow violate these rules (e.g. not ISO format), ask a Moderator and we might make an exception. 
+
+Rules edited 2011-02-13

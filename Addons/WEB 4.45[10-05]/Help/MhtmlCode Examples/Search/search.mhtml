@@ -1,0 +1,50 @@
+<html>
+<?mhtml
+   if ($mhtml.isset(search)) {
+      var %sock = $mhtml.sock, %hash = testings $+ %sock
+      var %h = 0, %f = 2, %data = $mhtml.get(search), %current, %j
+      if ($hget(%hash)) hfree %hash
+      hmake %hash
+      var %dir = $gettok($hget(web_folders,$mhtml.get(calldir)),1,32)
+      var %i = $findfile(%dir,* $+ $gettok(%data,1,43) $+ *,0,var %ii = $make(%hash,$1-))
+      hdel %hash j
+
+      while (%f <= $numtok(%data,43)) {
+            %current = $gettok(%data,%f,43)
+            %h = 1
+            while (%h <= %i) {
+                  if (%current !isin $hget(%hash,%h)) { hdel %hash %h }
+                  inc %h
+            }
+            inc %f
+      }
+
+      mhtml.print <html><title> $readf(title) </title><body bgcolor=" $+ $readf(bgcolor) $+ " link=" $+ $readf(link) $+ " vlink=" $+ $readf(vlink) $+ " text=" $+ $readf(text) $+ "><div align="left">
+      if ($isfile($readf(topimage))) { mhtml.print <p align="center"><img border="0" src=" /-_icons_-/top.jpg "></p> }
+      mhtml.print Search returned total of $hget(%hash,0).item files on $time $+ .<table>      
+      mhtml.print <tr><td><a href=""><img src="/-_icons_-/back.gif" alt="Back" border="0"></a></td><td></td><td><form method="POST" action=""><p><input type="text" name="search" size="20"><input type="submit" value="Search"></p></form></td></tr>
+      var %file, %size
+      %h = 1
+
+      while (%h <= $hget(%hash,0).item) {
+          %file = $hget(%hash,%h).data
+          %size = $file(%file).size
+          if (%size < 10000000) { %size = $round($calc(%size / 1024),1) $+ Kb }
+          else { %size = $round($calc(%size / 1048576),1) $+ Mb }
+          mhtml.print <tr><td><a href=" $+ / $+ $replace(%file,%dir,$mhtml.get(calldir) $+ /) $+ "> $nopath(%file) </a></td><td> %size </td></tr>
+          inc %h
+      }
+      mhtml.print </table>
+      mhtml.print Search returned total of $hget(%hash,0).item files on $time $+ .
+   }
+
+   if ($hget(%hash)) hfree %hash
+
+alias -l make {
+  var %j = $hget($1,j)
+  inc %j
+  hadd $1 %j $2
+  hadd $1 j %j
+}
+?>
+</html>

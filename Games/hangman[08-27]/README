@@ -1,0 +1,36 @@
+mIRC-Hangman v1.0 by Darkie
+
+Whats this?
+-----------
+
+This is a simple game of hangman which uses picture windows.
+
+Loading
+-------
+
+Type /load -rs hangman.mrc to load.  If you saved it to another directory,
+specify it.
+
+Now that it's loaded...
+-----------------------
+
+Right-click on any window and select mIRC-Hangman->play to play.  When
+you play, it selects a word from a list.  To edit the list, right-click
+and select mIRC-Hangman->Edit word list.
+
+To unload
+---------
+
+Right-click on any window and select mIRC-Hangman->Unload.
+
+Any plans?
+----------
+
+Here are the plans for future releases of this addon:
+* The ability to change fonts, etc.
+* Got any suggestions? Let me know and I'll consider it
+
+Any comments?
+-------------
+
+Email me at aaronm@ccns.net.au or pmsg me on mIRCscripts.org

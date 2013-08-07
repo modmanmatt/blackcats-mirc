@@ -1,0 +1,196 @@
+[Main]
+New=New
+Open=Open
+Save=Save
+Control_Editor=Control Editor
+Code_Editor=Code Editor
+Dialog_Code=Dialog Code
+Tools=Tools
+Help=Help
+Button=Button
+Edit=Edit
+Text=Text
+Link=Link
+Box=Box
+Scroll=Scroll
+Tab=Tab
+Icon=Icon
+Check=Check
+Radio=Radio
+List=List
+Combo=Combo
+Dialog=Dialog
+Name:=Name:
+Titlebar_Text:=Titlebar Text:
+Position_And_Size:=Position and Size:
+Use_DBU=Use DBU
+
+[Error]
+ERROR!=ERROR!
+OK=OK
+Repair=Repair
+
+[Update]
+Update=Update
+URL=URL
+Size=Size
+Progress:=Progress:
+Time:=Time:
+Update_Size:=Update Size:
+Downloaded:=Downloaded:
+Download=Download
+Stop=Stop
+Refresh=Refresh
+Current=Current
+OK=OK
+
+[Options]
+Options=Options
+Open=Open
+On_Top=On Top
+Auto_Start=Auto Start
+Open_Last_Project=Open Last Project
+Close_Loading=Close Loading
+Show_Tips=Show Tips
+Remember_Positions=Remember Positions
+Red:=Red:
+Green:=Green:
+Blue:=Blue:
+Load=Load
+Add=Add
+Rename=Rename
+Refresh=Refresh
+Delete=Delete
+General=General
+Main=Main
+Patterns=Patterns
+Editors=Editors
+Code_Editor=Code Editor
+Visual_Editor=Visual Editor
+Control_Editor=Control Editor
+Skins=Skins
+Languages=Languages
+OK=OK
+
+[Modules]
+OK=OK
+Load=Load
+Unload=Unload
+Adjust=Adjust
+Refresh=Refresh
+Delete=Delete
+Module=Module
+Modules=Modules
+Author=Author
+
+[Tips]
+Tips=Tips
+Always_show_tips_at_startup=Always show tips at startup
+Another_Tip=Another Tip
+Close=Close
+
+[Control_Editor]
+Controls:=Controls:
+Text:=Text:
+Size:=Size:
+Type:=Type:
+Align:=Align:
+Tab:=Tab:
+Disable=Disable
+Hide=Hide
+Group=Group
+Result=Result
+Copy=Copy
+Delete=Delete
+Save=Save
+Default=Default
+Multi-Line=Multi-Line
+Select...=Select...
+Add=Add
+Refresh=Refresh
+Auto_H_Scroll=Auto H Scroll
+Auto_V_Scroll=Auto V Scroll
+Horizontal_Scroll=Horizontal Scroll
+Vertical_Scroll=Vertical Scroll
+Sorted=Sorted
+Editable=Editable
+Force_Size=Force Size
+Extended_Select=Extended Select
+No_Wordwrap=No Wordwrap
+Read-Only=Read-Only
+Flat=Flat
+3_State=3 State
+Multi_Select=Multi Select
+No_Border=No Border
+Password_Entry=Password Entry
+Allow_Return=Allow Return
+Maximum:=Maximum:
+Limit:=Limit:
+Icon_File:=Icon File:
+Scroll_Range:=Scroll Range:
+Minimum:=Minimum:
+
+[Language_Editor]
+Language_Editor=Language Editor
+Default=Default
+Translated=Translated
+New=New
+Change=Change
+Windows=Windows
+Main=Main
+Error=Error
+Update=Update
+Options=Options
+Modules=Modules
+Control_Editor=Control Editor
+Code_Editor=Code Editor
+Translation_Changer=Translation Changer
+Go_To_Line=Go To Line
+Search=Search
+Menus=Menus
+Open=Open
+Tools=Tools
+Dialog_Code=Dialog Code
+About=About
+
+[Code_Editor]
+Code_Editor=Code Editor
+Save=Save
+Copy=Copy
+Paste=Paste
+Print=Print
+Clear=Clear
+Search=Search
+Go_To_Line=Go To Line
+Explorer=Explorer
+Patterns=Patterns
+Brackets=Brackets
+Lines=Lines
+Size=Size
+Clipboard=Clipboard
+
+[Go_To_Line]
+Go_To_Line...=Go To Line...
+Go=Go
+Cancel=Cancel
+
+[Search]
+Search...=Search...
+Find=Find
+Cancel=Cancel
+
+[Tools]
+Options=Options
+Update=Update
+Modules=Modules
+Language_Editor=Language Editor
+Preview=Preview
+
+[Dialog_Code]
+View=View
+Copy=Copy
+Save=Save
+
+[About]
+Author=$me
+Version=1.00

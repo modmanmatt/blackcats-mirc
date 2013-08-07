@@ -1,0 +1,196 @@
+[Main]
+New=Нов
+Open=Отвори
+Save=Запази
+Control_Editor=Кон Редакт
+Code_Editor=Код Редакт
+Dialog_Code=Диалог Код
+Tools=Инстр
+Help=Помощ
+Button=Бутон
+Edit=Едит
+Text=Текст
+Link=Връзка
+Box=Кутия
+Scroll=Скрол
+Tab=Таб
+Icon=Икона
+Check=Чек
+Radio=Радио
+List=Лист
+Combo=Комбо
+Dialog=Диалог
+Name:=Име:
+Titlebar_Text:=Текст на Тайтълбар:
+Position_and_Size:=Позиция и Размер:
+Use_DBU=Използвай DBU
+
+[Error]
+ERROR!=ГРЕШКА!
+OK=Добре
+Repair=Поправи
+
+[Update]
+Update=Ъпдейт
+URL=URL
+Size=Размер
+Progress:=Прогрес:
+Time:=Време:
+Update_Size:=Размер:
+Downloaded:=Смъкнато:
+Download=Смъкни
+Stop=Спри
+Refresh=Опресни
+Current=Сегашна
+OK=Добре
+
+[Options]
+Options=Опции
+Open=Отвори
+On_Top=Най-отгоре
+Auto_Start=Авто Старт
+Open_Last_Project=Отваряй Посл Файл
+Close_Loading=Затваряй Зарежд
+Show_Tips=Показвай Съвети
+Remember_Positions=Помни Позиции
+Red:=Червен:
+Green:=Зелен:
+Blue:=Син:
+Load=Зареди
+Add=Добави
+Rename=Преимен
+Refresh=Опресни
+Delete=Изтрий
+General=Генерални
+Main=Главни
+Patterns=Модели
+Editors=Редактори
+Code_Editor=Код Редактор
+Visual_Editor=Визуален Редактор
+Control_Editor=Контрол Редактор
+Skins=Скинове
+Languages=Езици
+OK=Добре
+
+[Modules]
+OK=Добре
+Load=Зареди
+Unload=Отзареди
+Adjust=Настрой
+Refresh=Опресни
+Delete=Изтрий
+Module=Модул
+Modules=Модули
+Author=Автор
+
+[Tips]
+Tips=Съвети
+Always_show_tips_at_startup=Винаги показвай съвети при старт
+Another_Tip=Друг Съвет
+Close=Затвори
+
+[Control_Editor]
+Controls:=Контроли:
+Text:=Текст:
+Size:=Размер:
+Type:=Вид:
+Align:=Подредба:
+Tab:=Таб:
+Disable=Негодно
+Hide=Скрит
+Group=Група
+Result=Резултат
+Copy=Копирай
+Delete=Изтрий
+Save=Запази
+Default=Първоначално
+Multi-Line=Мулти-Ред
+Select...=Избери...
+Add=Добави
+Refresh=Опресни
+Auto_H_Scroll=Автоматичен Х Скрол
+Auto_V_Scroll=Автоматичен В Скрол
+Horizontal_Scroll=Хоризонтален Скрол
+Vertical_Scroll=Вертикален Скрол
+Sorted=Сортиран
+Editable=Редактаемо
+Force_Size=Форсиран Размер
+Extended_Select=Протегнато Маркиране
+No_Wordwrap=Без Падане на Думи
+Read-Only=Само-Четене
+Flat=Плоско
+3_State=3 Места
+Multi_Select=Мулти Маркиране
+No_Border=Без Граница
+Password_Entry=Въвеждане на Парола
+Allow_Return=Разреши Връщането
+Maximum:=Максимум:
+Limit:=Лимит:
+Icon_File:=Файл на Иконата:
+Scroll_Range:=Обхват на Скрола:
+Minimum:=Минимум:
+
+[Language_Editor]
+Language_Editor=Езиков Редактор
+Default=Първоначално
+Translated=Преведен
+New=Нов
+Change=Промени
+Windows=Прозорци
+Main=Главен
+Error=Грешка
+Update=Ъпдейт
+Options=Опции
+Modules=Модули
+Control_Editor=Контрол Редактор
+Code_Editor=Код Редактор
+Translation_Changer=Промени Превод
+Go_To_Line=Отиди на ред
+Search=Търси
+Menus=Менюта
+Open=Отвори
+Tools=Инструменти
+Dialog_Code=Диалог Код
+About=За...
+
+[Code_Editor]
+Code_Editor=Кодов Редактор
+Save=Запази
+Copy=Копирай
+Paste=Пейст
+Print=Принтирай
+Clear=Изчисти
+Search=Търси
+Go_To_Line=Отиди на Ред
+Explorer=Изследовател
+Patterns=Модели
+Brackets=Скоби
+Lines=Реда
+Size=Размер
+Clipboard=Клипборд
+
+[Go_To_Line]
+Go_To_Line...=Отиди на ред...
+Go=Отиди
+Cancel=Затвори
+
+[Search]
+Search...=Търси...
+Find=Намери
+Cancel=Затвори
+
+[Tools]
+Options=Опции
+Update=Ъпдейт
+Modules=Модули
+Language_Editor=Езиков Редактор
+Preview=Предварително
+
+[Dialog_Code]
+View=Виж
+Copy=Копирай
+Save=Запази
+
+[About]
+Author=KUKU BOI
+Version=1.00

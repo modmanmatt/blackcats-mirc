@@ -1,0 +1,352 @@
+		Tontito Web Server (TnTWS) - Version released to www.mircscripts.org
+
+
+### problems detected if a NTFS partition was converted from FAT32###
+I can't control this problem since it is a mirc limitation (don't know why)
+
+
+05/10/2005 - Version v4.45
+
+  .Added new language
+
+  .OS hiden folders will not be listed from now on
+
+  .OS; hiden, system or with out attributes; files will not be listed from now on
+
+  .fixed unload problem in web server menu
+
+  .fixed bug when changing server port when server isn't running
+
+
+
+
+28/02/2005 - Version v4.40.3
+
+  .Fided multiple problems with version check
+
+  .Fixed unload problem
+
+
+
+
+28/02/2005 - Version v4.40.1 (Mirc Birthday)
+ 
+  .Added support for wap pages (via mhtml and normal wml pages)
+
+  .Finaly fixed version check
+
+  .Updated upload module files
+
+
+
+
+23/11/2004 - Version 4.30 (thanks to lunatix)
+
+  .Extended support for mirc 6.16 (versions > 6.16 will get a warning)
+
+  .Added one protection in mhtml engine
+
+  .Added protection in chan pub when people forget to add chan message. It now sends a warning.
+
+  .Solved problems with tabs and spaces in lines, in mhtml file processing
+
+
+
+
+25/06/2004 - Version 4.2.36 aka PT 8-7 EN (thanks to Axia)
+
+  .Added support for mirc 6.15 (php porblems)
+
+  .Fixed problems when using some functions in mhtlm
+
+  .Fixed auto startup of pages when they are in folder named root. 
+
+  .fixed bug in ListConnections window when trying to Block and kill a selected connection
+
+  .Fixed problem that allowed seeing wrong output in mhtml pages in unusual situations
+
+  .Fixed problem when downloading files from server (password protected) with getright
+
+  
+
+23/03/2004 - Version 4.2.3 (thanks to lunatix and Axia)
+
+  .Server can now startup and check for new version when Autostart is on
+
+  .Version check works now fine and it is 3 times faster checking the version (dl less html)
+
+  .Added myip identifier for chan publicity (it will be replaced by http//:your_ip:your_port)
+
+  .Added "!web server" on text trigger for notice pub when requested by users and server is running
+
+  .Fixed problem when changing the chan pub timer and server wasn't running (now timer doesn't start)
+
+  .Added, when starting server with chan pub on and already connected to irc server, it sends the message to all chans added in list
+
+  .Added new login and password system. It works when folders are protected by login and pass. Now it is possible for users to have
+      they own login and password. With that it is allowed to give different privileges for each user (folders access).
+
+  .Fixed bug when renaming folder that have similar path (sometimes you rename the other folder)
+
+  .Improved documentation (documentation size is now 3 times bigger than the addon himself)
+
+
+
+
+
+08/03/2004 - Version 4.1 for Php, Mhtml and Shoutcast (thanks to lunatix)
+
+  .Fixed small problem with English.ini file
+
+  .Fixed some vars initialization in php environment
+
+  .Fixed some errors in help documentation
+
+  .Added some improvements in documentation (new ways to solve problems)
+
+  .Fixed problem when single shoutcast a song (now working fine for Windows M. P. and Winamp based players)
+
+  .Also fixed one initialization var in live shoutcast (sometimes after the addon is loaded, the var wasn't created so the shoutcast didn't work)
+
+  .Added protection when php module is set but path is invalid
+
+  .Now posted data don't get logged
+
+  .Added version check, autochecks if autostart is on or you can make it check in management options
+	 (checks if version is different from the one you have, from www.mircscripts.org)
+
+  .Fixed root mhtlm or php folder can now run correctly by default in / if there is more than one folder shared
+	 (it was only correctly working when only one folder was shared)
+
+  .For all ips in block list, if there is a new attempt to connect to the server, it will be logged in file Denied_Access.log
+	 (if smart ip block is on)
+
+  .Web server tested for exploits with Tenable NeWT and Shadow Security Scanners (with the latest security tests)
+
+
+
+
+
+19/01/2004 - Version 4.0 (thanks to lunatix, oracel, raakjawebben and di|substance)
+
+  .Added Php support, a bit based in oracel's cgi engine for POST and GET and improved in speed and functionalities,
+	tested with PhpBB2 forum (downloaded in http://www.phpbb.com) and Works for all "types" of POSTS.
+	You can setup the admin section with it!!!
+
+  .Web server tested for exploits with Nessus and Shadow Security Scanner (all problems fixed)
+
+  .Improved speed in the most used methods
+
+  .Fixed unusual problem with timers when detecting end of data transfer
+
+  .Improved memory use in case of the web server is been attacked
+
+  .Faster responses in case of errors (50% faster)
+
+  .Pic in /live section fixed (can be perfectly seen in dark background)
+
+  .Shoutcast listing in /live is now extremely faster (about 8 to 10 times)
+
+  .Shoutcast playing file will be seen in list with link color (from styles dialog)
+
+  .In chan publicity section, if you want to advertise the shoutcast service and song, you can type the message you
+	want and in the place you want the current song to appear, you only have to type "mysong" without the ""
+
+  .Fixed some refresh problems with dynamic pages (folder listing, shoutcast listing and extended to Php)
+
+  .Mhtml examples are now inside of help folder
+
+  .Now when listen port is changed in config dialog, server closes old socket and starts new one in new port
+
+  .The detected attack attempts weren't been added to block list (in smart ip blocking), that problem is now fixed
+
+
+
+
+24/12/2003 - Version 3.50 Ho Ho Ho Stable (thanks to lunatix, metal and di|substance)
+
+  .Added continuous live shoutcast stream. Can be used by any client that supports shoutcast and only runs in Mirc v6.12+.
+	The address to make it work is http://your_ip/live
+	If there are no listeners, the shoutcast will stop and will be resumed next time one client connects
+
+  .When using your browser the url http://your_ip/live you can see the list of files loaded and the
+	one that is playing atm. There is also a playlist to be loaded that will startup the default player
+	with the song that is playing.
+
+  .Included an option in the config menu for you to shoutcast your own playlist (ex: from your mp3 player)
+	For that you only need to set the hashtable containing the list in the config menu section shoutcast
+	The playlist must have the format:
+	   - item: nº
+	   - data: shortfn format path to the filename
+	This option will allow you to reorder the playlist the way you want, since i am not going to implement
+	a playlist for that.
+
+  .Mhtml files are now in sections for you to test some options you can use to implement your own pages.
+	The upload code was also sent to the module section and can be used as an official module for the
+	web server with login and password protection for that virtual folder (don't forget!).
+
+  .Added rename option for virtual folder names
+
+  .Improved speed when listing folders (less html to dwl)
+
+  .Added new style for default text color in config options
+
+  .Changed page generation time to seconds scale
+
+  .Fixed small bug with hashtables noticed sometimes when starting the web server
+
+  .Fixed problem when listing active connections, in some rare cases server denies a new connection
+	because it thinks the user achieved the max limit of connections
+
+  .Added better interface when adding login and pass to a virtual folder (autocheck when filling the last field)
+	and in virtual folder fields interface
+
+  .Fixed problem with upload option noticed with tar files when uploaded by browsers (Mozilla) running in Linux
+
+  .Added protection when pressing upload with no file selected or file size is 0
+
+  .Fixed freezing bug when a shared folder is deleted in Hd, but it still exists in the virtual folder list
+
+  .Added error message when browser makes requests not supported by server for that browser (special chars like "á,...")
+
+  .Added option to block downloads for some specific ips 
+
+  .Updated Mhtml documentation and files (fixed a small problem in example code and more)
+
+  .Fixed unusual problem with menu items
+
+  .Fixed unusual bug with timers when unloading the addon
+
+  .Now .log and .txt files display correctly in browsers
+
+
+
+
+Version 3.40 Stable (thanks to lunatix for helping me find and debug some problems)
+
+  .Fixed the version check problem in the addon load process
+
+  .Fixed problem with the image on top, was only working for localhost
+
+  .Definitely solved the problem with urls containing % values (thanks to Dirk)
+    (Only works for Mozilla/5.0 compatible browsers -> netscape and mozilla since they are the 
+      only ones that know what hex values are)
+
+  .Updated some old language files and fixed problem with spanish file
+
+  .Fixed problem when trying to enter in folders when the links add no / at the end
+
+  .Updated documentation (mhtml helps) and optimized.mhtml file
+
+  .Fixed minor problem when unloading the addon (now echos the unload information)
+
+  .Now returns error message 503 (Service Unavailable) when trying to view html pages in mirc version < 6.12
+
+  .Added web server menu in status window (no more excuses for the ones that don't know what is a "Menubar")
+
+  .Improved perfomance by 100 times when uploading files bigger than 9MB (bcopy function is very slow for big values)
+
+  .Fixed bug when uploading files with a specific size
+
+  .Fixed stupid bug with autostart, when load the server and already having a config file. 
+      this was the older bug in the server :)
+
+  .Added file size control when uploading files (files bigger than 50.000.000 bytes will not be uploaded)
+     this option was added to prevent mirc errors or windows crashes
+
+  .Improved error displayed in browsers, now the messages explain the problem.
+
+  .Added some languages updates
+
+
+
+
+Version 3.31
+
+   .Fixed /.. bug
+
+   .Added new folder and back images so you don't see the images background
+     color (thanks to Nicky^JaM and johnonolennon9)
+
+   .Fixed small bug with the config interface in security section (now allow and block sections
+     are correctly enabled and disabled)
+
+   .Added option in Styles section to add a top image in all file listing pages
+
+   .Fixed the rest of the freezing bugs related to chars(i hope)
+
+   .Fixed bug when, for files and folders with more than one space together in name and 
+     server returns 404
+
+   .Fixed bug in shoutcast service (not working for some requests in some players)
+
+   .Improved a lot file and folder listing and removed the 8 sec limit (thanks to oracel)
+	.in mirc 6.03 got ~1.2 times faster
+	.in mirc 6.12  got ~8 times faster (can get extra 2 to 4 times faster when a bug in mirc is solved)
+
+   .Improved the speed of mhtml code generation and recursion level increased to 100 (mirc's limit)
+     in mirc 6.12
+	.in small mhtml files ~2kB it gets 2.5 times faster now (1.3s in PIII 500)
+	.in files whith about 500k it gets 25 times faster (3.8s in PIII 500)
+     in mirc 6.03 this option was disabled since it is too slow
+
+      As you can see, for mirc 6.1, now if the Mhtml page is bigger it takes less time (as it was supposed) to be
+      processed, so now you can start to make decent mhtml web pages and modules :)
+
+   .Added new redesigned Mhtml v2. This was made with me, Rkzad and Oracel (read the Mhtml2.txt file)
+
+   .Added support for POST requests (thanks for Oracel tips)
+
+   .Added support for file uploading (have a look to the codes in "mhtml code 
+        examples" and share it, then, with the browser goto login.mhtml -> login "guest" pass "xxx").
+      A folder named uploads will be created where the mhtml code is running. You can share this 
+        folder under the name of uploads and in view section you can pre-visualize what you uploaded.
+
+
+
+Version 3.10
+
+   Added support to use colors when using chan publicity option (thanks to Nicky^JaM)
+
+   Added French and Spanish language files (thanks to KabaaL and Nicky^JaM)
+
+   Fixed one minor bug
+
+   Added option to change your page interface (color parameters in file listing)
+
+   Title option moved to Styles tab to improve interface
+
+   Fixed bug when using a single shared folder with mhtml files. Now the server doesn't 
+     delete those files. (thanks to K`Zaith for is nice bug report)
+
+
+
+Version 3.0
+
+   Added mhtml support (with out Mhtml.dll, but thanks to rkzad for his idea, help to put the code in
+     mirc script and examples)
+
+   Fixed freezing bugs (thanks to kristoffer_lov, GloGS and Craig for they nice bug report, log and patiente)
+
+   Now index.mhtml opens by default if you have it in a folder with NO index.htm or index.html files
+
+   Once again i noticed the 99% bug, hope its fixed now...
+
+   Fixed problems with icons with "Language for non-Unicode programs" for some languages thanks 
+     to Jakuza nice bug report
+
+   Multiple small fixs (in connections list and in shared folder list check)
+
+   Added options to set max number of total connections and max connections by Ip for big downloads
+     (files bigger than 100kb)
+
+   Added 4 more languages (thanks to all that helped in this)
+
+   Added documentation to help you create and use mhtml in a optimized way (How to create mhtml pages.txt)
+
+
+
+
+Version *** to 2.80
+
+ .....
