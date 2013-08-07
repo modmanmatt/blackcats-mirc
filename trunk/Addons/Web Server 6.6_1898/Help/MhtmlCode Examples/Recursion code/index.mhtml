@@ -1,0 +1,58 @@
+<html>
+<head><title>mIRC Web Server</title></head>
+<body bgcolor=white text=black link=blue alink=blue vlink=blue>
+<font face=tahoma size=-1>
+<center><img src=mws.png><br><br>
+<?mhtml
+  if ($mhtml.isset(hello)) mhtml.print Hello, $getform(hello) $+ !<br>
+?>
+<table border=2 bordercolor=#DADADA cellpadding=0 cellspacing=0><tr><td bgcolor=#EAEAEA>
+<center><b>My Current mIRC Info
+</b></center></td>
+</tr><tr><td>
+<table border=0 cellpadding=5><tr><td bgcolor=#F5F5F5><div align=right>
+<font size=-1><b>Server:<br>
+Nickname:<br>Address:<br>Idle:<br>Active channels:<br>Uptime:<br></font></div></td><td><font size=-1>
+<?mhtml
+  mhtml.print $+($iif(!$server,Not Connected,$server),<br>,$me,<br>,$iif($server,$host,-),<br>,$duration($idle),<br>)
+  if ($chan(0)) {
+    var %num = $chan(0)
+    while %num {
+      mhtml.print $chan(%num) $+ $iif(%num != 1,$chr(44))
+      dec %num
+    }
+  }
+  else mhtml.print None
+  mhtml.print $+(<br>,$uptime(system,1))
+?>
+</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>
+<table border=2 bordercolor=#DADADA cellpadding=0 cellspacing=0><tr><td bgcolor=#EAEAEA>
+<center><b>MWS Info</b>
+</center>
+</td></tr>
+<tr>
+<td>
+<table border=0 cellpadding=5>
+<tr>
+<td bgcolor=#F5F5F5>
+<div align=right><font size=-1><b>Port:<br>Pages served:<br>Users served:<br>Uptime:</font></div></td><td><font size=-1>
+<?mhtml
+  mhtml.print $sock(www).port <br> <br> <br> $sock(www).ls
+?>
+</font>
+</td>
+</tr>
+</table>
+<center>
+<font size=-2>*During uptime</center>
+</font></td>
+</tr></table>
+<?mhtml.inc include.mhtml
+<font size=-2><b>mIRC Web Server</b> and <b>MHTML</b> concept by <a href=mailto:rkzad@hotmail.com>rkzad</a> and implemented in script by tontito </font></font></body></html>

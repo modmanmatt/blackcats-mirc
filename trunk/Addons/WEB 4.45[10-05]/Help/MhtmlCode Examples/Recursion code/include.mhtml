@@ -1,0 +1,6 @@
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" id="AutoNumber1">
+<?mhtml
+mhtml.print <tr><td> you can include more mhtml files recursivly </td><td> heheh </td></tr>
+?>
+</table>
+<?mhtml.inc include.mhtml

@@ -1,0 +1,313 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\IRCext.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "IRCext DLL\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "IRCext\0"
+            VALUE "LegalCopyright", "Copyright (C) 1999\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "IRCext.DLL\0"
+            VALUE "ProductName", "IRCext Dynamic Link Library\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DEBUGDLG_DIALOG DIALOG DISCARDABLE  0, 0, 320, 124
+STYLE DS_LOCALEDIT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDC_HIDE,263,7,50,14
+    PUSHBUTTON      "Clear",IDC_CLEAR,263,31,50,14
+    CONTROL         "",IDC_OUTPUT,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,7,
+                    7,244,110
+END
+
+IDD_CONFIGUREDLG_DIALOG DIALOG DISCARDABLE  0, 0, 361, 194
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,304,96,50,14
+    CONTROL         "List1",IDC_TIMERLIST,"SysListView32",LVS_REPORT | 
+                    WS_BORDER | WS_TABSTOP,7,7,217,60
+    PUSHBUTTON      "Add",IDC_ADD,236,96,50,14
+    PUSHBUTTON      "Remove",IDC_REMOVE,236,115,50,14
+    EDITTEXT        IDC_CHANNELS,7,173,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TIMER,62,173,40,14,ES_AUTOHSCROLL
+    LTEXT           "Channels:",IDC_STATIC,7,161,32,8
+    LTEXT           "Timer (secs)",IDC_STATIC,62,161,39,8
+    EDITTEXT        IDC_TRIGGER_AD,119,94,105,60,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_WANTRETURN
+    LTEXT           "Nick:",IDC_STATIC,247,29,18,8
+    EDITTEXT        IDC_NICK,272,26,74,14,ES_AUTOHSCROLL
+    LTEXT           "User:",IDC_STATIC,247,45,18,8
+    EDITTEXT        IDC_USER,272,42,74,14,ES_AUTOHSCROLL
+    CONTROL         "Enable",IDC_AD_ENABLE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,175,172,38,10
+    PUSHBUTTON      "Update",IDC_UPDATE,236,134,50,14
+    GROUPBOX        "Global",IDC_STATIC,238,12,116,66
+    LTEXT           "Timed Message:",IDC_STATIC,7,81,53,8
+    EDITTEXT        IDC_MSG,7,94,105,60,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_WANTRETURN
+    LTEXT           "Triggered Message:",IDC_STATIC,119,81,64,8
+    EDITTEXT        IDC_TRIGGERTEXT,119,173,40,14,ES_AUTOHSCROLL
+    LTEXT           "Trigger Text:",IDC_STATIC,119,161,41,8
+    CONTROL         "Global Enable",IDC_GLOBAL_ENABLE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,265,169,60,10
+    LTEXT           "Servers:",IDC_STATIC,243,60,27,8
+    EDITTEXT        IDC_SERVER_LIST,272,58,74,14,ES_AUTOHSCROLL
+END
+
+IDD_PASSWORD_HOP DIALOG DISCARDABLE  0, 0, 269, 113
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Password Hopping"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,212,7,50,14
+    CONTROL         "List1",IDC_ACCOUNTS,"SysListView32",LVS_REPORT | 
+                    WS_BORDER | WS_TABSTOP,7,7,194,69
+    LTEXT           "Account:",IDC_STATIC,7,84,30,8
+    EDITTEXT        IDC_ACCOUNT,40,82,61,14,ES_AUTOHSCROLL
+    LTEXT           "Rate (minutes):",IDC_STATIC,108,84,48,8
+    EDITTEXT        IDC_RATE,161,82,40,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add",IDC_ADD,212,32,50,14
+    PUSHBUTTON      "Remove",IDC_REMOVE,212,57,50,14
+    PUSHBUTTON      "Update",IDC_UPDATE,212,82,50,14
+END
+
+IDD_KICKRULES DIALOG DISCARDABLE  0, 0, 247, 130
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Kick Rules"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,190,7,50,14
+    CONTROL         "List1",IDC_RULES_LIST,"SysListView32",LVS_REPORT | 
+                    WS_BORDER | WS_TABSTOP,7,7,173,67
+    LTEXT           "Kick logins to account:",IDC_STATIC,7,83,73,8
+    LTEXT           "If not in channel:",IDC_STATIC,94,83,54,8
+    EDITTEXT        IDC_ACCOUNT,14,95,61,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_CHANNEL,100,95,81,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Add",IDC_ADD,190,35,50,14
+    PUSHBUTTON      "Remove",IDC_REMOVE,190,63,50,14
+    PUSHBUTTON      "Update",IDC_UPDATE,190,91,50,14
+END
+
+IDD_EVENT_MSG DIALOG DISCARDABLE  0, 0, 329, 278
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Event Messages"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,272,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,272,24,50,14
+    LTEXT           "Login Message:",IDC_STATIC,7,9,51,8
+    EDITTEXT        IDC_LOGIN_MSG,7,21,108,39,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_WANTRETURN
+    EDITTEXT        IDC_LOGIN_CHANNELS,7,78,108,14,ES_AUTOHSCROLL
+    LTEXT           "Login Channels:",IDC_STATIC,7,65,52,8
+    LTEXT           "Logout Message:",IDC_STATIC,127,9,56,8
+    EDITTEXT        IDC_LOGOUT_MSG,127,21,108,39,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_LOGOUT_CHANNELS,127,78,108,14,ES_AUTOHSCROLL
+    LTEXT           "Logout Channels:",IDC_STATIC,127,65,56,8
+    LTEXT           "Download Message:",IDC_STATIC,7,100,66,8
+    EDITTEXT        IDC_DOWNLOAD_MSG,7,112,108,39,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_DOWNLOAD_CHANNELS,7,169,108,14,ES_AUTOHSCROLL
+    LTEXT           "Download Channels:",IDC_STATIC,7,156,66,8
+    LTEXT           "Upload Message:",IDC_STATIC,127,100,56,8
+    EDITTEXT        IDC_UPLOAD_MSG,127,112,108,39,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_UPLOAD_CHANNELS,127,169,108,14,ES_AUTOHSCROLL
+    LTEXT           "Upload Channels:",IDC_STATIC,127,156,57,8
+    LTEXT           "Make Dir Message:",IDC_STATIC,7,188,62,8
+    EDITTEXT        IDC_MAKEDIR_MSG,7,200,108,39,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_MAKEDIR_CHANNELS,7,257,108,14,ES_AUTOHSCROLL
+    LTEXT           "Make Dir Channels:",IDC_STATIC,7,244,63,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_DEBUGDLG_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 117
+    END
+
+    IDD_CONFIGUREDLG_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 354
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 187
+    END
+
+    IDD_PASSWORD_HOP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 262
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 106
+    END
+
+    IDD_KICKRULES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 240
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 123
+    END
+
+    IDD_EVENT_MSG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 322
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 271
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDP_SOCKETS_INIT_FAILED "Windows sockets initialization failed."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\IRCext.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

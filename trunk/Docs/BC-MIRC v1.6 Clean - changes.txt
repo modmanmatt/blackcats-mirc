@@ -1,0 +1,129 @@
+ Author: BC Crew 2011(Camaro350)
+ Name: BC MIRC Script v1.6 Clean
+ Date: 03-28-2013
+
+ Script help: https://www.blackcats-games.net/forum/index.php?showtopic=52748
+
+ Thanks to:
+ Camaro350(Creator, Designer, gods gift to computers...)
+ Stoi(Creator of BlackCats)
+ Netwerk(snarf script)
+ Harcroft
+ regs
+ X
+ iamamitten(Emulators-input) ..and many more
+
+
+BC Notes: Thanks to all BC Staff & Members
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new changes for v 1.6.6 Clean so far 3/28/2013
+-----------------
+
+~Removed Sounds
+Duke Sounds
+sounds script
+Misc Folder From Root.
+User/Wii Folder From root.
+FtpGuild
+
+~Removed Mirc Tools
+Converter-img
+currconv[03-26]
+pdsfv
+ppf
+adr
+
+
+~i kept these few tools i found prevelent or usefull.
+Calculator
+NfoViewer
+Keygen
+Unrar
+Address Book
+FireBurner
+Alarm Clock
+
+
+~Removed mirc addons 
+Canos v1.03166
+coSAMProtectionSystem1.5
+Essence
+Horoscope367
+Lagbar_3310
+mmp
+mpaint
+mRadio
+SE[08-31]
+
+
+~I only kept a few small tools i found prevelent or usefull listed here;
+Utorrent Integrated *Custom Addon (By Camaro350)
+IMDB Tool
+Hddspace1.11
+Port Scanner
+Weather Client4.0
+Web Browser Integrated
+PC STats1.5
+Loafs Magic 8 Ball
+
+``````````````````````````````````````````````````````
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+new changes for v 1.6.5 Clean so far 2/27/2013
+-----------------
+Removed Emulator Pack
+REmoved Tools Pack
+Removed PC Tools Pack
+Removed Bc Sounds Files
+Cleaned out extra (no longer used)-> files.
+
+
+new changes for v 1.6 Full so far 2/27/2013
+-----------------
+
+
+new changes for v 1.5 so far 9/01/2011
+-----------------
+* Added Filezilla portable version to pctools packs
+* made all the scripts into standalone modules that way you can add and remove features easily and it will make update and bins system much easier...
+* added a bins ftp server for modules, bcmirc updates and console tools will be similar to xbins wich i removed until i can find a cleaner version.
+* added more console tools and emulators
+* cleaned out everything that was considered bad by security systems(antivirus trojans etc... why xbins was removed)
+* added duke nukem sound board and fixed the issues from before
+with the system being on after install as well as issue of nickalert being on after install these features are still there but they are off by default
+* added invision sound script that is off by default incase anyone wants it to have complete invision sound system
+* started many other features that are still in the works for v1.6
+* fixed administrators colors issue with the blue being to dark blue. its much lughter blue now
+* added pc info and stats systems
+*to much to name lets just say this version kicks 1.4 butt!
+
+
+new changes for v 1.4 so far 8/01/2011
+-----------------
+* cleaned allot of fat and usless rubbish
+* Added Emulation Section with 20 current emulators
+* Recoded alot of the tsz material in backround of irc script to fit BC
+* cleaned out allot of old usless links
+* added some misc roms to some of the emulators just for show i guess
+* removed old irc scripts and programs that were no longer needed
+
+
+new changes for v 1.3 so far 7/01/2011
+-----------------
+* Fixed keygen
+* fixed mirc help/online help link
+* fixed graphic layout
+* added links list to games menu of top 10 best FPS online free games
+
+ v1.2 12-07-2011
+ -----------------
+ * changed style and images to match BC style
+ * Stripped out some not yet all of the TSZ content
+ * Added Snarf Menu and tools
+ * Added BC links and info
+ * Added BC perform line
+ * Added Console Modding tools
+
+**************

@@ -1,0 +1,4 @@
+<?mhtml
+     var %var = " $+ $mhtml.rootdir $+ uploads\ $+ $replace($mhtml.get(id),s_p_a_c_e,$chr(32)) $+ "
+     if ($isfile(%var)) .remove %var
+?>

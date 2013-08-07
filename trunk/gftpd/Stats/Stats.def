@@ -1,0 +1,8 @@
+; Stats.def : Declares the module parameters for the DLL.
+
+LIBRARY      "Stats"
+DESCRIPTION  'Stats Windows Dynamic Link Library'
+
+EXPORTS
+  HandleEventHook @1
+  HandleGFTPDEventHook @2

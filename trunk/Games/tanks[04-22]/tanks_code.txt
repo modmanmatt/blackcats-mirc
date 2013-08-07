@@ -1,0 +1,3889 @@
+on *:load:tanks.init
+alias tanks.init {
+  if ($version < 5.7) {
+    tanks.alias./echo $tanksversion requires mIRC v5.7 or newer - $tanks.alias.hl(http://www.mirc.com/get.html)
+    if ($?!="You need a newer version of mIRC to use Tanks.") tanks.alias.timer run http://www.mirc.com/get.html
+    unload -rs " $+ $script $+ "
+  }
+  if (%tanksnick) %tanksname = %tanksnick
+  var %f = $scriptdir $+ tanksb.bmp
+  if ($isfile(%f)) .remove " $+ %f $+ "
+  if (%tanksautoscroll !isnum) %tanksautoscroll = 1
+  if (%tanksforget !isnum) %tanksforget = 1
+  if (%tankspublic !isnum) %tankspublic = 1
+  %f = $scriptdir $+ tanks.txt
+  var %variable = $read -w"*Fixes and additions" " [ $+ [ %f ] $+ ] "
+  if (%variable) {
+    window -zBkdaC @Tanks versions -1 -1 -1 400 Fixedsys 15
+    loadbuf $calc($readn - 1) $+ - $+ $calc($lines(%f)-2) @Tanks versions " $+ %f $+ "
+  }
+}
+alias tanksversion var %variable = 2004.06.04 | if ($1) return %variable | return Tanks [[ $+ %variable $+ ]]
+alias tanks {
+  if (* !iswm $window(@Tanks)) tanks.alias.end
+  else {
+    window -a @Tanks
+    if (* !iswm $1) return
+  }
+  $tanks.alias.nodl
+  tokenize 32 $replace($1-,:,$chr(32))
+  if (. isin $1) || ($1 isnum) && ($1 !ischan) && ($2 isnum 1-) {
+    if ($1 isnum) tokenize 32 $longip($1) $2
+    %tanksip = $1
+    %tanksport = $2
+    tanks.alias.end
+    sockopen tanks %tanksip %tanksport
+    tanks.alias./echo Tanks: Connecting to %tanksip $+ : $+ %tanksport . . .
+    return
+  }
+  if ($sock(tanks.*,0)) && ($1 isnum 1-65534) tanks.alias.parsechat /port $1
+  var %1 = $1, %p = 1
+  if ($1 == $me) tokenize 32 $2-
+  elseif ($1 !isnum) && (. !isin $1) && ($1) {
+    if (* !iswm $server) || (* !iswm $ip) {
+      tanks.alias./echo Tanks: You are not connected to IRC.
+      return
+    }
+    %tankstempnick = $1
+    tanks.alias.notice request $tanksversion(1) %tanksip %tanksport
+    tanks.alias./echo Tanks invitation sent to $1 $+ .
+    %p = 0
+    tokenize 32 $2-
+  }
+  if ($sock(tanks.*,0)) || ($sock(tanks)) return
+  tanks.alias.end
+  $tanks.alias.newgame
+  tankscheck
+  %tanks.me = 0
+  %tanks.player.0 = %tanksserver
+  tanks.alias.setcolor 0 %tankscolor
+  if (* !iswm $timer(_tanksd)) {
+    %tanks.me = 1
+    tanks.alias.setcolor 1 %tankscolor
+    %tanks.ai.1 = 5
+    %tanks.player.1 = $tanks.alias.validname(%tanksname,1)
+    tanks.alias.vars 1 $tanks.alias.vars
+  }
+  if (* !iswm %1) {
+    tanks.alias.addbot %tanksskill
+    %tankspublic = 0
+  }
+  else %tankspublic = %p
+  tanks.alias.@tanks
+  tanks.alias.draw-all
+  sockclose tanks.0
+  %tanksip = $ip
+  if (%tankssavedport !isnum 1-65534) %tankssavedport = $rand(3000,60000)
+  if ($1 isnum 1-65534) %tankssavedport = $1
+  %tanksport = %tankssavedport
+  tanks.alias.setport 0 1
+  tanks.alias.titlebar
+}
+alias -l tanks.alias.setport {
+  if ($1) inc %tanksport
+  sockclose tanks.0
+  .timertanks.tanks.alias.setport -o 1 0 tanks.alias.setport $calc(1+$1) $2
+  socklisten tanks.0 %tanksport
+  .timertanks.tanks.alias.setport off
+  tanks.alias.tanklistadd
+  if ($1) && ($version < 6.14) {
+    tanks.alias.echochat tanks.echotype.echo Please ignore mIRC's error message. Tanks was testing the port and it was unavailable.
+    tanks.alias.echochat tanks.echotype.echo Server running on port %tanksport
+  }
+  if ($2) return
+  tanks.alias.echochat tanks.echotype.echo Server port has been changed to %tanksport
+  :error
+  if ($version >= 6.14) reseterror
+}
+alias tanksd {
+  .timer_tanksd -o 1 0 return
+  tanks $calc(+$1)
+}
+alias -l tanks.alias.addbot {
+  var %p = 1
+  while (1) {
+    var %s = tanks. $+ %p
+    if ($sock(%s)) || (%tanks.color. [ $+ [ %p ] ] isnum) inc %p
+    else break
+  }
+  if (%p > %tanks.maxplayers) return 1
+  if ($1 !isnum 0-4) tokenize 32 $rand(0,4)
+  else %tanksskill = $1
+  %tanks.ai. [ $+ [ %p ] ] = $1
+  tanks.alias.join 0 $1 %p 0 Skill  $+ $1
+}
+alias -l tanks.alias.addplayer {
+  var %p = 1
+  while (1) {
+    var %s = tanks. $+ %p
+    if ($sock(%s)) || (%tanks.color. [ $+ [ %p ] ] isnum) inc %p
+    else break
+  }
+  if (%p > %tanks.maxplayers) return 1
+  %tanks.ai. [ $+ [ %p ] ] = 5
+  if (%tanks.me == 0) %tanks.me = %p
+  tanks.alias.join 0 5 %p $tanks.alias.validcolor(%tankscolor) $tanks.alias.validname($iif($0,$1-,%tanks.player. [ $+ [ %tanks.me ] ] ),%p)
+}
+alias -l tanks.alias.setfont {
+  if ($1 isnum 0-1) %tankstahoma = $1
+  if (%tankstahoma !isnum 0-1) %tankstahoma = 1
+  if (%tankstahoma) {
+    %tankschat.fontsize = $iif($version < 5.91,13,11)
+    %tankschat.font = Tahoma
+    %tankschat.qfont = "Tahoma"
+  }
+  else {
+    %tankschat.fontsize = $iif($version < 5.91,13,12)
+    %tankschat.font = MS Sans Serif
+    %tankschat.qfont = "MS Sans Serif"
+  }
+  if ($1 isnum 0-1) {
+    tanks.alias.draw-chat
+    tanks.alias.draw-buttons
+    tanks.alias.draw-shield
+    drawdot @Tanks
+  }
+}
+alias -l tanks.alias.newgame {
+  .timertanks* off
+  %tanksremove = %tanksid
+  %tanksid = $ticks
+  if ($version == 6.02) window -hp @tanksname
+  else {
+    var %variable = $iif(%tanksnoxy || * * !iswm %tanksxy,-1 -1,%tanksxy)
+    window -hBdfp +Ld @tanksname %variable 100 17
+    window -h @tanksname %variable 100 17
+  }
+  window -hl @tankschat
+  var %x, %y, %f = $scriptdir $+ tanks.bmp
+  tanks.alias.setrgb
+  if ($pic(%f).width $pic(%f).height != 367 148) {
+    tanks.alias./echo $iif($isfile(%f),Incorrect Tanks file:,Tanks file missing:) tanks.bmp
+    tanks.alias.cancel
+    downloadtanks
+    return return
+  }
+  %tanksbmp = " $+ %f $+ "
+  %tanks.wcolors = 30
+  %tanks.hcolors = 10
+  if (%tankstitle !isnum) %tankstitle = 15
+  window -Bhpf +d @tankscolors -1 -1 %tanks.wcolors %tanks.hcolors
+  window -f @tankscolors -1 -1 %tanks.wcolors %tanks.hcolors
+  drawpic -c @tankscolors 0 0 150 104 %tanks.wcolors %tanks.hcolors %tanksbmp
+  %tanks.colors = 5 11 13 10 8 18 3 17 2 16 6
+  %tankscolor = $tanks.alias.validcolor(%tankscolor)
+  %tanksname = $tanks.alias.validname(%tanksname,1)
+  if (* !iswm %tanksserver) %tanksserver = %tanksname $+ 's server
+  %tanksserver = $tanks.alias.validname(%tanksserver,0)
+  window -hl @tanksban
+  %f = $scriptdir $+ tanks.ban
+  if ($isfile(%f)) loadbuf @tanksban " $+ %f $+ "
+  if (%tanksskill !isnum 0-4) %tanksskill = 4
+  if (%tankscwind !isnum 0-2) %tankscwind = 1
+  if (%tanksmode !isnum 0-1) %tanksmode = 0
+  %tanks.fast = %tanksfast
+  if (%tanksinc !isin 1 5) %tanksinc = 5
+  if (%tankslimit !isnum 1-999) %tankslimit = 10
+  if (%tankslimitmode !isnum 0-2) %tankslimitmode = 1
+  %tanks.cwind = %tankscwind
+  %tanks.mode = %tanksmode
+  %tanks.round = 1
+  %tanks.limit = %tankslimit
+  %tanks.limitmode = %tankslimitmode
+  %tanks.item = 1
+  %tanks.turn = 1
+  %tanks.wind = 0
+  %tanks.maxplayers = 32
+  %tanks.namezero = 0
+  %tanks.namescroll = 2
+  if (%tanksplayerlimit !isnum 2-32) %tanksplayerlimit = 8
+  %tankswidth = 641
+  %tanksheight = 460
+  %tanks.top = 20
+  %tanks.bottom = 311
+  inc %tanksd
+  if (%tanksd > $script(0)) %tanksd = 1
+  %tanks.arrow = 0
+  %tanks.maxname = 21
+  %tankschat.x = 321
+  %tankschat.y = 312
+  %tankschat.w = $calc(%tankswidth -15-%tankschat.x)
+  %tankschat.h = $calc(%tanksheight -%tankschat.y)
+  %tankschat.l = 11
+  %tankschat.bg = %tanks.15
+  %tankschat.text = %tanks.1
+  %tankschat.msg = %tanks.2
+  %tankschat.echo = %tanks.8
+  %tankschat.bar = 15000804
+  %tankschat.bar1 = 9342606
+  %tankschat.barx = %tankswidth - 15
+  %tankschat.bary = %tankschat.y + 15
+  %tankschat.barh = %tankschat.h - 30
+  %tankschat.barb = %tanksheight - 15
+  %tankschat.scroll = 0
+  %tankschat.lines = 0
+  tanks.alias.setfont
+  %tanks.ground = $iif(%tanksground isnum,%tanksground,%tanks.14)
+  %tanks.sky = $iif(%tankssky isnum,%tankssky,%tanks.15)
+  %tanks.cpath = 11579568
+  %tanks.seltext = 16777215
+  %tanks.selbg = 0
+  %tanks.wtext = 7368816
+  %tanks.shieldbg = %tanks.8
+  %tanks.noshield = %tanks.1
+  %tanks.smallnoshield = %tanks.8
+  close -@ @Tanks @tanksland
+  var %p = %tanks.maxplayers
+  while (%p) {
+    tanks.alias.vars %p $tanks.alias.vars
+    dec %p
+  }
+}
+alias -l tanks.alias.end {
+  if ($sock(tanks.0)) tanks.alias.tanklistremove
+  unset %tanks.color.*
+  sockclose tanks
+  sockclose tanks.*
+  if ($window(@Tanks)) && ($1 != 1) {
+    tanks.alias.echochat tanks.echotype.echo Game over
+    unset %tanks.*
+    %tanks.bottom = 311
+  }
+  else {
+    close -@ @tanksland @Tanks color @tankscolors @Tank info @tanksban @tanksname @tankschat @tanksrgb
+    unset %tankschat.* %tanksbmp %tankswidth %tanksheight %tanks.*
+  }
+  if ($window(@Tanks request)) tanks.alias.setrgb
+}
+alias -l tanks.alias.highlight-request {
+  var %x = $mouse.x, %y = $mouse.y
+  drawtext -rbn @Tanks request %tanks.0 $iif($inrect(%x,%y,16,24,39,15),%tanks.12,%tanks.2) Fixedsys 15 16 24 [Yes]
+  drawtext -rbn @Tanks request %tanks.0 $iif($inrect(%x,%y,64,24,31,15),%tanks.12,%tanks.2) Fixedsys 15 64 24 [No]
+  drawdot @Tanks request
+}
+menu @Tanks request {
+  mouse:tanks.alias.highlight-request
+  leave:tanks.alias.highlight-request
+  sclick:{
+    var %x = $click(@Tanks request,$click(@Tanks request,0)).x, %y = $click(@Tanks request,$click(@Tanks request,0)).y
+    if ($inrect(%x,%y,16,24,39,15)) {
+      close -@ @Tanks request
+      tanks.alias.end
+      sockopen tanks %tankstempip %tankstempport
+    }
+    elseif ($inrect(%x,%y,64,24,31,15)) {
+      close -@ @Tanks request
+      tanks.alias.notice decline
+    }
+  }
+}
+on ^*:notice:tanks *:*:{
+  if ($2 == request) {
+    haltdef
+    if (%tanksnolisten) return
+    var %e = tanks.alias./echo $nick wants to play a game of Tanks $+ $chr(44) but, %n = tanks.alias.notice 0 $nick
+    if ($tanksversion(1) < $3) {
+      %e you have an older version.  Get the newest by typing ' $+ $tanks.alias.hl(/downloadtanks) $+ '.
+      %n old
+    }
+    elseif ($tanksversion(1) != $3) {
+      %e they have an older version.
+      %n new
+    }
+    elseif ($tanks.alias.nodl) {
+      %e Tanks is busy installing the newest version right now.
+      %n installing
+    }
+    elseif ($sock(tanks)) || ($sock(tanks.*,0)) %n playing %tanksip %tanksport
+    else {
+      %tankstempip = $4
+      %tankstempport = $5
+      %tankstempnick = $nick
+      tanks.alias.setrgb
+      var %variable = Will you join $nick $+ 's game of Tanks?, %w = $width(%variable,fixedsys,15,0,0) + 16
+      tanks.alias.open @Tanks request -1 -1 %w 47 Fixedsys 15
+      drawrect -rfn @Tanks request %tanks.15 1 0 0 %w 47
+      drawtext -rbn @Tanks request %tanks.1 %tanks.15 Fixedsys 15 8 8 %variable
+      tanks.alias.highlight-request
+    }
+    return
+  }
+  if ($nick == %tankstempnick) {
+    if ($2 == playing) {
+      if ($sock(tanks.*,0) > 1) || ($sock(tanks)) tanks.alias./echo $nick is already playing Tanks at $3 $+ : $+ $4 $+ .
+      else {
+        tanks.alias.end
+        tanks $3-4
+      }
+    }
+    elseif ($2 == decline) tanks.alias./echo $nick declined your Tanks invitation.
+    elseif ($2 == installing) tanks.alias./echo $nick is busy installing the new version of Tanks.
+    elseif ($2 == ver) || ($2 == old) tanks.alias./echo $nick has an older version of Tanks.
+    elseif ($2 == new) tanks.alias./echo $nick has a newer version of Tanks. Download the newest version by typing $tanks.alias.hl(/downloadtanks) $+ .
+  }
+  haltdef
+}
+alias -l tanks.alias.setrgb {
+  drawpic -c
+  tokenize 32 15790320 0 8388608 32768 240 128 8388736 10526880 6316128 11579568 3158064 20644 15728640 16496 8421504 13684944 8388688 8411136 2121760
+  close -@ @tanksrgb
+  if ($version < 5.71) window -pd @tanksrgb
+  else window -Bhp @tanksrgb
+  var %x = 0, %c
+  while ($1 isnum) {
+    drawdot -r @tanksrgb $1 0 1 1
+    %tanks. [ $+ [ %x ] ] = $getdot(@tanksrgb,1,1)
+    tokenize 32 $2-
+    inc %x
+  }
+  close -@ @tanksrgb
+  if (%tanks.14 == %tanks.8) %tanks.8 = $rgb(128,128,0)
+}
+alias -l tanks.alias.sound {
+  if (%tanksnosound) return
+  !.splay " $+ $scriptdir $+ tanks $+ $1 $+ .wav"
+}
+alias -l tanks.alias.sendexclude {
+  var %s, %n = %tanks.maxplayers
+  while (%n) {
+    %s = tanks. $+ %n
+    if ($sock(%s)) && (%tanks.color. [ $+ [ %n ] ] isnum) && ($1 != %n) sockwrite -tn %s $2-
+    dec %n
+  }
+}
+alias -l tanks.alias.sendspecific {
+  var %s = tanks. $+ $1
+  if ($sock(%s)) && ($1) && (%tanks.color. [ $+ [ $1 ] ] isnum) sockwrite -tn %s $2-
+}
+alias -l tanks.alias.sendall {
+  if ($sock(tanks)) sockwrite -tn tanks $1-
+  else {
+    var %s, %n = %tanks.maxplayers
+    while (%n) {
+      %s = tanks. $+ %n
+      if ($sock(%s)) && (%tanks.color. [ $+ [ %n ] ] isnum) sockwrite -tn %s $1-
+      dec %n
+    }
+  }
+}
+alias -l tanks.alias.notice {
+  if ($1 == 0) !.notice $2 tanks $3-
+  else !.notice %tankstempnick tanks $1-
+}
+alias -l tanks.alias.hl return  $+ $colour(h) $+ $1- $+ 
+alias -l tanks.alias./echo echo $colour(i) -iat *** $1-
+alias -l tanks.alias.timer .timertanks $+ $rand(0,999999) $+ $ticks -o 1 0 $1-
+alias -l tanks.alias.err {
+  if ($1 == 3) tanks.alias./echo Tanks $3- error (server not found)
+  else tanks.alias./echo Tanks $3- error $1 $sock($2).wsmsg
+  sockclose $2
+}
+alias -l tanks.alias.randsock {
+  if ($sock($1)) {
+    var %n = tanks.rand. $+ $ticks $+ $rand(0,999999)
+    sockclose %n
+    sockrename $1 %n
+    sockwrite -tn %n $2-
+    .timer -o 1 30 sockclose %n
+  }
+}
+on *:sockwrite:tanks.*.*:.timer -o 1 15 sockclose $sockname
+on *:socklisten:tanks.0:{
+  var %x = 1, %s, %variable
+  if ($sockerr) {
+    tanks.alias.err $ifmatch tanks.0 socket listening
+    return
+  }
+  while (1) {
+    %s = tanks. $+ %x
+    if ($sock(%s)) || (%tanks.color. [ $+ [ %x ] ] isnum) inc %x
+    else break
+  }
+  sockaccept %s
+  var %i = $sock(%s).ip, %c = tanksconnect $+ %i
+  if (%x > %tanksplayerlimit) %variable = tanks.sockmsg.full
+  elseif (%tanksonecon != 1) && ($timer(%c)) && (%i) %variable = tanks.sockmsg.fast
+  else .timer $+ %c -o 1 10 return
+  if ($tanks.alias.checkban(0,%i)) %variable = tanks.sockmsg.ban
+  else {
+    var %p = %tanks.maxplayers
+    while (%p) && (%tanksonecon) {
+      if (%tanks.color. [ $+ [ %p ] ] isnum) && (%i == $sock(tanks. [ $+ [ %p ] ] ).ip) {
+        %variable = tanks.sockmsg.con
+        break
+      }
+      dec %p
+    }
+  }
+  if (%variable) tanks.alias.randsock %s ver $tanksversion(1) %variable
+  else .timertanks.tanks.alias.iftimer $+ %x -o 1 15 tanks.alias.iftimer 1 %x %s %i
+}
+alias -l tanks.alias.iftimer {
+  if ($1 == 1) {
+    if (%tanks.color. [ $+ [ $2 ] ] !isnum) && ($sock($3).ip == $4) sockclose $3
+  }
+  elseif ($1 == 2) {
+    if ($window($2)) $3-
+  }
+  elseif ($1 == 3) {
+    if ($window(@Tanks)) && (%tanks.state == tanks.state.nextturn) %tanks.state = tanks.state.myturn
+  }
+  elseif ($1 == 4) {
+    tanks.alias.erase
+    if ($window(@Tanks)) drawdot @Tanks
+  }
+}
+on *:sockopen:tanks:{
+  if ($sockerr) {
+    tanks.alias.err $ifmatch $sockname connection
+    return
+  }
+  $tanks.alias.newgame
+  tanks.alias.sendall tanks.sockmsg.join $tanksversion(1) %tankscolor %tanksname
+  %tanks.state = tanks.state.client-joining
+}
+on *:sockread:tanks:{
+  var %r, %n
+  if ($sockerr) {
+    tanks.alias.err $ifmatch $sockname sockread
+    return
+  }
+  while ($sock($sockname)) {
+    sockread %r
+    if ($sockbr !isnum 1-) return
+    tokenize 32 %r
+    if ($1 == ver) {
+      if ($2 != $tanksversion(1)) {
+        if ($2 > $tanksversion(1)) tanks.alias./echo The Tanks server has a newer version ( $+ $2 $+ ). Download the newest by typing $tanks.alias.hl(/downloadtanks) $+ .
+        else tanks.alias./echo The server has an older version ( $+ $2 $+ ). Your version is $tanksversion(1) $+ .
+        tanks.alias.end
+        continue
+      }
+      tokenize 32 $3-
+    }
+    if ($1 == tanks.sockmsg.land) {
+      while ($2) {
+        tokenize 32 $2-
+        aline @tanksland $1
+      }
+      if ($line(@tanksland,0) >= %tankswidth) {
+        drawrect -rfn @Tanks %tanks.sky 1 0 0 %tankswidth %tanks.bottom
+        var %n = 1, %variable = 0
+        while (%n <= %tankswidth) {
+          drawline -rn @Tanks %tanks.ground 1 %variable $line(@tanksland,%n) %variable %tanks.bottom
+          inc %n
+          inc %variable
+        }
+        %tanks.state = tanks.state.waiting
+        if (%tanks.color. [ $+ [ %tanks.me ] ] isnum) tanks.alias.1start
+        tanks.alias.sendall tanks.sockmsg.ready
+      }
+      continue
+    }
+    elseif ($1 == tanks.sockmsg.new) {
+      filter -wwcx @tanksland @tanksland
+      unset %tanks.state
+      %tanks.wind = $2
+      if ($3 != 1) {
+        tanks.alias.terrain
+        tanks.alias.initvars
+      }
+    }
+    elseif ($1 == tanks.sockmsg.ready) tanks.alias.sendall $1
+    elseif ($1 == tanks.sockmsg.ping) tanks.alias.sendall tanks.sockmsg.pong $2
+    elseif ($1 == tanks.sockmsg.pong) {
+      var %variable = $ctime - $2
+      if (%variable) tanks.alias.echochat tanks.echotype.echo Your lag is $duration(%variable)
+      else tanks.alias.echochat tanks.echotype.echo You have no lag
+    }
+    elseif ($1 == tanks.sockmsg.push) && (%tanks.state == tanks.state.waiting) tanks.alias.push 0 $2-
+    elseif ($1 == tanks.sockmsg.svars) {
+      %tanks.mode = $2
+      %tanks.cwind = $3
+      %tanks.round = $4
+      %tanks.limit = $5
+      %tanks.limitmode = $6
+      %tanks.item = $7
+      %tanks.turn = $8
+      %tanks.wind = $9
+      tanks.alias.titlebar
+      tanks.alias.fix
+      if (%tanks.state != tanks.state.client-joining) {
+        tanks.alias.draw-wind
+        tanks.alias.draw-numbers
+        tanks.alias.draw-shield
+        tanks.alias.draw-buttons
+        drawdot @Tanks
+      }
+    }
+    elseif ($1 == tanks.sockmsg.vars) {
+      %tanks.vote. [ $+ [ $4 ] ] = $2
+      %tanks.ai. [ $+ [ $4 ] ] = $3
+      tanks.alias.vars $4-
+    }
+    elseif ($1 == tanks.sockmsg.fire) {
+      if ($2) {
+        %tanks.item = $2
+        %tanks.angle. [ $+ [ %tanks.turn ] ] = $3
+        %tanks.power. [ $+ [ %tanks.turn ] ] = $4
+      }
+      tanks.alias.fire $5-
+    }
+    elseif ($1 == tanks.sockmsg.skip) tanks.alias.skip $2-
+    elseif ($1 == tanks.sockmsg.done) tanks.alias.done $2-
+    elseif ($1 == tanks.sockmsg.wind) {
+      %tanks.nwind = $calc(+$2)
+      if (-99 > %tanks.nwind) %tanks.nwind = $ifmatch
+      elseif (99 < %tanks.nwind) %tanks.nwind = $ifmatch
+    }
+    elseif ($1 == tanks.sockmsg.msg) && (%tanksnochat != 1) tanks.alias.echochat tanks.echotype.msg %tanks.color. [ $+ [ $2 ] ] %tanks.player. [ $+ [ $2 ] ] $3-
+    elseif ($1 == tanks.sockmsg.chat) && (%tanksnochat != 1) tanks.alias.echochat tanks.echotype.chat %tanks.color. [ $+ [ $2 ] ] %tanks.player. [ $+ [ $2 ] ] $3-
+    elseif (%tanksnochat != 1) || ($2 == %tanks.me) || ($2 == 0) && ($1 == tanks.sockmsg.name) tanks.alias.name $2-
+    elseif ($1 == tanks.sockmsg.server) {
+      tanks.alias.setcolor 0 $2
+      %tanks.player.0 = $3
+      tanks.alias.@tanks
+      close -@ @tanksland
+      window -hl @tanksland
+    }
+    elseif ($1 == tanks.sockmsg.color) tanks.alias.color $2-
+    elseif ($1 == tanks.sockmsg.port) %tanksport = $2
+    elseif ($1 == tanks.sockmsg.repecho) tanks.alias.echochat tanks.echotype.repecho $2-
+    elseif ($1 == tanks.sockmsg.vote) tanks.alias.vote $2-
+    elseif ($1 == tanks.sockmsg.kick) tanks.alias.quit tanks.sockmsg.kick $2-
+    elseif ($1 == tanks.sockmsg.quit) tanks.alias.quit $2-
+    elseif ($1 == tanks.sockmsg.names) {
+      if ($2) %tanks.me = $2
+      tanks.alias.setnames $3-
+      if ($2) unset %tanks.state
+      else {
+        tanks.alias.draw-shield
+        drawdot @Tanks
+        tanks.alias.titlebar
+      }
+    }
+    elseif ($1 == tanks.sockmsg.join) tanks.alias.join $2-
+    elseif ($1 == tanks.sockmsg.full) {
+      tanks.alias./echo The Tanks game at %tanksip is full.
+      tanks.alias.end
+    }
+    elseif ($1 == tanks.sockmsg.fast) {
+      tanks.alias./echo Tanks: You're trying to reconnect too fast.
+      tanks.alias.end
+    }
+    elseif ($1 == tanks.sockmsg.ban) {
+      tanks.alias./echo Tanks: You're banned from the server at %tanksip $+ .
+      tanks.alias.end
+    }
+    elseif ($1 == tanks.sockmsg.con) {
+      tanks.alias./echo Tanks: There is already a connection from your address.
+      tanks.alias.end
+    }
+  }
+}
+alias -l tanks.alias.ban {
+  tokenize 32 %tanks.order
+  var %r = $1-
+  while ($1) {
+    var %i = $iif(%tanks.ai. [ $+ [ $1 ] ] isnum,127.0.0.1,$sock(tanks. [ $+ [ $1 ] ] ).ip)
+    if (%i) tanks.alias.checkban $1 %i %tanks.player. [ $+ [ $1 ] ]
+    tokenize 32 $2-
+  }
+  if (%r != %tanks.order) tanks.alias.tanklistadd
+}
+alias -l tanks.alias.checkban {
+  var %b, %p = $1, %i = $2, %n = $3, %x = $line(@tanksban,0)
+  while (%x) {
+    tokenize 32 $line(@tanksban,%x)
+    var %1 = $iif($right($1,-1),(banned))
+    if (n isin $1) && ($2 iswm %n) {
+      %b = 1
+      if (%1) && ($3) %b = $iif($3 iswm %i,1)
+    }
+    elseif (m isin $1) && ($2 iswm %i) && (%p) sockmark tanks. $+ %p 1
+    elseif (n !isin $1) && ($2 iswm %i) %b = 1
+    if (%b) && (%p) tanks.alias.quit $iif(%1 || $4,tanks.sockmsg.kick) %p %1
+    else {
+      dec %x
+      continue
+    }
+    return return
+  }
+}
+alias -l tanks.alias.getnames {
+  var %s = 0, %variable
+  while (%s <= %tanks.maxplayers) {
+    if (%tanks.color. [ $+ [ %s ] ] isnum) %variable = %variable %s %tanks.c. [ $+ [ %s ] ] %tanks.player. [ $+ [ %s ] ]
+    inc %s
+  }
+  return %variable
+}
+alias -l tanks.alias.setnames {
+  while ($0) {
+    tanks.alias.setcolor $1 $tanks.alias.validcolor($2)
+    if (%tanksnochat) && ($sock(tanks)) && ($1 != %tanks.me) {
+      if ($1 == 0) %tanks.player.0 = Server
+      else %tanks.player. [ $+ [ $1 ] ] = Player $+ $1
+    }
+    else %tanks.player. [ $+ [ $1 ] ] = $3
+    tokenize 32 $4-
+  }
+}
+alias -l tanks.alias.join {
+  var %b
+  if ($1 == 0) {
+    %b = $2
+    tokenize 32 $3-
+  }
+  %tanks.msgn = $remtok(%tanks.msgn,$1,1,44)
+  var %c = $tanks.alias.validcolor($2), %n = $3
+  if (* !iswm %n) return
+  if ($dialog(tanksbots)) && (%b isnum) {
+    var %i = 1
+    while ($did(tanksbots,20,%i) < $1) {
+      inc %i
+    }
+    did -i tanksbots 20 %i $1
+    did -i tanksbots 22 %i %n
+  }
+  $tanks.alias.checkban($1,$sock(tanks. [ $+ [ $1 ] ] ).ip,%n)
+  tanks.alias.setcolor $1 %c
+  if (%tanksnochat) && ($sock(tanks)) && ($1 != %tanks.me) %n = Player $+ $1
+  %tanks.player. [ $+ [ $1 ] ] = %n
+  tanks.alias.vars $1 $tanks.alias.vars
+  unset %tanks.idle. [ $+ [ $1 ] ]
+  if (* !iswm $timer(tanks.tanks.alias.timeout)) && (%tanks.ai. [ $+ [ %tanks.turn ] ] == 5) tanks.alias.timeout 0
+  %tanks.ai. [ $+ [ $1 ] ] = %b
+  if (* !iswm $sock(tanks)) {
+    tanks.alias.sendspecific $1 tanks.sockmsg.server %tanks.c.0 %tanks.player.0
+    tanks.alias.sland $iif(%tanks.state !isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn,-) $1 1
+    tanks.alias.svars $1
+    tanks.alias.sendspecific $1 tanks.sockmsg.names $1 $tanks.alias.getnames
+    if (%b isnum) %b = 0 %b
+    tanks.alias.sendall tanks.sockmsg.join %b $1 %c %n
+  }
+  if ($1 == %tanks.me) && (%tankslog) && ($sock(tanks)) write " $+ $scriptdir $+ tanks.log" - Connect: %tanksip $+ : $+ %tanksport
+  if ($1 == %tanks.me) && ($line(@tanksland,1)) && ($sock(tanks)) {
+    %tanks.state = tanks.state.waiting
+    tanks.alias.draw-all
+  }
+  else {
+    tanks.alias.draw-buttons
+    tanks.alias.draw-shield
+    if ($1 == %tanks.me) tanks.alias.draw-chat
+  }
+  tanks.alias.echochat tanks.echotype.join %tanks.color. [ $+ [ $1 ] ] %n $sock(tanks. [ $+ [ $1 ] ] ).ip
+  tanks.alias.tanklistadd
+  tanks.alias.ban
+}
+alias -l tanks.alias.svars {
+  var %variable = %tanks.mode %tanks.cwind %tanks.round %tanks.limit %tanks.limitmode %tanks.item %tanks.turn %tanks.wind
+  if ($1) tanks.alias.sendspecific $1 tanks.sockmsg.svars %variable
+  else tanks.alias.sendall tanks.sockmsg.svars %variable
+}
+alias -l tanks.alias.sland {
+  var %1 = 1
+  if ($1 == -) {
+    %1 = 0
+    tokenize 32 $2-
+  }
+  else {
+    tanks.alias.svars $1
+    tanks.alias.sendspecific $1 tanks.sockmsg.new %tanks.wind $2
+  }
+  var %p = %tanks.maxplayers, %w = 1
+  while (%p) {
+    tanks.alias.sendspecific $1 tanks.sockmsg.vars $calc(+%tanks.vote. [ $+ [ %p ] ] ) $iif(%tanks.ai. [ $+ [ %p ] ] isnum,%tanks.ai. [ $+ [ %p ] ] ,-) %p $tanks.alias.vars(%p)
+    dec %p
+  }
+  if (%1) {
+    while (%w <= %tankswidth) {
+      tanks.alias.sendspecific $1 tanks.sockmsg.land $line(@tanksland,%w) $line(@tanksland,$calc(1+%w)) $line(@tanksland,$calc(2+%w)) $line(@tanksland,$calc(3+%w)) $line(@tanksland,$calc(4+%w)) $line(@tanksland,$calc(5+%w)) $line(@tanksland,$calc(6+%w)) $line(@tanksland,$calc(7+%w)) $line(@tanksland,$calc(8+%w)) $line(@tanksland,$calc(9+%w))
+      inc %w 10
+    }
+  }
+}
+alias -l tanks.alias.validname {
+  var %n = $deltok($replace($remove($strip($1),$chr(1)),$chr(32), ),0,160), %x = 1
+  while (%x <= $len(%n)) {
+    if ($asc($mid(%n,%x,1)) < 33) {
+      %n = $left(%n,$calc(%x -1))
+      break
+    }
+    inc %x
+  }
+  if (* !iswm %n) {
+    if (%tanks.player. [ $+ [ $2 ] ] != $null) %n = $ifmatch
+    elseif ($me) %n = $me
+    else %n = Tank $+ $right($ticks,5)
+  }
+  if ($left(%n,-1) === Skill ) && ($right(%n,1) isnum 0-4) && (%tanks.ai. [ $+ [ $2 ] ] != $right(%n,1)) %n = %n $+ $rand(0,9)
+  %x = %tanks.maxplayers
+  while (%x) {
+    if (%tanks.color. [ $+ [ %x ] ] isnum) && (%n === %tanks.player. [ $+ [ %x ] ] ) && (%x != $2) {
+      %n = %n $+ $rand(0,9)
+      %x = %tanks.maxplayers
+      continue
+    }
+    dec %x
+  }
+  return %n
+}
+alias -l tanks.alias.newname {
+  if ($dialog(tankschat)) {
+    dialog -ev tankschat
+    return
+  }
+  if ($0) var %n = $1-
+  else var %n = $dialog(tankschat,tanksname,@Tanks)
+  if (%tanks.me) %tanksname = %n
+  else %tanksserver = %n
+  %n = $tanks.alias.validname($left(%n,64),%tanks.me)
+  if (* iswm %n) {
+    if ($sock(tanks)) tanks.alias.sendall tanks.sockmsg.name %n
+    else tanks.alias.name %tanks.me %n
+  }
+}
+alias -l tanks.alias.name {
+  if (* !iswm $2) || (%tanks.player. [ $+ [ $1 ] ] === $2) return
+  if ($dialog(tanksbots)) {
+    var %i = $did(tanksbots,20).lines
+    while (%i) {
+      if ($did(tanksbots,20,%i) == $1) did $iif($did(tanksbots,22,%i).state,-ock,-o) tanksbots 22 %i $2
+      dec %i
+    }
+  }
+  var %p = %tanks.player. [ $+ [ $1 ] ]
+  if ($1 == 0) %p = (server)  $+ %p
+  %tanks.player. [ $+ [ $1 ] ] = $2
+  if ($1 < 2) && (%tanks.me == 0) tanks.alias.titlebar
+  tanks.alias.tanklistadd
+  tanks.alias.draw-shield
+  tanks.alias.titlebar
+  tanks.alias.echochat tanks.echotype.name %tanks.color. [ $+ [ $1 ] ] %p $2
+  if ($sock(tanks.*,0)) {
+    tanks.alias.sendall tanks.sockmsg.name $1 $2
+    tanks.alias.ban
+  }
+}
+alias -l tanks.alias.newcolor {
+  %tanks.newcolor = $1
+  if ($version != 6.02) window -h @tanksname
+  var %variable, %c = 1, %n = $numtok(%tanks.colors,32), %w = $calc(94+8*%tanks.wcolors), %h = $calc(20+8*%tanks.hcolors)
+  close -@ @Tanks color
+  window -Bhdofpk +Ltf @Tanks color $int($calc($window(@Tanks).x +(%tankswidth -%w)/2)) $int($calc($window(@Tanks).y +(%tanksheight -%h)/2)) %w %h
+  drawrect -rfn @Tanks color %tanks.15 1 0 0 %w %h
+  tokenize 32 %tanks.wcolors %tanks.hcolors
+  if ($version < 6.02) tokenize 32 $calc($1 -1) $calc($2 -1)
+  drawcopy -nt @tankscolors 16711935 0 0 $1-2 @Tanks color 10 10 $calc(8*%tanks.wcolors -1) $calc(8*%tanks.hcolors -1)
+  var %x = $calc(20+8*%tanks.wcolors), %y = $calc(8*%tanks.hcolors -54)
+  drawtext -rn @Tanks color 0 Fixedsys 15 %x 10 Selected
+  drawrect -r @Tanks color %tanks.14 1 %x %y 64 64
+  drawdot @Tanks color
+  window -a @Tanks color
+}
+alias -l tanks.alias.iscolor {
+  var %c = $getdot(@Tanks color,$1,$2), %x = $calc(20+8*%tanks.wcolors), %y = $calc(8*%tanks.hcolors -53)
+  if ($3 != 1) if (%c == %tanks.15) return
+  if ($1 < %x) {
+    if ($3) drawrect -rf @Tanks color %c 1 $calc(1+%x) %y 62 62
+    return $int($calc(($1 -10)/8)) $+ , $+ $int($calc(($2 -10)/8))
+  }
+  elseif ($3) drawrect -rf @Tanks color %tanks.15 1 $calc(1+%x) %y 62 62
+}
+menu @Tanks color {
+  mouse:if ($window(@Tanks color)) tanks.alias.iscolor $mouse.x $mouse.y 1
+  leave:tanks.alias.iscolor 0 0 1
+  sclick:{
+    var %c = $tanks.alias.iscolor($click(@Tanks color,$click(@Tanks color,0)).x,$click(@Tanks color,$click(@Tanks color,0)).y)
+    if (%c) {
+      close -@ @Tanks color @1
+      if (%tanks.newcolor != 1) %tankscolor = %c
+      if ($sock(tanks)) tanks.alias.sendall tanks.sockmsg.color %c
+      elseif (%tanks.newcolor) {
+        unset %tanks.newcolor
+        if ($dialog(tanksbots)) {
+          var %i = 1
+          :0
+          if ($did(tanksbots,22,%i).sel) {
+            tanks.alias.color $did(tanksbots,20,$did(tanksbots,22,%i).sel) %c
+            inc %i
+            goto 0
+          }
+        }
+      }
+      else tanks.alias.color %tanks.me %c
+    }
+  }
+}
+alias -l tanks.alias.color {
+  var %c = $tanks.alias.validcolor($2), %a = %tanks.color. [ $+ [ $1 ] ]
+  if (%tanks.c. [ $+ [ $1 ] ] == %c) return
+  if ($sock(tanks.*,0)) tanks.alias.sendall tanks.sockmsg.color $1 %c
+  $tanks.alias.setcolor($1,%c)
+  if ($1 == %tanks.turn) tanks.alias.draw-buttons
+  tanks.alias.draw-shield
+  tanks.alias.draw-tank $1
+  tanks.alias.echochat tanks.echotype.color %a %tanks.player. [ $+ [ $1 ] ] %tanks.color. [ $+ [ $1 ] ]
+}
+alias -l tanks.alias.quit {
+  var %e = tanks.echotype.quit, %s = tanks.sockmsg.quit
+  if ($1 == tanks.sockmsg.kick) {
+    %e = tanks.echotype.kick
+    %s = $1
+    tokenize 32 $2-
+  }
+  if ($dialog(tanksbots)) {
+    var %i = $did(tanksbots,20).lines
+    while (%i) {
+      if ($did(tanksbots,20,%i) == $1) did -d tanksbots 20,22 %i
+      dec %i
+    }
+    tanks.alias.botbuttons
+  }
+  if (%tanks.color. [ $+ [ $1 ] ] isnum) && ($window(@Tanks)) {
+    if ($sock(tanks. [ $+ [ $1 ] ] ).ip) %tanks.qip = (IP: $ifmatch $+ )
+    else unset %tanks.qip
+    tanks.alias.echochat %e %tanks.color. [ $+ [ $1 ] ] %tanks.player. [ $+ [ $1 ] ] $2-
+    var %variable = %tanks.shield. [ $+ [ $1 ] ] 
+    %tanks.shield. [ $+ [ $1 ] ] = 0
+    tanks.alias.draw-tanks
+    unset %tanks.color. [ $+ [ $1 ] ] %tanks.player. [ $+ [ $1 ] ] %tanks.c. [ $+ [ $1 ] ]
+    tanks.alias.draw-shield
+    if (%tanks.state == tanks.state.ready) tanks.alias.draw-buttons
+    drawpic @Tanks
+    var %i = 1
+    while (%tanks.shield. [ $+ [ $gettok(%tanks.order,%i,32) ] ] > 0) {
+      inc %i
+    }
+    dec %i
+    if ($1 == %tanks.turn) && (%tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) {
+      .timertanks.tanks.alias.fire2 off
+      tanks.alias.turn
+    }
+    elseif (%i < 2) || ($tanks.alias.checkvotes) && (%variable > 0) {
+      if ($tanks.alias.checkvotes > 1) tanks.alias.done
+      else tanks.alias.skip
+    }
+    if ($1 == %tanks.me) {
+      if ($sock(tanks)) {
+        tanks.alias.end
+        return
+      }
+      %tanks.me = 0
+    }
+    if ($sock(tanks.*,0)) {
+      tanks.alias.sendexclude $1 %s $1-
+      tanks.alias.randsock tanks. $+ $1 %s $1-
+      tanks.alias.tanklistadd
+    }
+  }
+}
+on *:sockclose:tanks.*:if ($gettok($sockname,2,46) isnum) tanks.alias.quit $ifmatch
+on *:sockread:tanks.*:{
+  var %r, %p = $deltok($sockname,1,46), %i = $sock($sockname).ip, %m = $sock($sockname).mark
+  if ($sockerr) {
+    if ($gettok($sockname,2,46) isnum) tanks.alias.quit $ifmatch
+    tanks.alias.err $ifmatch $sockname sockread
+    return
+  }
+  if (%p !isnum) return
+  while ($sock($sockname)) {
+    sockread %r
+    if ($sockbr !isnum 1-) return
+    tokenize 32 %r
+    if (tanks.sockmsg.join $tanksversion(1) * * iswm $1-) {
+      if (* iswm %tanks.color. [ $+ [ %p ] ] ) {
+        tanks.alias.quit tanks.sockmsg.kick %p (Join error)
+        return
+      }
+      tanks.alias.join %p $3 $tanks.alias.validname($left($4,%tanks.maxname),%p)
+      continue
+    }
+    elseif (* !iswm %tanks.color. [ $+ [ %p ] ] ) {
+      tanks.alias.randsock $sockname ver $tanksversion(1)
+      return
+    }
+    if (%tanks.turn == %p) && ($1 != tanks.sockmsg.pong) tanks.alias.timeout
+    if ($1 == tanks.sockmsg.ready) %tanks.ready. [ $+ [ %p ] ] = 1
+    elseif ($1 == tanks.sockmsg.names) tanks.alias.sendspecific %p tanks.sockmsg.names 0 $tanks.alias.getnames
+    elseif ($1 == tanks.sockmsg.push) {
+      if (%p != %tanks.turn) continue
+      tanks.alias.sendexclude %p $1-
+      tanks.alias.push 0 $2-
+    }
+    elseif ($1 == tanks.sockmsg.fire) {
+      if (%p != %tanks.turn) || (%tanks.ready. [ $+ [ %p ] ] != 1) continue
+      %tanks.item = $2
+      %tanks.angle. [ $+ [ %p ] ] = $3
+      %tanks.power. [ $+ [ %p ] ] = $4
+      var %variable = %tanks.idle. [ $+ [ %p ] ] - 1
+      %tanks.idle. [ $+ [ %p ] ] = $iif(%variable < 0,0,%variable)
+      tanks.alias.fire
+    }
+    elseif ($1 == tanks.sockmsg.quit) tanks.alias.quit %p $2-
+    else {
+      inc -z %tanks.flood. [ $+ [ %p ] ]
+      if (%tanks.flood. [ $+ [ %p ] ] > 3) {
+        inc -z %tanks.flood. [ $+ [ %p ] ] 10
+        tanks.alias.sendspecific %p tanks.sockmsg.repecho 0 0 Your message was not sent (too many too fast), please wait $duration($calc(%tanks.flood. [ $+ [ %p ] ] -3))
+        continue
+      }
+    }
+    if ($1 == tanks.sockmsg.vote) && (%tanks.shield. [ $+ [ %p ] ] > 0) && (%tanks.state != tanks.state.ready) && ($numtok(%tanks.order,32) > 1) tanks.alias.vote %p $iif(%tanks.vote. [ $+ [ %p ] ] ,0,1)
+    elseif ($1 == tanks.sockmsg.ping) tanks.alias.sendspecific %p tanks.sockmsg.pong $2
+    elseif ($1 == tanks.sockmsg.pong) {
+      var %variable = $ctime - $2
+      if (%variable) tanks.alias.echochat tanks.echotype.echo Lag for %tanks.player. [ $+ [ %p ] ] is $duration(%variable)
+      else tanks.alias.echochat tanks.echotype.echo There is no lag for %tanks.player. [ $+ [ %p ] ]
+    }
+    elseif ($1 == tanks.sockmsg.color) tanks.alias.color %p $2
+    elseif ($1 == tanks.sockmsg.name) {
+      var %variable = $left($tanks.alias.validname($2,%p),%tanks.maxname)
+      if (%m) tanks.alias.sendspecific %p tanks.sockmsg.name %p %variable
+      else tanks.alias.name %p %variable
+    }
+    elseif ($1 == tanks.sockmsg.chat) && (%m != 1) {
+      tanks.alias.echochat tanks.echotype.chat %tanks.color. [ $+ [ %p ] ] %tanks.player. [ $+ [ %p ] ] $left($2-,200)
+      tanks.alias.sendexclude %p tanks.sockmsg.chat %p $left($2-,200)
+    }
+    elseif ($1 == tanks.sockmsg.msg) {
+      var %variable = 1
+      while ($gettok($2,%variable,44) isnum) {
+        var %c = $gettok($2,%variable,44), %s = tanks. $+ %c, %n
+        if (%m != 1) || (%p == %c) {
+          if (* !iswm $sock(%s)) || (%c == 0) %n = 1
+          else tanks.alias.sendspecific %c tanks.sockmsg.msg %p $left($3-,200)
+        }
+        inc %variable
+      }
+      if (%n) tanks.alias.echochat tanks.echotype.msg %tanks.color. [ $+ [ %p ] ] %tanks.player. [ $+ [ %p ] ] $3-
+    }
+  }
+}
+alias -l tanks.alias.vote {
+  if ($sock(tanks.*,0)) tanks.alias.sendall tanks.sockmsg.vote $1-
+  %tanks.vote. [ $+ [ $1 ] ] = $2
+  tanks.alias.draw-shield
+  tanks.alias.echochat tanks.echotype.echo %tanks.player. [ $+ [ $1 ] ] votes $iif($2,to,not to) end the round
+  if ($tanks.alias.checkvotes) {
+    if ($ifmatch > 1) tanks.alias.done
+    else tanks.alias.skip
+    return 1
+  }
+}
+alias -l tanks.alias.checkvotes {
+  if ($sock(tanks)) return
+  var %p = %tanks.maxplayers, %c = 0, %h = 0, %variable = 0, %s = 0
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) {
+      inc %c
+      if (%tanks.shield. [ $+ [ %p ] ] > 0) {
+        inc %s
+        if (%tanks.ai. [ $+ [ %p ] ] !isnum 0-4) inc %h
+        if (%tanks.vote. [ $+ [ %p ] ] ) inc %variable
+      }
+    }
+    dec %p
+  }
+  if (%c > 1) {
+    if (%h == 0) && (%tanksstopbots) return 2
+    if (%variable == 0) return
+    if (%tankslvr) {
+      if (%s == %variable) return 1
+    }
+    elseif (%h == %variable) return 1
+  }
+}
+on *:sockclose:tanks:{
+  close -@ @Tanks request
+  if ($window(@Tanks)) tanks.alias.echochat tanks.echotype.echo The server closed the connection
+  else tanks.alias./echo Tanks: Server closed the connection
+  tanks.alias.end
+}
+alias -l tanks.alias.cancel {
+  %tanksxy = $window(@Tanks).x $window(@Tanks).y
+  close -@ @Tanks
+  if ($dialog(tanksban)) dialog -x tanksban
+  if ($dialog(tankschat)) dialog -x tankschat
+  if ($dialog(tanksbots)) dialog -x tanksbots
+  if ($dialog(tanksserver)) dialog -x tanksserver
+  .timertanks* off
+  tanks.alias.end 1
+  if (%tankslog) {
+    write " $+ $scriptdir $+ tanks.log" - Session Close: $fulldate
+    write " $+ $scriptdir $+ tanks.log" -
+  }
+}
+alias -l tanks.alias.@tanks tanks.alias.open @Tanks $iif(%tanksnoxy || * * !iswm %tanksxy,-1 -1,%tanksxy) %tankswidth %tanksheight Fixedsys 15
+alias -l tanks.alias.open {
+  var %c = window $iif(%tanksontop,-o,-u) $1
+  if ($2-) {
+    tanks.alias.timer tanks.alias.iftimer 2 $1 %c
+    if (%tanks.0 !isnum) $tanks.alias.newgame
+    window -hzBdfkp +ntf $1-
+    if (%tankslog) write " $+ $scriptdir $+ tanks.log" - Session Start: $fulldate
+    if ($1 == @Tanks) {
+      drawrect -rf @Tanks %tanks.1 1 0 0 %tankswidth %tanksheight
+      var %f = Verdana, %s = $iif($version > 5.9,50,60), %variable = " $+ %f $+ " %s, %x = $int($calc(2+(%tankswidth -$width(Tanks,%f,%s,0,0))/2))
+      var %h = $height(Tanks,%f,%s), %y = $int($calc((%tanks.bottom -%h)/2)), %c = %y + 2
+      drawtext -rn @Tanks %tanks.8 %variable %x %c Tanks | dec %x | dec %c
+      drawtext -rn @Tanks %tanks.14 %variable %x %c Tanks | dec %x | dec %c
+      drawtext -rn @Tanks %tanks.9 %variable %x %c Tanks | dec %x | dec %c
+      drawtext -rn @Tanks %tanks.15 %variable %x %c Tanks | dec %x | dec %c
+      drawtext -rn @Tanks 16777215 %variable %x %c Tanks | window -hl @tanksland
+      tokenize 122 nnnvqnomnkmmknzunoonqznqomnlomnlplzttnlsnnqzmjnlkkznsnlqkzrvniqnoonszuenvknmmnkomqnzruomnlomnlplziooonqzxongrnppnqlpjnzwinrooqnnhzslmnmonvzmhrnzoknoznpntzqenwzqenoznpntzulmolnmmnkompnoonojn
+      %x = $int($calc((%tankswidth -85)/2))
+      inc %y %h
+      while ($1) {
+        var %c = 1, %s = drawline -rn @Tanks %tanks.14 1
+        while (%c < $len($1)) {
+          inc %x $calc($asc($mid($1,%c,1)) - 110) | inc %c
+          inc %y $calc($asc($mid($1,%c,1)) - 110) | inc %c
+          %s = %s %x %y
+        }
+        %s
+        tokenize 32 $2-
+      }
+      drawpic @Tanks
+      var %x = %tankswidth
+      while (%x) {
+        aline @tanksland 0
+        dec %x
+      }
+    }
+  }
+  else %c
+}
+alias -l tanks.alias.setcolor {
+  if (, isin $2) var %b = $getdot(@tankscolors, [ $2 ] )
+  else var %b = %tanks. [ $+ [ $2 ] ]
+  %tanks.c. [ $+ [ $1 ] ] = $2
+  if (%tanks.color. [ $+ [ $1 ] ] == %b) return return
+  %tanks.color. [ $+ [ $1 ] ] = %b
+}
+alias -l tanks.alias.validcolor {
+  if ($istok(%tanks.colors,$1,32)) return $1
+  if (, isin $1) {
+    var %1 = $1, %variable = 1
+    tokenize 44 $rgb($getdot(@tankscolors, [ $1 ] ))
+    if ($1 > 222) && ($2 < 32) && ($3 > 222) %variable = 0
+    if ($gettok(%1,1,44) isnum 0- [ $+ [ $calc(%tanks.wcolors -1) ] ] ) if ($gettok(%1,2,44) isnum 0- [ $+ [ $calc(%tanks.hcolors -1) ] ] ) if (%variable) return %1
+  }
+  return $gettok(%tanks.colors,$rand(1,$numtok(%tanks.colors,32)),32)
+}
+alias -l tanks.alias.fix {
+  var %x = %tanks.maxplayers
+  while (%x) {
+    if (%tanks.color. [ $+ [ %x ] ] isnum) {
+      var %p = %tanks.power. [ $+ [ %x ] ] , %m = %tanks.max. [ $+ [ %x ] ]
+      if (%tanks.mode & 1) %m = 100
+      if (%p < 0) %p = 0
+      if (%p > %m) %p = %m
+      %tanks.power. [ $+ [ %x ] ] = %p
+      var %c = %tanks.credits. [ $+ [ %x ] ]
+      if (%c < 0) %c = 0
+      if (%c > 999) %c = 999
+      %tanks.credits. [ $+ [ %x ] ] = %c
+    }
+    dec %x
+  }
+  if ($1) {
+    if (%tanks.item < 1) %tanks.item = 1
+    if ($tanks.alias.maxweapon < %tanks.item) %tanks.item = $ifmatch
+  }
+}
+alias -l tanks.alias.draw-buttons {
+  if (* !iswm $window(@Tanks)) return
+  var %1 = 1
+  if ($1 == -) {
+    tokenize 32 $2-
+    %1 = 0
+  }
+  %tanksxy = $window(@Tanks).x $window(@Tanks).y
+  drawline -rn @Tanks %tanks.1 1 0 %tanks.bottom %tankswidth %tanks.bottom
+  drawline -rn @Tanks %tanks.1 1 320 %tanks.bottom 320 %tanksheight
+  var %p = %tanks.maxplayers, %n = 0, %a = 0, %b = 0, %c = 0
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) {
+      if (%tanks.shield. [ $+ [ %p ] ] > 0) inc %a
+      if (%tanks.ai. [ $+ [ %p ] ] isnum 0-4) inc %b
+      elseif (%tanks.ai. [ $+ [ %p ] ] !isnum) inc %c
+      inc %n
+    }
+    dec %p
+  }
+  if (%n < 2) unset %tanks.state
+  elseif (%a == 1) || (* !iswm %tanks.state) && (* !iswm $sock(tanks)) %tanks.state = tanks.state.ready
+  if ($1) { }
+  elseif (%tanks.state !isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) {
+    drawrect -rfn @Tanks %tanks.15 1 0 380 320 80
+    if (%tanks.state == tanks.state.ready) {
+      if (%c) tanks.alias.go
+      elseif (%b == %n) && (%tanksstopbots) unset %tanks.state
+      else {
+        drawtext -rn @Tanks %tanks.1 Fixedsys 15 56 404 Double-click here or press
+        drawtext -rn @Tanks %tanks.1 Fixedsys 15 64 420 enter to start the game.
+      }
+      if (%1) drawdot @Tanks
+    }
+    return
+  }
+  var %c = %tanks.color. [ $+ [ %tanks.turn ] ]
+  if (%c !isnum) return
+  drawrect -rfn @Tanks %c 1 0 380 320 80
+  drawpic -cnt @Tanks 16711935 4 383 0 0 312 74 %tanksbmp
+  tanks.alias.draw-angle
+  tanks.alias.draw-num 398 %tanks.power. [ $+ [ %tanks.turn ] ]
+  tanks.alias.draw-numbers
+  tanks.alias.draw-explosive
+  drawpic -cnt @Tanks 16711935 81 440 77 $iif(%tanksinc == 1,131,57) 16 17 %tanksbmp
+  drawpic -cnt @Tanks 16711935 99 440 95 $iif(%tanksinc == 1,57,131) 16 17 %tanksbmp
+  if (%tanks.me != %tanks.turn) {
+    drawrect -rfn @Tanks %c 1 0 380 117 80 206 383 110 25 206 433 110 24
+    drawpic -cn @Tanks 5 409 202 26 110 23 %tanksbmp
+    drawrect -rfn @Tanks 0 1 7 411 106 19
+    var %a = $calc(+$round($calc(100*%tanks.damage. [ $+ [ %tanks.turn ] ] /%tanks.shot. [ $+ [ %tanks.turn ] ] ),0)) $+ %
+    drawtext -rn @Tanks 16777215 %tankschat.qfont %tankschat.fontsize $calc(11+%tankstahoma) $calc(414-%tankstahoma) Accuracy:
+    drawtext -rn @Tanks 16777215 Fixedsys 15 $calc(108-$width(%a,fixedsys,15,0,0)) 413 %a
+  }
+  tanks.alias.draw-brackets
+}
+alias -l tanks.alias.draw-brackets {
+  if ($numtok(%tanks.order,32) > 8) {
+    drawpic -cnt @Tanks 16711935 4 383 0 0 36 17 %tanksbmp
+    return
+  }
+  var %c = %tanks.color. [ $+ [ %tanks.turn ] ]
+  if (%c !isnum) return
+  drawrect -rfn @Tanks %c 1 4 383 36 17
+}
+alias -l tanks.alias.draw-num {
+  if (%tanks.state !isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) return
+  drawrect -rfn @Tanks 0 1 172 $calc(1+$1) 25 13
+  if ($2 isnum) drawtext -rn @Tanks $iif($3,10921638,16777215) Fixedsys 15 $calc(196-$width($2,fixedsys,15,0,0)) $1 $2
+}
+alias -l tanks.alias.draw-numbers {
+  tokenize 32 %tanks.turn %tanks.max. [ $+ [ %tanks.turn ] ] %tanks.credits. [ $+ [ %tanks.turn ] ]
+  if (%tanks.mode & 1) tokenize 32 $1 100 $3
+  if ($3 !isnum) return
+  tanks.alias.draw-num 411 %tanks.prev. [ $+ [ $1 ] ] $iif(%tanks.mode !& 1 && %tanks.prev. [ $+ [ $1 ] ] > $2,1)
+  tanks.alias.draw-num 424 $2
+  tanks.alias.draw-num 440 $3 $iif(%tanks.mode & 1 || %tanks.shield. [ $+ [ $1 ] ] >= 10 && $3 < 50 || $3 < 30,1)
+}
+alias -l tanks.alias.draw-angle {
+  var %a = %tanks.angle. [ $+ [ %tanks.turn ] ]
+  if ($calc(180-%a) < %a) %a = $ifmatch
+  tanks.alias.draw-num 385 %a
+}
+alias -l tanks.alias.draw-explosive {
+  drawpic -cnt @Tanks 16711935 206 409 202 26 110 23 %tanksbmp
+  var %variable = $tanks.alias.maxweapon
+  if (%variable < %tanks.item) %variable = %tanks.item
+  drawpic -cnt @Tanks 16711935 208 411 204 102 $calc(1+21*%variable) 19 %tanksbmp
+  drawpic -cnt @Tanks 16711935 $calc(188+21*%tanks.item) 416 $iif(%tanks.turn == %tanks.me,130 104,130 113) 20 9 %tanksbmp
+}
+alias -l tanks.alias.letter if (%tanks.x. [ $+ [ $1 ] ] ) drawtext -brn @Tanks $2 %tanks.sky fixedsys 20 $calc(%tanks.x. [ $+ [ $1 ] ] -$iif(%tanks.x. [ $+ [ $1 ] ] > $calc(%tankswidth /2),0,1)-(5*$len($3))) %tanks.top $iif(%tanks.color. [ $+ [ $1 ] ] isnum,$3, )
+alias -l tanks.alias.noletters {
+  if ($window(@Tanks)) {
+    drawrect -rfn @Tanks %tanks.sky 1 0 %tanks.top %tankswidth 16
+    if ($timer(tanks.tanks.alias.erase)) tanks.alias.path
+  }
+}
+alias -l tanks.alias.draw-arrow {
+  if (%tanks.shield. [ $+ [ %tanks.turn ] ] > 0) && (%tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) {
+    var %x = %tanks.x. [ $+ [ %tanks.turn ] ] , %y = 1 + %tanks.top
+    if ($1) drawrect -rfn @Tanks %tanks.sky 1 %tanks.arrow %y 10 13
+    %tanks.arrow = %x - $iif(%x > $calc(%tankswidth /2),5,6)
+    drawpic -cnt @Tanks 16711935 %tanks.arrow %y 120 104 10 13 %tanksbmp
+    drawfill -srn @Tanks 7368816 16777215 $calc(5+%tanks.arrow) %y
+  }
+}
+alias -l tanks.alias.draw-shield {
+  if (* !iswm $window(@Tanks)) return
+  var %p = %tanks.maxplayers, %0, %1, %s = $iif($numtok(%tanks.order,32) > 8,1,0)
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) {
+      if (%tanks.shield. [ $+ [ %p ] ] > 0) %0 = %p %0
+      else %1 = %p %1
+    }
+    dec %p
+  }
+  %tanks.order = %0 %1
+  if (%tanksautoscroll) && (%tanks.prevorder != %tanks.turn %tanks.order) {
+    %tanks.prevorder = %tanks.turn %tanks.order
+    %p = $findtok(%tanks.order,%tanks.turn,1,32)
+    while (%p < $calc(%tanks.namezero + 3)) {
+      dec %tanks.namezero %tanks.namescroll
+    }
+    while (%p > $calc(%tanks.namezero + 4)) || (%tanks.namezero < 0) {
+      inc %tanks.namezero %tanks.namescroll
+    }
+  }
+  var %n = $numtok(%tanks.order,32)
+  while ($calc(9-%tanks.namescroll +%tanks.namezero) > %n) && (%tanks.namezero > 0) {
+    dec %tanks.namezero %tanks.namescroll
+  }
+  if (%s != $iif(%n > 8,1,0)) && (%tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) tanks.alias.draw-brackets
+  drawrect -rfn @Tanks %tanks.15 1 0 312 320 57
+  if (%tanks.arrow) tanks.alias.noletters
+  tanks.alias.draw-arrow
+  var %i = 1, %m = $tanks.alias.maxweapon, %me = %tanks.0, %s = %tanks.shield. [ $+ [ %tanks.turn ] ]
+  while (1) {
+    var %p = $gettok(%tanks.order,%i,32)
+    if (%p) && (%tanks.shield. [ $+ [ %p ] ] > 0) {
+      if (%p != %tanks.turn) && ($tanks.alias.maxweapon(%p) >= %s) && (%s > 0) {
+        if (%tanks.mode !& 1) && (%tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) tanks.alias.letter %p %tanks.4 !
+        %me = %tanks.4
+      }
+      inc %i
+    }
+    else break
+  }
+  %i = 1
+  while (1) {
+    %p = $gettok(%tanks.order,$calc(%tanks.namezero + %i),32)
+    if (%i <= 8) && (%p) { }
+    else break
+    var %n = 10, %o = %tanks.shield. [ $+ [ %p ] ] , %x = $iif(%i & 1,64,222), %y = $calc(320+13*$int($calc((%i -1)/2))), %c = $iif(%p == %tanks.turn,%me,$iif(%o > %m,%tanks.0,%tanks.4)), %variable = $iif(%tanks.vote. [ $+ [ %p ] ] && %o > 0 || %tanks.ai. [ $+ [ %p ] ] isnum,14,0), %z = $iif(%p == %tanks.turn && %o > 0,%tanks.seltext,%tanks.1)
+    if (%p == %tanks.turn) && (%o > 0) drawrect -rfn @Tanks %tanks.selbg 1 $calc(10+%x) $calc(%y -6) 85 14
+    drawrect -rnf @Tanks %tanks.color. [ $+ [ %p ] ] 1 $calc(%x -61) $calc(%y -5) 69 12
+    drawpic -cnt @Tanks 16711935 $calc(%x -61) $calc(%y -5) 120 92 69 12 %tanksbmp
+    if (%tanks.ai. [ $+ [ %p ] ] == 5) {
+      drawpic -cnt @Tanks 16711935 $calc(11+%x) $calc(%y -4) 190 92 12 10 %tanksbmp
+      drawfill -srn @Tanks $iif(%p == %tanks.turn && %o > 0,%tanks.15,%tanks.1) 16777215 $calc(11+%x) %y $calc(16+%x) %y
+    }
+    elseif (%tanks.ai. [ $+ [ %p ] ] isnum 0-4) {
+      drawpic -cnt @Tanks 16711935 $calc(11+%x) $calc(%y -4) 180 104 12 10 %tanksbmp
+      drawfill -srn @Tanks $iif(%p == %tanks.turn && %o > 0,%tanks.15,%tanks.1) 16777215 $calc(11+%x) %y $calc(15+%x) %y $calc(15+%x) $calc(3+%y)
+    }
+    elseif (%variable) {
+      drawpic -cnt @Tanks 16711935 $calc(12+%x) $calc(%y -4) 192 104 10 10 %tanksbmp
+      drawfill -srn @Tanks %z 16777215 $calc(13+%x) %y
+    }
+    drawtext -crn @Tanks %z %tankschat.qfont %tankschat.fontsize $calc(10+%variable + %x + %tankstahoma) $calc(%y -6) $calc(83-%variable) 13 %tanks.player. [ $+ [ %p ] ]
+    if (%o > 10) || (%tanks.mode & 1) {
+      if (%o < 1) %c = %tanks.smallnoshield
+      elseif (%tanks.mode & 1) %c = %tanks.0
+      if (%tanks.mirc) {
+        dec %x 56
+        drawline -rn @Tanks %c 1 %x %y $calc(59+%x) %y
+        inc %y
+        drawline -rn @Tanks %c 1 %x %y $calc(59+%x) %y
+      }
+      else drawrect -rfn @Tanks %c 1 $calc(%x -56) %y 59 2
+    }
+    else {
+      :615fix
+      if (%n) {
+        drawfill -rn @Tanks $iif(%o >= %n,%c,%tanks.smallnoshield) 0 %x %y
+        dec %x 6
+        dec %n
+        goto 615fix
+      }
+    }
+    inc %i
+  }
+  if (%tanks.color. [ $+ [ %tanks.turn ] ] !isnum) return
+  var %n = 10, %s = %tanks.shield. [ $+ [ %tanks.turn ] ]
+  drawrect -rfn @Tanks %tanks.shieldbg 1 0 370 320 9
+  if (%s > 10) || (%tanks.mode & 1) {
+    if (%s < 1) %me = %tanks.noshield
+    elseif (%tanks.mode & 1) %me = %tanks.0
+    drawrect -rfn @Tanks %me 1 1 372 318 5
+    return
+  }
+  while (%n) {
+    drawrect -rfn @Tanks $iif(%s >= %n,%me,%tanks.noshield) 1 $calc(32*%n -31) 372 30 5
+    dec %n
+  }
+}
+alias -l tanks.alias.draw-wind {
+  if (%tanks.state !isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) return
+  drawrect -rfn @Tanks %tanks.sky 1 0 0 %tankswidth %tanks.top
+  if (%tanks.cwind == 0) return
+  var %d =   $iif(%tanks.cwind == 2,Changing wind:,Wind:) $abs(%tanks.wind)  , %m = $int($calc(%tankswidth /2)), %x = $int($calc(.5+(100+%tanks.wind)/100*%m))
+  if (%tanks.wind < 0) drawtext -rn @Tanks %tanks.wtext Fixedsys 15 %m 4 %d
+  if (%tanks.wind > 0) drawtext -rn @Tanks %tanks.wtext Fixedsys 15 $calc(%m -$width(%d,fixedsys,15,0,0)) 4 %d
+  if (%tanks.wind) {
+    drawline -rn @Tanks %tanks.wtext 1 %m 6 %m 17
+    drawline -rn @Tanks %tanks.wtext 1 %m 11 %x 11
+    drawtext -rn @Tanks %tanks.wtext Fixedsys 15 $iif(%tanks.wind < 0,%x,$calc(%x -7)) 4 $iif(%tanks.wind < 0,<,>)
+  }
+}
+alias -l tanks.alias.draw-all {
+  if ($window(@Tanks)) {
+    tanks.alias.titlebar
+    tanks.alias.fix
+    tanks.alias.draw-wind
+    tanks.alias.draw-shield
+    tanks.alias.draw-buttons - $1
+    tanks.alias.draw-tanks
+    if ($1 != 0) tanks.alias.draw-chat
+    else drawdot @Tanks
+  }
+}
+alias -l tanks.alias.draw-tanks {
+  var %p = %tanks.maxplayers, %r
+  while (%p) {
+    %r = %r $tanks.alias.draw-tank(%p,1)
+    dec %p
+  }
+  tokenize 32 %r
+  while ($1) {
+    tanks.alias.draw-tank $1
+    tokenize 32 $2-
+  }
+}
+alias -l tanks.alias.draw-tank {
+  var %c = %tanks.color. [ $+ [ $1 ] ] , %x = %tanks.x. [ $+ [ $1 ] ] , %y = %tanks.y. [ $+ [ $1 ] ] , %xmin = -8, %xmax = 9 + %tankswidth, %n = %tanks.maxplayers, %s = %tanks.shield. [ $+ [ $1 ] ] , %p = 312, %a = %tanks.angle. [ $+ [ $1 ] ]
+  if (%c isnum) && (%x) { }
+  else return
+  while (%n) {
+    if (%tanks.shield. [ $+ [ %n ] ] > 0) && (%tanks.color. [ $+ [ %n ] ] isnum) && (%n != $1) {
+      var %d = %tanks.x. [ $+ [ %n ] ]
+      if (%d < %x) && (%d > %xmin) %xmin = %d
+      if (%d > %x) && (%d < %xmax) %xmax = %d
+    }
+    dec %n
+  }
+  inc %xmin 18
+  dec %xmax 18
+  if (%s < 1) {
+    if (%tanks.erased. [ $+ [ $1 ] ] ) return
+    %c = %tanks.sky
+    %tanks.erased. [ $+ [ $1 ] ] = 1
+  }
+  else %tanks.erased. [ $+ [ $1 ] ] = 0
+  var %sky = drawfill -srn @Tanks %tanks.sky %c, %f = drawfill -srn @Tanks %c 16777215
+  %sky %x %y
+  var %x_ = %x - 6, %xx = %x + 5, %t0 = %x, %t1 = %x + 1, %d, %n = 1, %variable = drawline -rn @Tanks 16777215 1
+  if (%a > $iif(%x > $calc(%tankswidth /2),89,90)) {
+    inc %x_
+    inc %xx
+    dec %t0 2
+    dec %t1 4
+    inc %p 15
+    %n = -1
+  }
+  %a = $calc(%a *3.14159/180)
+  var %0 = $round($calc(6*$cos(%a)),0), %1 = $round($calc(7+6*$sin(%a)),0), %z, %i = -1
+  if ($2) %z = return $1
+  :1
+  inc %i
+  drawrect -rnf @Tanks %tanks.sky 1 $calc(%x -6) $calc(%y -13) 11 12
+  drawpic -cnt @Tanks 16711935 $calc(%x -8) $calc(%y -9) %p 0 15 10 %tanksbmp
+  %variable $calc(%t1 +%0) $calc(1+%y -%1) %t1 $calc(%y -6)
+  %variable $calc(%t0 +%n +%0) $calc(%y -%1) %t0 $calc(%y -6)
+  %variable $calc(%t0 +%0) $calc(%y -%1) %t0 $calc(%y -7)
+  %f %x %y
+  if (%c == %tanks.sky) {
+    var %l = 21, %y_, %h
+    while (%l) {
+      %y_ = $calc(%x +%l -11)
+      %h = %y_ - 1
+      drawline -rn @Tanks %tanks.ground 1 %h $line(@tanksland,%y_) %h %tanks.bottom
+      dec %l
+    }
+  }
+  if (%i) drawdot @Tanks
+  if (%s < 1) return
+  var %l = $iif(%y >= $line(@tanksland,%x_),1), %r = $iif(%y >= $line(@tanksland,%xx),1)
+  if (%l) && (%r) goto 3
+  if (%r) && (%d == tanks.dir.right) || ((%l) && (%d == tanks.dir.left)) {
+    %z
+    %sky %x %y
+    inc %y
+    goto 1
+  }
+  var %yy = 0 + $line(@tanksland,%x)
+  if ($calc(2+%y) > %yy) goto 3
+  if (%r) {
+    if (%x > %xmin) {
+      %z
+      %sky %x %y
+      dec %t0
+      dec %t1
+      dec %x
+      dec %x_
+      dec %xx
+      %d = tanks.dir.left
+      goto 1
+    }
+  }
+  elseif (%l) {
+    if (%x < %xmax) {
+      %z
+      %sky %x %y
+      inc %t0
+      inc %t1
+      inc %x
+      inc %x_
+      inc %xx
+      %d = tanks.dir.right
+      goto 1
+    }
+  }
+  elseif ($calc(2+%y) < %yy) {
+    %z
+    %sky %x %y
+    inc %y 2
+    goto 1
+  }
+  else {
+    %z
+    %sky %x %y
+    inc %y
+    goto 1
+  }
+  :3
+  %tanks.x. [ $+ [ $1 ] ] = %x
+  %tanks.y. [ $+ [ $1 ] ] = %y
+}
+alias -l tanks.alias.titlebar {
+  if ($window(@Tanks)) {
+    var %variable, %p = $iif(%tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn,1)
+    if (%p) && (%tankstitle & 1) {
+      if (%tanks.limitmode == 2) %variable =  -  Round %tanks.round of %tanks.limit
+      else %variable =  -  Round %tanks.round
+    }
+    if (%p) && (%tankstitle & 2) {
+      if (%tanks.me != 0) %variable = %variable  -  Frags: %tanks.frags. [ $+ [ %tanks.me ] ]
+      if (%tanks.limitmode == 1) %variable = %variable  -  Frag limit: %tanks.limit
+    }
+    if ($0) %variable =  -  $1-
+    else {
+      if (%tankstitle & 4) && (%tanks.shot. [ $+ [ %tanks.me ] ] > 0) && (%p) %variable = %variable  -  Accuracy: $calc(+$round($calc(100 * %tanks.damage. [ $+ [ %tanks.me ] ] / %tanks.shot. [ $+ [ %tanks.me ] ] ),0)) $+ %
+      var %s = $iif(%tanks.color.0 isnum,%tanks.player.0,%tanks.player.1)
+      if ($sock(tanks)) || ($sock(tanks.*,0)) && (%tankstitle & 8) && (* iswm %s) && ((%tanksnochat != 1) || (* !iswm $sock(tanks))) %variable = %variable  -  Server: %s
+    }
+    titlebar @Tanks $iif(%tanks.mode & 1,instagib) %variable
+  }
+}
+alias -l tanks.alias.skip {
+  if ($sock(tanks)) && ($1 != 1) return
+  if ($sock(tanks.*,0)) tanks.alias.sendall tanks.sockmsg.skip 1
+  var %n = %tanks.maxplayers, %d
+  while (%n) {
+    if (%tanks.limitmode == 1) && (%tanks.color. [ $+ [ %n ] ] isnum) && (%tanks.frags. [ $+ [ %n ] ] >= %tanks.limit) %d = 1
+    elseif %tanks.limitmode == 2) && (%tanks.round >= %tanks.limit) %d = 1
+    dec %n
+  }
+  if (%d) tanks.alias.done
+  else {
+    inc %tanks.round
+    tanks.alias.terrain
+  }
+}
+alias -l tanks.alias.done {
+  if ($sock(tanks.*,0)) tanks.alias.sendall tanks.sockmsg.done
+  if (%tanks.state != tanks.state.client-terrain) unset %tanks.state
+  .timertanks.tanks.alias.think off
+  .timertanks.tanks.alias.fire2 off
+  tanks.alias.draw-all 0
+  if (%tanks.me != 0) tanks.alias.scores
+}
+alias -l tanks.alias.terrain {
+  .timertanks.tanks.alias.erase -e
+  unset %tanks.vote.* %tanks.prev.*
+  if (%tanks.state == tanks.state.client-terrain) return
+  unset %tanks.state
+  var %x = 0, %p = %tanks.maxplayers
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) inc %x
+    dec %p
+  }
+  if (%x < 2) {
+    tanks.alias.done
+    return
+  }
+  if ($sock(tanks)) {
+    %tanks.state = tanks.state.client-terrain
+    return
+  }
+  var %n = %tanks.maxplayers, %d, %p = $calc(300+25*%x)
+  if (%tanks.mode & 1) %p = 0
+  while (%n) {
+    if (%tanks.color. [ $+ [ %n ] ] isnum) {
+      %tanks.ready. [ $+ [ %n ] ] = 0
+      %tanks.credits. [ $+ [ %n ] ] = %p
+      if (%tanks.limitmode == 1) && (%tanks.frags. [ $+ [ %n ] ] >= %tanks.limit) %d = 1
+      elseif (%tanks.limitmode == 2) && (%tanks.round > %tanks.limit) %d = 1
+    }
+    dec %n
+  }
+  if (%d) {
+    unset %tanks.credits.*
+    tanks.alias.done
+    return
+  }
+  %tanks.wind = $calc($rand(0,198)-99)
+  var %s, %p = %tanks.maxplayers
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) %s = %p %s
+    dec %p
+  }
+  var %p = $numtok(%s,32), %a, %variable = %s, %s
+  while (%p) {
+    %a = $rand(1,$numtok(%variable,32))
+    %s = %s $gettok(%variable,%a,32)
+    %variable = $deltok(%variable,%a,32)
+    dec %p
+  }
+  var %p = $numtok(%s,32), %x = $int($calc(%tankswidth / $numtok(%s,32))), %a, %r = $int($calc(%x /4))
+  if ($calc((%x - 17) / 2) < %r) %r = $ifmatch
+  while (%p) {
+    %n = $int($calc(%x * %p - %x / 2 + $rand(0,%r) - %r / 2))
+    if (%n < 9) %n = 9
+    if ($calc(%tankswidth -8) <= %n) %n = $ifmatch
+    %a = $calc(%n -8) %a
+    %tanks.x. [ $+ [ $gettok(%s,%p,32) ] ] = %n
+    dec %p
+  }
+  var %l = 0, %b = $rand($calc(50+%tanks.top),$calc(%tanks.bottom -80)), %i = 0, %x = 1, %y, %p = 1, %variable = $gettok(%a,1,32)
+  %tanks.terrain = %b
+  tanks.alias.titlebar Generating land...
+  while (%x <= %tankswidth) {
+    if (%x >= %variable) {
+      if (%i) %tanks.terrain = %tanks.terrain %y %i
+      %i = 0
+      %y = 0
+      %l = 16
+      %tanks.y. [ $+ [ $gettok(%s,%p,32) ] ] = $int(%b) - 1
+      inc %p
+      %variable = $gettok(%a,%p,32)
+    }
+    if (%i >= %l) || (%x == %tankswidth) {
+      if (%i) %tanks.terrain = %tanks.terrain %y %i
+      %i = 0
+      %y = $calc($rand(0,16)/5-1.6)
+      %l = $rand(12,36)
+    }
+    if (%y < 0) && (%b <= $calc(50+%tanks.top)) {
+      if (%i) %tanks.terrain = %tanks.terrain %y %i
+      %i = 0
+      %y = $calc($rand(0,8)/5)
+      %l = $rand(12,36)
+    }
+    if (%y > 0) && (%b >= $calc(%tanks.bottom -50)) {
+      if (%i) %tanks.terrain = %tanks.terrain %y %i
+      %i = 0
+      %y = $calc(-$rand(0,8)/5)
+      %l = $rand(12,36)
+    }
+    inc %b %y
+    inc %i
+    inc %x
+  }
+  tanks.alias.titlebar
+  tanks.alias.start
+  if ($sock(tanks.*,0)) {
+    var %z = %tanks.maxplayers
+    while (%z) {
+      if (%tanks.color. [ $+ [ %z ] ] isnum) && (%z != %tanks.me) tanks.alias.sland %z
+      dec %z
+    }
+  }
+}
+alias -l tanks.alias.go {
+  %tanks.round = 1
+  tokenize 32 %tanks.order
+  %tanks.turn = $ [ $+ [ $rand(1,$0) ] ]
+  var %s = tanks. $+ %tanks.turn
+  if (* !iswm $sock(%s)) && (* !iswm $sock(tanks)) {
+    if (%tanks.ai. [ $+ [ %tanks.turn ] ] !isnum 0-4) %tanks.me = %tanks.turn
+  }
+  while ($1) {
+    tanks.alias.vars $1 $tanks.alias.vars
+    tokenize 32 $2-
+  }
+  tanks.alias.terrain
+}
+alias -l tanks.alias.initvars {
+  var %p = %tanks.maxplayers
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) {
+      %tanks.angle. [ $+ [ %p ] ] = $iif(%tanks.x. [ $+ [ %p ] ] > $calc(%tankswidth /2),145,35)
+      %tanks.power. [ $+ [ %p ] ] = 45
+      %tanks.shield. [ $+ [ %p ] ] = 11
+      %tanks.max. [ $+ [ %p ] ] = 100
+      unset %tanks.prev. [ $+ [ %p ] ]
+      if (%tanksforget) %tanksinc = 5
+    }
+    dec %p
+  }
+  %tanks.item = 1
+  tanks.alias.titlebar Drawing land...
+}
+alias -l tanks.alias.start {
+  tanks.alias.initvars
+  drawrect -rfn @Tanks %tanks.sky 1 0 0 %tankswidth %tanks.bottom
+  tokenize 32 . %tanks.terrain
+  var %n, %l = 0, %b = $2, %h, %i = 0, %x = 1, %xx = 0, %y, %d = drawline -rn @Tanks %tanks.ground 1
+  while (%x <= %tankswidth) && (* iswm $2) {
+    if (%i >= %l) || (%x == %tankswidth) {
+      tokenize 32 $3-
+      %y = $1
+      %l = $2
+      %i = 0
+    }
+    %h = $int(%b)
+    %d %xx %h %xx %tanks.bottom
+    rline @tanksland %x %h
+    inc %b %y
+    inc %x
+    inc %i
+    inc %xx
+  }
+  tanks.alias.1start
+}
+alias -l tanks.alias.1start {
+  %tanks.state = tanks.state.waiting
+  tanks.alias.draw-all 0
+  tanks.alias.sound h1
+  unset %tanks.state
+  tanks.alias.next
+}
+alias -l tanks.alias.maxweapon {
+  var %x = %tanks.turn
+  if ($1) %x = $1
+  %x = $int($calc(%tanks.credits. [ $+ [ %x ] ] /25))
+  if (%x < 1) return 1
+  if (%x > 5) return 5
+  return %x
+}
+alias -l tanks.alias.push {
+  if ($timer(tanks.tanks.alias.fire2)) return
+  var %a, %variable = %tanks.turn, %i = %tanksinc
+  if ($istok(tanks.button.up tanks.button.down tanks.button.left tanks.button.right tanks.button.next tanks.button.prev tanks.button.repair tanks.button.explosive1 tanks.button.explosive2 tanks.button.explosive3 tanks.button.explosive4 tanks.button.explosive5,$1,32)) tanks.alias.sendall tanks.sockmsg.push $1 $iif($2 isnum,$2,%i)
+  if ($1 == tanks.button.1) {
+    %tanksinc = 1
+    tanks.alias.draw-buttons
+  }
+  if ($1 == tanks.button.5) {
+    %tanksinc = 5
+    tanks.alias.draw-buttons
+  }
+  if ($1 == 0) tokenize 32 $2-
+  if ($2 isnum) %i = $2
+  if ($1 == tanks.button.up) || ($1 == tanks.button.down) {
+    %a = %tanks.power. [ $+ [ %variable ] ] $replace($1,tanks.button.up,+,tanks.button.down,-) %i
+    if (%a < 0) %a = 0
+    if ($iif(%tanks.mode & 1,100,%tanks.max. [ $+ [ %variable ] ] ) < %a) %a = $ifmatch
+    %tanks.power. [ $+ [ %variable ] ] = %a
+    tanks.alias.draw-num 398 %tanks.power. [ $+ [ %tanks.turn ] ]
+  }
+  elseif ($1 == tanks.button.left) || ($1 == tanks.button.right) {
+    %a = $replace($1,tanks.button.left,1,tanks.button.right,-1)
+    inc %tanks.angle. [ $+ [ %variable ] ] $calc(%i *%a)
+    if ($calc(%tanks.angle. [ $+ [ %variable ] ] -%i *%a) == $calc(90+90*%a)) %tanks.angle. [ $+ [ %variable ] ] = $calc(90-90*%a)
+    if (%tanks.angle. [ $+ [ %variable ] ] < 0) %tanks.angle. [ $+ [ %variable ] ] = 0
+    if (%tanks.angle. [ $+ [ %variable ] ] > 180) %tanks.angle. [ $+ [ %variable ] ] = 180
+    tanks.alias.draw-angle
+    tanks.alias.draw-tank %variable
+  }
+  elseif (tanks.button.explosive? iswm $1) {
+    %tanks.item = $tanks.alias.maxweapon
+    if (%tanks.item > $right($1,1)) %tanks.item = $right($1,1)
+    tanks.alias.draw-explosive
+  }
+  elseif ($1 == tanks.button.next) {
+    %i = $calc(1+%tanks.item)
+    if (%i > 5) %i = 5
+    if ($calc(25*%i) <= %tanks.credits. [ $+ [ %variable ] ] ) %tanks.item = %i
+    tanks.alias.draw-explosive
+  }
+  elseif ($1 == tanks.button.prev) {
+    dec %tanks.item
+    if (%tanks.item < 1) %tanks.item = 1
+    tanks.alias.draw-explosive
+  }
+  elseif ($1 == tanks.button.repair) tanks.alias.repair
+  elseif ($1 == tanks.button.fire) {
+    if (%tanks.turn == %tanks.me) && ($timer(tanks.tanks.alias.fire2)) return
+    tanks.alias.fire
+  }
+  elseif ($1 == tanks.button.namesleft) && (%tanks.namezero > 0) {
+    dec %tanks.namezero %tanks.namescroll
+    tanks.alias.draw-shield
+  }
+  elseif ($1 == tanks.button.namesright) {
+    var %variable = %tanks.maxplayers
+    while (%variable) && (%tanks.color. [ $+ [ %variable ] ] !isnum) {
+      dec %variable
+    }
+    if (%variable > $calc(8+%tanks.namezero)) inc %tanks.namezero %tanks.namescroll
+    tanks.alias.draw-shield
+  }
+  drawdot @Tanks
+}
+alias -l tanks.alias.togglechat {
+  if ($1 !isnum 0-1) return
+  %tanksnochat = $1
+  if ($1) {
+    tanks.alias.setnames $tanks.alias.getnames
+    tanks.alias.draw-shield
+    drawdot @Tanks
+    tanks.alias.titlebar
+  }
+  else tanks.alias.sendall tanks.sockmsg.names
+}
+alias -l tanks.alias.chatbox {
+  if ($dialog(tankschat)) {
+    dialog -ev tankschat
+    return
+  }
+  if ($1) %tanks.msg = 1
+  else unset %tanks.msg
+  if (%tanks.color. [ $+ [ %tanks.me ] ] isnum) || ($sock(tanks.*,0)) { }
+  else return
+  var %variable = $left($dialog(tankschat,$replace(tankschat,chat,$iif($1,msg,chat)),@tanks),200)
+  if ($1) && (* iswm %tanks.msgn) tanks.alias.parsechat /msg %tanks.msgn %variable
+  else tanks.alias.parsechat %variable
+}
+alias tanks.chat tanks.alias.parsechat $1-
+alias -l tanks.alias.parsechat {
+  var %m, %0 = $iif(%tanksnochat && $sock(tanks),0,1)
+  if ($1 == /msg) && ($numtok($2,44)) && (%0) {
+    if (* !iswm $3) return
+    %m = 1
+    var %x = $numtok($2,44), %z, %p
+    while (%x) {
+      %p = $gettok($2,%x,44)
+      if (* iswm %z) %z = %tanks.player. [ $+ [ %p ] ] $+ ,  $+ %z
+      else %z = %tanks.player. [ $+ [ %p ] ]
+      dec %x
+    }
+    %tanks.msgn = $2
+    %tanks.msgp = %z
+    tokenize 32 $3-
+  }
+  if (/ooh* iswm $1) {
+    var %r, %l = $rand(6,16), %variable = $2-
+    while ($len(%r) < %l) {
+      %r = %r $+ $mid(oO,$rand(1,2),1)
+    }
+    tokenize 32 %r $+ $right($1,-4) %variable
+  }
+  if ($1 == /xyzzy) tanks.alias.echochat tanks.echotype.echo Something happened!
+  elseif ($1 == /log) {
+    if (/log on == $1-) {
+      %tankslog = 1
+      tanks.alias.echochat tanks.echotype.echo Logging is ON
+    }
+    elseif (/log off == $1-) {
+      %tankslog = 0
+      tanks.alias.echochat tanks.echotype.echo Logging is OFF
+    }
+    else tanks.alias.echochat tanks.echotype.echo Logging is $iif(%tankslog,ON,OFF)
+  }
+  elseif ($1 == /chat) {
+    if ($sock(tanks)) {
+      if (/chat on == $1-) {
+        tanks.alias.togglechat 0
+        tanks.alias.echochat tanks.echotype.echo Chat is ON
+      }
+      elseif (/chat off == $1-) {
+        tanks.alias.togglechat 1
+        tanks.alias.echochat tanks.echotype.echo Chat is OFF
+      }
+      else tanks.alias.echochat tanks.echotype.echo Chat is $iif(%tanksnochat,OFF,ON)
+    }
+    else tanks.alias.echochat tanks.echotype.echo The /chat [on|off] command is only available for clients connected to a server
+  }
+  elseif ($1 == /color) {
+    if ($2 == 0) var %n = $gettok($remtok(%tanks.colors,%tanks.c. [ $+ [ %tanks.me ] ] ,1,32),$rand(1,$calc($numtok(%tanks.colors,32)-1)),32)
+    else var %n = $gettok(%tanks.colors,$2,32)
+    if (%n) {
+      %tankscolor = %n
+      if ($sock(tanks)) tanks.alias.sendall tanks.sockmsg.color %n
+      else tanks.alias.color %tanks.me %n
+    }
+    else tanks.alias.newcolor
+  }
+  elseif ($istok(/sname /snick,$1,32)) {
+    if ($sock(tanks)) %tanksserver = $2-
+    else {
+      var %variable = %tanks.me
+      %tanks.me = 0
+      tanks.alias.newname $2-
+      %tanks.me = %variable
+    }
+  }
+  elseif ($istok(/name /nick,$1,32)) && (%0) tanks.alias.newname $2-
+  elseif ($1 == /clear) {
+    window -c @tankschat
+    window -hl @tankschat
+    %tankschat.scroll = 0
+    %tankschat.lines = 0
+    .timertanks.tanks.alias.echochat -o 1 0 return
+    tanks.alias.draw-chat
+  }
+  elseif ($1 == /vote) {
+    if (* !iswm $sock(tanks)) {
+      if (%tanks.me isnum 1-) {
+        tanks.alias.vote %tanks.me $iif(%tanks.vote. [ $+ [ %tanks.me ] ] ,0,1)
+        if (%tanks.vote. [ $+ [ %tanks.me ] ] ) tanks.alias.echochat tanks.echotype.echo Type /end to end the round without voting
+      }
+      else tanks.alias.echochat tanks.echotype.echo Type /end to end the round
+    }
+    if ($sock(tanks)) && (%tanks.shield. [ $+ [ %tanks.me ] ] > 0) && ($numtok(%tanks.order,32) > 1) tanks.alias.sendall tanks.sockmsg.vote
+    elseif ($sock(tanks)) tanks.alias.echochat tanks.echotype.echo You can't vote
+  }
+  elseif ($1 == /port) {
+    if ($2 !isnum) || ($sock(tanks.*,0) == 0) tanks.alias.echochat tanks.echotype.echo Server port is %tanksport
+    else {
+      if ($2 !isnum 1-65534) {
+        window -n @Tanks
+        tokenize 32 /port $?="Enter new server port:"
+        if (* !iswm $window(@Tanks)) return
+        window -a @Tanks
+        if ($2 !isnum 1-65534) return
+      }
+      %tankssavedport = $2
+      if (%tanksport == $2) return
+      %tanksport = $2
+      tanks.alias.sendall tanks.sockmsg.port %tanksport
+      tanks.alias.setport
+    }
+  }
+  elseif ($1 == /end) && (* !iswm $sock(tanks)) {
+    if (%tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) tanks.alias.skip
+  }
+  elseif ($1 == /bot) || ($1 == /skill) && (* !iswm $sock(tanks)) {
+    if ($tanks.alias.addbot($2)) tanks.alias.echochat tanks.echotype.echo The game is full
+  }
+  elseif ($1 == /nobots) || ($1 == /nobot) && (* !iswm $sock(tanks)) {
+    var %n = 1
+    while (%n <= %tanks.maxplayers) {
+      if (%tanks.ai. [ $+ [ %n ] ] isnum 0-4) tanks.alias.quit %n
+      inc %n
+    }
+  }
+  elseif ($1 == /join) && (* !iswm $sock(tanks)) {
+    if ($tanks.alias.addplayer($iif($0 > 1,$2-,%tanksname))) tanks.alias.echochat tanks.echotype.echo The game is full
+  }
+  elseif ($istok(/bot /nobots /end /join,$1,32)) tanks.alias.echochat tanks.echotype.echo Only the server can use the $1 command
+  elseif ($1 == /ping) tanks.alias.sendall tanks.sockmsg.ping $ctime
+  elseif ($istok(/list /tanklist /tankslist,$1,32)) tanklist
+  elseif ($1 == /quit) {
+    if ($sock(tanks)) tanks.alias.sendall tanks.sockmsg.quit
+    elseif (%tanks.me != 0) tanks.alias.quit %tanks.me
+    else tanks.alias.echochat tanks.echotype.echo Use /exit to close Tanks
+  }
+  elseif ($1 == /exit) tanks.alias.cancel
+  elseif ($istok(/help /about /readme,$1,32)) tanksreadme
+  elseif (%m) && ($0) {
+    var %n, %s = %tanks.maxplayers
+    while (%s >= 0) {
+      if ($istok(%tanks.msgn,%s,44)) && (%tanks.color. [ $+ [ %s ] ] isnum) {
+        %n = 1
+        if (* !iswm $sock(tanks)) tanks.alias.sendspecific %s tanks.sockmsg.msg %tanks.me $1-
+      }
+      dec %s
+    }
+    if (%n) {
+      tanks.alias.echochat tanks.echotype.sent %tanks.color. [ $+ [ %tanks.me ] ] %tanks.msgp $1-
+      if ($sock(tanks)) tanks.alias.sendall tanks.sockmsg.msg %tanks.msgn $1-
+    }
+  }
+  elseif ($0) && (%m != 1) && (%0) {
+    if ($sock(tanks)) tanks.alias.sendall tanks.sockmsg.chat $1-
+    else tanks.alias.sendall tanks.sockmsg.chat %tanks.me $1-
+    tanks.alias.echochat tanks.echotype.chat %tanks.color. [ $+ [ %tanks.me ] ] %tanks.player. [ $+ [ %tanks.me ] ] $1-
+  }
+}
+alias -l tanks.alias.echochat {
+  if (* !iswm $window(@Tanks)) return
+  window -g3 @Tanks
+  var %0, %1 = 1
+  if ($1 == -) {
+    %1 = 0
+    tokenize 32 $2-
+  }
+  if ($1 == tanks.echotype.display) {
+    %0 = 1
+    tokenize 32 tanks.echotype.echo $2-
+  }
+  if ($1 == tanks.echotype.repecho) tokenize 32 tanks.echotype.echo $replace($4-,   ,%tanks.player. [ $+ [ $3 ] ] ,  ,%tanks.player. [ $+ [ $2 ] ] )
+  var %a = $1, %c, %variable, %n, %w = $calc(%tankschat.w -19-%tankstahoma)
+  if (%a == tanks.echotype.echo) %variable = $2-
+  else %c = $2
+  if (%a == tanks.echotype.join) %variable = $3 joined the game $iif($4,(IP: [ [ $4 ] $+ ] ))
+  elseif (%a == tanks.echotype.sent) {
+    if ($istok(/me /em,$4,32)) {
+      %a = tanks.echotype.pact
+      %variable = (pmsg) -> * $+ $3 $+ * $5-
+    }
+    else %variable = (pmsg) -> * $+ $3 $+ * $4-
+  }
+  elseif ($istok(tanks.echotype.chat tanks.echotype.msg,%a,32)) {
+    if ($istok(/me /em,$4,32)) {
+      %a = tanks.echotype.act
+      %variable = * $3 $5-
+    }
+    else %variable = < $+ $3 $+ > $4-
+    if ($1 == tanks.echotype.msg) {
+      if (%a == tanks.echotype.act) %a = tanks.echotype.pact
+      %variable = (pmsg) %variable
+      tanks.alias.blink 1
+    }
+    if ($3 === %tanks.player.0) %variable = (server) %variable
+  }
+  elseif (%a == tanks.echotype.name) %variable = $3 renamed to $4
+  elseif (%a == tanks.echotype.color) {
+    %c = %c $4
+    %variable = $3 changed color
+  }
+  elseif (%a == tanks.echotype.quit) {
+    %variable = $3 left the game $4- %tanks.qip
+    if (* !iswm $3) return
+  }
+  elseif (%a == tanks.echotype.kick) %variable = $3 was kicked out $4- %tanks.qip
+  %variable = $strip(%variable)
+  if (%tankslog) && (%0 != 1) {
+    tokenize 32 %c %variable
+    var %l = $2-
+    if (%a == tanks.echotype.color) %l = $3-
+    if (%a == tanks.echotype.echo) %l = $1-
+    if ($istok(tanks.echotype.chat tanks.echotype.sent tanks.echotype.msg tanks.echotype.act,%a,32) != $true) %l = *** %l
+    write " $+ $scriptdir $+ tanks.log" $timestamp %l
+  }
+  while ($len(%variable)) && (* iswm $remove(%variable, )) {
+    %n = 1
+    while ($width($mid(%variable,1,%n),%tankschat.font,%tankschat.fontsize,0,0) < %w) && (%n <= $len(%variable)) {
+      inc %n
+    }
+    if ($asc($mid(%variable,%n,1)) != 32) {
+      dec %n
+      var %l = $left(%variable,%n)
+      if (%n < $len(%variable)) && ($numtok(%l,32) > 2) %n = $pos(%l,$chr(32),$count(%l,$chr(32)))
+    }
+    tanks.alias.scroll %a %c $left(%variable,%n)
+    if ($asc($mid(%variable,%n,1)) == 32) %variable =   $right(%variable,$calc(0-%n))
+    else %variable =    $+ $right(%variable,$calc(0-%n))
+  }
+  if (%1) tanks.alias.draw-chat
+}
+alias -l tanks.alias.draw-chat {
+  if (* !iswm $window(@Tanks)) || (%tankschat.bg !isnum) return
+  if (%tankschat.lines == 0) {
+    tanks.alias.echochat - tanks.echotype.display Right-click for commands and options
+    if ($sock(tanks)) && (%tanksnochat) tanks.alias.echochat - tanks.echotype.display Chat text and player names are disabled
+    elseif ($sock(tanks.*,0)) || ($sock(tanks)) tanks.alias.echochat - tanks.echotype.display Press 'T' to chat or 'M' to send a private message
+    if (%tanksnochat != 1) || (* !iswm $sock(tanks)) && (%tanks.color.0 isnum) tanks.alias.echochat - $iif($timer(tanks.tanks.alias.echochat),tanks.echotype.display,tanks.echotype.echo) Server is: %tanks.player.0
+    %tankschat.lines = $line(@tankschat,0)
+  }
+  drawrect -fnr @Tanks %tankschat.bar 1 %tankschat.barx %tankschat.bary 15 %tankschat.barh
+  if (%tankschat.lines < 12) %tankschat.knob = %tanksheight + 15
+  else {
+    %tankschat.knob = $int($calc(%tanksheight -30-(%tankschat.barh -15)*%tankschat.scroll /(%tankschat.lines -11)))
+    if (%tankschat.barbutton == tanks.button.bar.pgup) drawrect -fnr @Tanks %tankschat.bar1 1 %tankschat.barx %tankschat.bary 15 $calc(%tankschat.knob -%tankschat.bary)
+    elseif (%tankschat.barbutton == tanks.button.bar.pgdn) drawrect -fnr @Tanks %tankschat.bar1 1 %tankschat.barx %tankschat.knob 15 $calc(%tankschat.barb -%tankschat.knob)
+    drawpic -cn @Tanks %tankschat.barx %tankschat.knob 180 115 15 15 %tanksbmp
+  }
+  var %x = 150
+  if (%tankschat.barbutton == tanks.button.bar.up) && (%tankschat.bardown) %x = 165
+  drawpic -cn @Tanks %tankschat.barx %tankschat.y %x 115 15 15 %tanksbmp
+  %x = 150
+  if (%tankschat.barbutton == tanks.button.bar.down) && (%tankschat.bardown) %x = 165
+  drawpic -cn @Tanks %tankschat.barx %tankschat.barb %x 130 15 15 %tanksbmp
+  var %x = %tankschat.x, %yy = %tankschat.y, %w = %tankschat.w, %h = %tankschat.h, %c
+  drawrect -rfn @Tanks %tankschat.bg 1 %x %yy %w %h
+  inc %x 3
+  %w = $calc(%w -19-%tankstahoma)
+  var %y = $calc(%yy -15+%h), %xx = $calc(%x +14+%tankstahoma), %variable, %n = %tankschat.scroll
+  while (%y > %yy) {
+    inc %n
+    tokenize 32 $line(@tankschat,%n)
+    if (* !iswm $1) {
+      drawdot @Tanks
+      return
+    }
+    if ($1 == tanks.echotype.echo) %variable = $2-
+    elseif ($1 == tanks.echotype.color) %variable = $4-
+    else %variable = $3-
+    if ( * !iswm %variable) {
+      if ($1 != tanks.echotype.echo) drawrect -rfn @Tanks $2 1 %x %y 12 12
+      drawpic -cnt @Tanks 16711935 %x %y $replace($1,tanks.echotype.join,120,tanks.echotype.pact,132,tanks.echotype.act,132,tanks.echotype.chat,132,tanks.echotype.sent,132,tanks.echotype.msg,132,tanks.echotype.name,132,tanks.echotype.color,144,tanks.echotype.quit,156,tanks.echotype.kick,168,tanks.echotype.echo,180) 80 12 12 %tanksbmp
+      if ($1 == tanks.echotype.color) drawfill -srn @Tanks $3 16777215 $calc(10+%x) $calc(10+%y)
+    }
+    if ($1 == tanks.echotype.chat) %c = %tankschat.text
+    elseif ($istok(tanks.echotype.msg tanks.echotype.sent,$1,32)) %c = %tankschat.msg
+    elseif ($1 == tanks.echotype.act) %c = 6291520
+    elseif ($1 == tanks.echotype.pact) %c = 8388688
+    else %c = %tankschat.echo
+    drawtext -nrc @Tanks %c %tankschat.qfont %tankschat.fontsize %xx $calc(%y -%tankstahoma) %w 13 %variable
+    dec %y 13
+  }
+  if (%tankschat.selecting) %tankschat.drawsel
+  drawdot @Tanks
+}
+alias -l tanks.alias.scroll {
+  iline @tankschat 1 $1-
+  inc %tankschat.lines
+  if (%tankschat.scroll > 0) {
+    inc %tankschat.sel
+    inc %tankschat.sel1
+    inc %tankschat.scroll
+  }
+  if (%tankschat.scroll0 > 0) inc %tankschat.scroll0
+  if (%tankschat.selecting) && (%tankschat.scroll == 0) {
+    %tankschat.scrolldown = 1
+    %tankschat.scroll = 1
+    inc %tankschat.sel
+    inc %tankschat.sel1
+  }
+}
+alias -l tanks.alias.pgup {
+  if (%tankschat.selecting) return
+  var %x = %tankschat.scroll
+  inc %tankschat.scroll $1
+  if (%tankschat.scroll >= $calc(%tankschat.lines -10)) %tankschat.scroll = %tankschat.lines - 11
+  if (%tankschat.scroll < 0) %tankschat.scroll = 0
+  if (%x != %tankschat.scroll) tanks.alias.draw-chat
+}
+alias -l tanks.alias.pgdn {
+  if (%tankschat.selecting) return
+  var %x = %tankschat.scroll
+  dec %tankschat.scroll $1
+  if (%tankschat.scroll < 0) %tankschat.scroll = 0
+  if (%x != %tankschat.scroll) tanks.alias.draw-chat
+}
+alias -l tanks.alias.mkey {
+  if ($mouse.key & 2) || ($mouse.key & 4) && ($istok(tanks.button.up tanks.button.down tanks.button.left tanks.button.right,$1,32)) return $1 $iif(%tanksinc == 1,5,1)
+  return $1 %tanksinc
+}
+on *:keydown:@tanks:*:{
+  if (%tanks.turn == %tanks.me) tanks.alias.timeout 0
+  var %variable = $keyval
+  if ($mouse.key & 2) && (%variable isnum 35-36) {
+    if (%variable == 35) %tankschat.scroll = 0
+    else %tankschat.scroll = %tankschat.lines - 11
+    if (%tankschat.scroll < 0) %tankschat.scroll = 0
+    tanks.alias.draw-chat
+  }
+  elseif (%tanks.state %variable == tanks.state.ready 13) tanks.alias.go
+  elseif (%tanks.state == tanks.state.myturn) tanks.alias.push $tanks.alias.mkey($replace(%variable,38,tanks.button.up,40,tanks.button.down,37,tanks.button.left,39,tanks.button.right,45,tanks.button.explosive1,36,tanks.button.explosive5,46,tanks.button.prev,35,tanks.button.next,49,tanks.button.explosive1,50,tanks.button.explosive2,51,tanks.button.explosive3,52,tanks.button.explosive4,53,tanks.button.explosive5,13,tanks.button.fire,32,tanks.button.repair,9,$iif(%tanksinc == 1,tanks.button.5,tanks.button.1)))
+  if ($istok(84 89 77,%variable,32)) .timertanks.tanks.alias.chatbox -o 1 0 tanks.alias.chatbox $iif(%variable == 77,1)
+  elseif (%variable == 33) tanks.alias.pgup $iif($mouse.key !& 2,11)
+  elseif (%variable == 34) tanks.alias.pgdn $iif($mouse.key !& 2,11)
+  elseif (%variable == 219) tanks.alias.push tanks.button.namesleft
+  elseif (%variable == 221) tanks.alias.push tanks.button.namesright
+}
+alias -l tanks.alias.showname {
+  var %x_ = $1 - $3, %y_ = $2 - $4, %x = $3, %y = $4, %c = $5, %p
+  tokenize 32 $gettok(%tanks.order, [ [ $calc(1+%tanks.namezero) ] $+ ] -,32)
+  if (%y < %tanks.bottom) {
+    tokenize 32 %tanks.order
+    var %variable = a
+    while (%tanks.shield. [ $+ [ $1 ] ] > 0) {
+      if ($calc((%tanks.x. [ $+ [ $1 ] ] -%x)^2+(%tanks.y. [ $+ [ $1 ] ] -%y)^2) < %variable) {
+        %variable = $ifmatch
+        if (%variable < 1600) %p = $1
+      }
+      tokenize 32 $2-
+    }
+  }
+  elseif (%tanks.color. [ $+ [ $1 ] ] isnum) && (%tanks.shield. [ $+ [ $1 ] ] > 0) && ($inrect(%x,%y,2,315,158,13)) %p = $1
+  elseif (%tanks.color. [ $+ [ $2 ] ] isnum) && (%tanks.shield. [ $+ [ $2 ] ] > 0) && ($inrect(%x,%y,160,315,158,13)) %p = $2
+  elseif (%tanks.color. [ $+ [ $3 ] ] isnum) && (%tanks.shield. [ $+ [ $3 ] ] > 0) && ($inrect(%x,%y,2,328,158,13)) %p = $3
+  elseif (%tanks.color. [ $+ [ $4 ] ] isnum) && (%tanks.shield. [ $+ [ $4 ] ] > 0) && ($inrect(%x,%y,160,328,158,13)) %p = $4
+  elseif (%tanks.color. [ $+ [ $5 ] ] isnum) && (%tanks.shield. [ $+ [ $5 ] ] > 0) && ($inrect(%x,%y,2,341,158,13)) %p = $5
+  elseif (%tanks.color. [ $+ [ $6 ] ] isnum) && (%tanks.shield. [ $+ [ $6 ] ] > 0) && ($inrect(%x,%y,160,341,158,13)) %p = $6
+  elseif (%tanks.color. [ $+ [ $7 ] ] isnum) && (%tanks.shield. [ $+ [ $7 ] ] > 0) && ($inrect(%x,%y,2,354,158,13)) %p = $7
+  elseif (%tanks.color. [ $+ [ $8 ] ] isnum) && (%tanks.shield. [ $+ [ $8 ] ] > 0) && ($inrect(%x,%y,160,354,158,13)) %p = $8
+  if (%p) && (%c == 0) tanks.alias.info %p
+  if ($window(@Tank info)) || ($dialog(tanksbots).active) || ($dialog(tanksserver).active) || ($dialog(abouttanks).active) || ($dialog(tankschat).active) || ($dialog(tanklist).active) || ($dialog(tanksban).active) || (%p !isnum) && ($version != 6.02) window -h @tanksname
+  if (%p !isnum) || (%c == 0) {
+    unset %tanks.showname
+    if (%c == 0) close -@ @Tanks color
+    return
+  }
+  if ($version == 6.02) || (%p == %tanks.showname) || ($window(@Tank info)) return
+  %tanks.showname = %p
+  var %n = %tanks.player. [ $+ [ %p ] ] , %w = $calc(7+$width(%n,%tankschat.font,%tankschat.fontsize,0,0)), %h = $iif(%tanks.mode & 1,17,23), %x0 = 3
+  if (%w < 37) && (%h > 17) var %x0 = $int($calc(3 + (37 - %w) / 2)), %w = 37
+  var %x = $int($calc(%x_ + %tanks.x. [ $+ [ %p ] ] - %w / 2)), %y = $calc(%y_ + %tanks.y. [ $+ [ %p ] ] - $iif(%h > 17,41,36))
+  if (%x < %x_) %x = %x_
+  if ($calc(%x_ + %tankswidth - %w) < %x) %x = $ifmatch
+  window @tanksname -1 -1 %w %h
+  drawrect -rf @tanksname %tanks.sky 1 0 0 %w %h
+  window -o @tanksname %x %y %w %h
+  drawdot @Tanks
+  drawrect -rn @tanksname %tanks.color. [ $+ [ %p ] ] 1 0 0 %w %h
+  drawtext -rn @tanksname 0 %tankschat.qfont %tankschat.fontsize $calc(%x0 +%tankstahoma) 2 %n
+  if (%h > 17) {
+    if (%tanks.showname == %tanks.turn) {
+      var %c = 1
+      tokenize 32 %tanks.order
+      while (%tanks.shield. [ $+ [ $1 ] ] > 0) {
+        if ($1 != %tanks.turn) if ($tanks.alias.maxweapon($1) > %c) %c = $ifmatch
+        tokenize 32 $2-
+      }
+    }
+    else var %c = $tanks.alias.maxweapon
+    %c = $iif(%tanks.shield. [ $+ [ %p ] ] > %c,%tanks.0,255)
+    var %x = $int($calc(%w /2-15))
+    if (%tanks.shield. [ $+ [ %tanks.showname ] ] == 11) {
+      drawrect -rnf @tanksname %c 1 %x 16 31 4
+      drawrect -rn @tanksname %tanks.1 1 %x 16 31 4
+    }
+    else {
+      drawrect -rnf @tanksname %tanks.smallnoshield 1 %x 16 31 4
+      drawrect -rnf @tanksname %c 1 %x 16 $calc(%tanks.shield. [ $+ [ %tanks.showname ] ] *3) 4
+      drawpic -cnt @tanksname 16711935 %x 16 120 76 31 4 %tanksbmp
+      drawfill -srn @tanksname %tanks.1 16777215 %x 16
+    }
+  }
+  drawdot @tanksname
+}
+alias -l tanks.alias.info {
+  var %h = $iif(%tanks.mode & 1,122,136), %d = drawtext -rn @Tank info 0 Fixedsys 15 8, %a = %tanks.angle. [ $+ [ $1 ] ]
+  if ($window(@Tank info)) {
+    window -c @Tank info
+    return
+  }
+  if (%tanks.shield. [ $+ [ $1 ] ] < 1) return
+  window -Bhdofpk +Ltf @Tank info $int($calc(%tankswidth /2-52+$window(@Tanks).x)) $int($calc(%tanksheight /2-60+$window(@Tanks).y)) 104 %h
+  drawrect -rfn @Tank info %tanks.color. [ $+ [ $1 ] ] 1 0 0 104 %h
+  drawrect -rfn @Tank info %tanks.15 1 3 3 98 $calc(%h -6)
+  drawtext -crn @Tank info 0 %tankschat.qfont %tankschat.fontsize 8 8 88 13 %tanks.player. [ $+ [ $1 ] ]
+  %d 24 Angle   $iif($calc(180-%a) < %a,$calc(180-%a),%a)
+  %d 38 Power   %tanks.power. [ $+ [ $1 ] ]
+  %d 52 Prev.   %tanks.prev. [ $+ [ $1 ] ]
+  %d 66 Max.    $iif(%tanks.mode & 1,100,%tanks.max. [ $+ [ $1 ] ] )
+  %d 84 Credits %tanks.credits. [ $+ [ $1 ] ]
+  if (%tanks.mode !& 1) %d 98 Shield  %tanks.shield. [ $+ [ $1 ] ]
+  %d = Accuracy:  $calc(+$round($calc(100*%tanks.damage. [ $+ [ $1 ] ] /%tanks.shot. [ $+ [ $1 ] ] ),0)) $+ %
+  drawtext -rn @Tank info 0 %tankschat.qfont %tankschat.fontsize $calc(52-$width(%d,%tankschat.font,%tankschat.fontsize,0,0)/2) $iif(%tanks.mode & 1,101,115) %d
+  drawdot @Tank info
+}
+alias -l tanks.alias.bar {
+  if (* !iswm $window(@Tanks)) return
+  if (%tankschat.barbutton == tanks.button.bar.pgup) var %y = %tankschat.bary, %h = %tankschat.knob - %tankschat.bary, %c = tanks.alias.pgup 11
+  elseif (%tankschat.barbutton == tanks.button.bar.pgdn) var %y = %tankschat.knob + 15, %h = $calc(%tankschat.barb -15-%tankschat.knob), %c = tanks.alias.pgdn 11
+  elseif (%tankschat.barbutton == tanks.button.bar.up) var %y = %tankschat.y, %h = 15, %c = tanks.alias.pgup
+  elseif (%tankschat.barbutton == tanks.button.bar.down) var %y = %tankschat.barb, %h = 15, %c = tanks.alias.pgdn
+  if ($1 != 1) && ($inrect($mouse.x,$mouse.y,%tankschat.barx,%y,15,%h)) {
+    %tankschat.bardown = 1
+    %c
+    return
+  }
+  %tankschat.bardown = 0
+  drawrect -fnr @Tanks %tankschat.bar 1 %tankschat.barx %tankschat.bary 15 %tankschat.barh
+  drawpic -cn @Tanks %tankschat.barx %tankschat.knob 180 115 15 15 %tanksbmp
+  drawpic -cn @Tanks %tankschat.barx %tankschat.y 150 115 15 15 %tanksbmp
+  drawpic -cn @Tanks %tankschat.barx %tankschat.barb 150 130 15 15 %tanksbmp
+  drawdot @Tanks
+}
+alias -l tanks.alias.chattext {
+  tokenize 32 $line(@tankschat,%tankschat.sel)
+  if ($1 == tanks.echotype.echo) return *** $2-
+  if ($1 == tanks.echotype.color) return *** $4-
+  if ($istok(tanks.echotype.pact tanks.echotype.act tanks.echotype.chat tanks.echotype.sent tanks.echotype.msg,$1,32)) return $3-
+  return *** $3-
+}
+alias -l tanks.alias.buttons {
+  if (* !iswm $window(@Tanks)) return
+  if (%tanks.turn == %tanks.me) && ($1 == 0) tanks.alias.timeout 0
+  var %r = .timertanks.tanks.alias.bar -om 1 200 .timertanks.tanks.alias.bar -om 0 50 tanks.alias.bar, %0 = tanks.button.1 81 440 77 57 131 16 17, %1 = tanks.button.5 99 440 95 57 131 16 17, %d = 0, %p = $1, %o = %tanks.button, %x_ = $mouse.dx, %y_ = $mouse.dy, %x = $mouse.x, %y = $mouse.y, %i, %b, %a
+  if ($mouse.key & 1) {
+    %d = 1
+    if ($inrect(%x,%y,%tankschat.x,%tankschat.y,%tankschat.w,%tankschat.h)) {
+      var %l = $int($calc((%y -3-%tankschat.y)/13))
+      if (%p == 0) && ($mouse.key > 1) {
+        %tankschat.sel = $calc(%tankschat.scroll +11-%l)
+        %tankschat.sel1 = %tankschat.sel
+        if (%l < 11) && (%tankschat.sel <= %tankschat.lines) {
+          %tankschat.drawsel
+          %tankschat.drawsel = drawrect -nrif @Tanks 0 1 $calc(16+%tankschat.x) $calc(3+%tankschat.y +13*%l) $calc(%tankschat.w -17) 13
+          %tankschat.drawsel
+          drawdot @Tanks
+          %tankschat.selecting = 1
+          unset %tankschat.scrolldown
+        }
+        else unset %tankschat.drawsel
+      }
+      elseif (%tankschat.selecting) {
+        if (%l > 10) %l = 10
+        %tankschat.sel1 = $calc(%tankschat.scroll +11-%l)
+        if (%tankschat.sel1 > %tankschat.sel) %tankschat.sel1 = %tankschat.sel
+        %tankschat.drawsel
+        %tankschat.drawsel = drawrect -nrif @Tanks 0 1 $calc(16+%tankschat.x) $calc(3+%tankschat.y +13*(11+%tankschat.scroll -%tankschat.sel)) $calc(%tankschat.w -17) $calc(13*(1+%tankschat.sel -%tankschat.sel1))
+        %tankschat.drawsel
+        drawdot @Tanks
+      }
+    }
+    elseif (%tankschat.selecting) {
+      %tankschat.drawsel
+      unset %tankschat.drawsel
+      drawdot @Tanks
+    }
+    if (%tankschat.move) {
+      var %variable = %tankschat.scroll
+      %tankschat.scroll = $int($calc(.5+%tankschat.scroll0 +(%tankschat.lines -11)*(%tankschat.move -%y)/(%tankschat.barh -15)))
+      if (%tankschat.scroll < $calc(%tankschat.lines -11)) {
+        if (%tankschat.scroll < 0) %tankschat.scroll = 0
+      }
+      else %tankschat.scroll = %tankschat.lines - 11
+      if (%variable != %tankschat.scroll) tanks.alias.draw-chat
+    }
+    if ($inrect(%x,%y,%tankschat.barx,%tankschat.y,15,%tankschat.h)) {
+      if ($inrect(%x,%y,%tankschat.barx,%tankschat.knob,15,15)) && (%p == 0) {
+        %tankschat.move = %y
+        %tankschat.scroll0 = %tankschat.scroll
+      }
+      if (%tankschat.move != 1) {
+        if (%y >= %tankschat.bary) && (%y < %tankschat.knob) {
+          if (%p == 0) {
+            %tankschat.barbutton = tanks.button.bar.pgup
+            tanks.alias.pgup 11
+            %tankschat.bardown = 1
+            %r
+          }
+        }
+        elseif (%tankschat.barbutton == tanks.button.bar.pgup) tanks.alias.bar 1
+        elseif (%y < %tankschat.barb) && (%y >= $calc(15+%tankschat.knob)) {
+          if (%p == 0) {
+            %tankschat.barbutton = tanks.button.bar.pgdn
+            tanks.alias.pgdn 11
+            %tankschat.bardown = 1
+            %r
+          }
+        }
+        elseif (%tankschat.barbutton == tanks.button.bar.pgdn) tanks.alias.bar 1
+      }
+      if (%y < %tankschat.bary) {
+        if (%p == 0) {
+          %tankschat.barbutton = tanks.button.bar.up
+          %tankschat.bardown = 1
+          tanks.alias.pgup
+          %r
+        }
+      }
+      elseif (%tankschat.barbutton == tanks.button.bar.up) tanks.alias.bar 1
+      if (%y >= %tankschat.barb) {
+        if (%p == 0) {
+          %tankschat.barbutton = tanks.button.bar.down
+          %tankschat.bardown = 1
+          tanks.alias.pgdn
+          %r
+        }
+      }
+      elseif (%tankschat.barbutton == tanks.button.bar.down) tanks.alias.bar 1
+    }
+    elseif ($timer(tanks.tanks.alias.bar)) tanks.alias.bar 1
+  }
+  else {
+    if (%tankschat.selecting) {
+      if (%tankschat.scrolldown) {
+        unset %tankschat.scrolldown %tankschat.drawsel
+        %tankschat.scroll = 0
+        tanks.alias.draw-chat
+      }
+      else {
+        %tankschat.drawsel
+        drawdot @Tanks
+        unset %tankschat.drawsel
+      }
+      %tankschat.selecting = 0
+      if ($inrect(%x,%y,%tankschat.x,%tankschat.y,%tankschat.w,%tankschat.h)) {
+        var %c
+        while (1) {
+          var %variable = $tanks.alias.chattext(%tankschat.sel)
+          if ($left(%variable,6) == ***   ) %c = %c $+ $mid(%variable,7)
+          elseif ($left(%variable,5) " == ***   ") %c = %c $mid(%variable,7)
+          elseif (  * iswm %variable) %c = %c $+ $mid(%variable,3)
+          elseif (  * iswm %variable) %c = %c $mid(%variable,3)
+          elseif (* iswm %c) %c = %c $+ $crlf $+ %variable
+          else %c = %variable
+          if (%tankschat.sel > %tankschat.sel1) dec %tankschat.sel
+          else break
+        }
+        clipboard %c
+      }
+    }
+    unset %tankschat.barbutton
+    %tankschat.move = 0
+    if ($timer(tanks.tanks.alias.bar)) {
+      tanks.alias.bar 1
+      .timertanks.tanks.alias.bar off
+    }
+  }
+  if (%tanks.state !isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) return
+  if (%p isnum) || ($mouse.key !& 1) && ($active == @Tanks) {
+    if (%y < %tanks.bottom) || ($inrect(%x,%y,0,312,320,57)) {
+      if ($appactive) tanks.alias.showname %x_ %y_ %x %y %p
+      return
+    }
+  }
+  unset %tanks.showname
+  if ($version != 6.02) window -h @tanksname
+  if (%o < 1) && (%d < 1) return
+  if (%tanks.state == tanks.state.myturn) {
+    %a = %0 %1
+    %a = %a tanks.button.explosive 206 409 0 0 0 110 23
+    %a = %a tanks.button.up 42 383 38 0 74 36 36
+    %a = %a tanks.button.down 42 421 38 38 112 36 36
+    %a = %a tanks.button.left 4 402 0 19 93 36 36
+    %a = %a tanks.button.right 80 402 76 19 93 36 36
+    %a = %a tanks.button.repair 218 383 214 0 74 84 25
+    %a = %a tanks.button.fire 218 433 214 50 124 84 24
+  }
+  if ($numtok(%tanks.order,32) > 8) {
+    %a = %a tanks.button.namesleft 4 383 0 0 74 17 17
+    %a = %a tanks.button.namesright 23 383 19 0 74 17 17
+  }
+  tokenize 32 %a
+  while ($1) {
+    %b = $1
+    if (%o) && (%o != %b) || (%tanksinc == $replace(%b,tanks.button.1,1,tanks.button.5,5)) { }
+    else {
+      if ($inrect(%x,%y,$2,$3,$7,$8)) %i = 1
+      else %i = 0
+      if (%b == tanks.button.explosive) {
+        if (%i) || (%tanks.button == tanks.button.explosive) && (%d) {
+          var %variable = 5
+          if (%x < 229) %variable = 1
+          elseif (%x < 250) %variable = 2
+          elseif (%x < 271) %variable = 3
+          elseif (%x < 292) %variable = 4
+          if (%tanks.item != %variable) tanks.alias.push %b $+ %variable
+          %tanks.button = tanks.button.explosive
+        }
+      }
+      elseif (%i) && (%d) {
+        drawpic -cnt @Tanks 16711935 $2-4 $6-8 %tanksbmp
+        drawdot @Tanks
+        %tanks.button = %b
+      }
+      elseif (%o == %b) {
+        if ($istok(tanks.button.1 tanks.button.5,%o,32)) && (%i) && (%p) tokenize 32 $iif(%b == tanks.button.1,%1,%0)
+        drawpic -cnt @Tanks 16711935 $2-5 $7-8 %tanksbmp
+        drawdot @Tanks
+      }
+      if (%i) && (%p) tanks.alias.push $tanks.alias.mkey(%b)
+    }
+    tokenize 32 $9-
+  }
+  if (%d) && (%tanks.button == 0) %tanks.button = \
+  if (%d < 1) %tanks.button = 0
+}
+alias -l tanks.alias.checkbox {
+  if ($1 == -) tokenize 32 $iif($2,0,1) $3-
+  if ($version < 5.9) return $iif($1,[×] ,[  ] ) $2-
+  return $style($1) $2-
+}
+menu @Tanks,@tanksname {
+  mouse:if ($menu != @tanksname) tanks.alias.buttons
+  leave:if ($menu != @tanksname) tanks.alias.buttons
+  sclick:{
+    if ($menu == @tanksname) tanks.alias.info %tanks.showname
+    else tanks.alias.buttons 0
+  }
+  dclick:{
+    if ($menu != @tanksname) {
+      tanks.alias.buttons 0
+      if (%tanks.state == tanks.state.ready) if ($inrect($mouse.x,$mouse.y,0,380,320,80)) tanks.alias.go
+    }
+  }
+  uclick:if ($menu != @tanksname) tanks.alias.buttons 1
+  -
+  $iif(%tanks.color. [ $+ [ %tanks.me ] ] isnum,Vie&w scores):.timertanks.tanks.alias.scores -o 1 0 tanks.alias.scores
+  -
+  $iif(* !iswm $sock(tanks),&Server settings):{
+    if ($dialog(tanksserver)) dialog -ev $ifmatch
+    else dialog $iif(%tanksontop,-dmo,-dm) tanksserver tanksserver
+  }
+  $iif(* !iswm $sock(tanks),&Bots && local players):{
+    if ($dialog(tanksbots)) dialog -ev $ifmatch
+    else dialog $iif(%tanksontop,-dmo,-dm) tanksbots tanksbots
+  }
+  -
+  $iif($sock(tanks.0),$tanks.alias.checkbox(%tankspublic,&Public server)):{
+    %tankspublic = $iif(%tankspublic,0,1)
+    if (%tankspublic) tanks.alias.tanklistadd
+    else tanks.alias.tanklistremove
+  }
+  -
+  &Commands
+  .$iif($sock(tanks*,0) && %tanksip && %tanksport,Copy server IP &address && port to clipboard):clipboard %tanksip $+ : $+ %tanksport
+  .$iif($sock(tanks.*,0),Change port for &server [ [ $+ [ %tanksport ] $+ ] ]):tanks.alias.parsechat /port 0
+  .$iif($sock(tanks),&Ping server):tanks.alias.sendall tanks.sockmsg.ping $ctime
+  .$iif($sock(tanks.*,0),&Ping user...)
+  ..$iif(%tanks.color.1 isnum && $sock(tanks.1),%tanks.player.1):tanks.alias.sendspecific 1 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.2 isnum && $sock(tanks.2),%tanks.player.2):tanks.alias.sendspecific 2 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.3 isnum && $sock(tanks.3),%tanks.player.3):tanks.alias.sendspecific 3 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.4 isnum && $sock(tanks.4),%tanks.player.4):tanks.alias.sendspecific 4 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.5 isnum && $sock(tanks.5),%tanks.player.5):tanks.alias.sendspecific 5 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.6 isnum && $sock(tanks.6),%tanks.player.6):tanks.alias.sendspecific 6 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.7 isnum && $sock(tanks.7),%tanks.player.7):tanks.alias.sendspecific 7 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.8 isnum && $sock(tanks.8),%tanks.player.8):tanks.alias.sendspecific 8 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.9 isnum && $sock(tanks.9),%tanks.player.9):tanks.alias.sendspecific 9 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.10 isnum && $sock(tanks.10),%tanks.player.10):tanks.alias.sendspecific 10 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.11 isnum && $sock(tanks.11),%tanks.player.11):tanks.alias.sendspecific 11 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.12 isnum && $sock(tanks.12),%tanks.player.12):tanks.alias.sendspecific 12 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.13 isnum && $sock(tanks.13),%tanks.player.13):tanks.alias.sendspecific 13 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.14 isnum && $sock(tanks.14),%tanks.player.14):tanks.alias.sendspecific 14 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.15 isnum && $sock(tanks.15),%tanks.player.15):tanks.alias.sendspecific 15 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.16 isnum && $sock(tanks.16),%tanks.player.16):tanks.alias.sendspecific 16 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.17 isnum && $sock(tanks.17),%tanks.player.17):tanks.alias.sendspecific 17 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.18 isnum && $sock(tanks.18),%tanks.player.18):tanks.alias.sendspecific 18 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.19 isnum && $sock(tanks.19),%tanks.player.19):tanks.alias.sendspecific 19 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.20 isnum && $sock(tanks.20),%tanks.player.20):tanks.alias.sendspecific 20 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.21 isnum && $sock(tanks.21),%tanks.player.21):tanks.alias.sendspecific 21 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.22 isnum && $sock(tanks.22),%tanks.player.22):tanks.alias.sendspecific 22 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.23 isnum && $sock(tanks.23),%tanks.player.23):tanks.alias.sendspecific 23 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.24 isnum && $sock(tanks.24),%tanks.player.24):tanks.alias.sendspecific 24 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.25 isnum && $sock(tanks.25),%tanks.player.25):tanks.alias.sendspecific 25 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.26 isnum && $sock(tanks.26),%tanks.player.26):tanks.alias.sendspecific 26 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.27 isnum && $sock(tanks.27),%tanks.player.27):tanks.alias.sendspecific 27 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.28 isnum && $sock(tanks.28),%tanks.player.28):tanks.alias.sendspecific 28 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.29 isnum && $sock(tanks.29),%tanks.player.29):tanks.alias.sendspecific 29 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.30 isnum && $sock(tanks.30),%tanks.player.30):tanks.alias.sendspecific 30 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.31 isnum && $sock(tanks.31),%tanks.player.31):tanks.alias.sendspecific 31 tanks.sockmsg.ping $ctime
+  ..$iif(%tanks.color.32 isnum && $sock(tanks.32),%tanks.player.32):tanks.alias.sendspecific 32 tanks.sockmsg.ping $ctime
+  ..-
+  ..Ping &all users:tanks.alias.sendall tanks.sockmsg.ping $ctime
+  .$iif($sock(tanks.*,0),&List IP addresses):{
+    if ($version != 6.02) window -h @tanksname
+    var %w = @Tanks IP addresses
+    close -@ %w
+    window $iif(%tanksontop,-fzdok0,-fzdk0) %w -1 -1 420 $calc(36+16*$numtok(%tanks.order,32)) Fixedsys 15
+    aline %w Server at %tanksip $+ : $+ %tanksport
+    aline %w -
+    var %p = %tanks.maxplayers
+    :0
+    if (%p) {
+      if (%tanks.color. [ $+ [ %p ] ] isnum) && ($sock(tanks. [ $+ [ %p ] ] )) iline %w 3 %tanks.player. [ $+ [ %p ] ] $sock(tanks. [ $+ [ %p ] ] ).ip
+      dec %p
+      goto 0
+    }
+  }
+  .-
+  .$iif($sock(tanks) && %tanks.shield. [ $+ [ %tanks.me ] ] > 0,Change your &vote to end this round):tanks.alias.sendall tanks.sockmsg.vote
+  .$iif(* !iswm $sock(tanks) && %tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn,&End this round):tanks.alias.skip
+  .$iif(* !iswm $sock(tanks) && %tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn,En&d current game):tanks.alias.done
+  .-
+  .$iif(%tanks.color. [ $+ [ %tanks.me ] ] isnum,C&hange server name [ [ $+ [ %tanks.player.0 ] $+ ] ]):tanks.alias.parsechat /sname
+  .$iif(%tanks.color. [ $+ [ %tanks.me ] ] isnum && %tanks.me,Change &name [ [ $+ [ %tanks.player. [ $+ [ %tanks.me ] ] ] $+ ] ]):tanks.alias.newname
+  .$iif(%tanks.color. [ $+ [ %tanks.me ] ] isnum,Change &color):tanks.alias.newcolor
+  .-
+  .$iif($sock(tanks.*,0),&Kick user...)
+  ..$iif(%tanks.color.1 isnum,%tanks.player.1):tanks.alias.quit tanks.sockmsg.kick 1
+  ..$iif(%tanks.color.2 isnum,%tanks.player.2):tanks.alias.quit tanks.sockmsg.kick 2
+  ..$iif(%tanks.color.3 isnum,%tanks.player.3):tanks.alias.quit tanks.sockmsg.kick 3
+  ..$iif(%tanks.color.4 isnum,%tanks.player.4):tanks.alias.quit tanks.sockmsg.kick 4
+  ..$iif(%tanks.color.5 isnum,%tanks.player.5):tanks.alias.quit tanks.sockmsg.kick 5
+  ..$iif(%tanks.color.6 isnum,%tanks.player.6):tanks.alias.quit tanks.sockmsg.kick 6
+  ..$iif(%tanks.color.7 isnum,%tanks.player.7):tanks.alias.quit tanks.sockmsg.kick 7
+  ..$iif(%tanks.color.8 isnum,%tanks.player.8):tanks.alias.quit tanks.sockmsg.kick 8
+  ..$iif(%tanks.color.9 isnum,%tanks.player.9):tanks.alias.quit tanks.sockmsg.kick 9
+  ..$iif(%tanks.color.10 isnum,%tanks.player.10):tanks.alias.quit tanks.sockmsg.kick 10
+  ..$iif(%tanks.color.11 isnum,%tanks.player.11):tanks.alias.quit tanks.sockmsg.kick 11
+  ..$iif(%tanks.color.12 isnum,%tanks.player.12):tanks.alias.quit tanks.sockmsg.kick 12
+  ..$iif(%tanks.color.13 isnum,%tanks.player.13):tanks.alias.quit tanks.sockmsg.kick 13
+  ..$iif(%tanks.color.14 isnum,%tanks.player.14):tanks.alias.quit tanks.sockmsg.kick 14
+  ..$iif(%tanks.color.15 isnum,%tanks.player.15):tanks.alias.quit tanks.sockmsg.kick 15
+  ..$iif(%tanks.color.16 isnum,%tanks.player.16):tanks.alias.quit tanks.sockmsg.kick 16
+  ..$iif(%tanks.color.17 isnum,%tanks.player.17):tanks.alias.quit tanks.sockmsg.kick 17
+  ..$iif(%tanks.color.18 isnum,%tanks.player.18):tanks.alias.quit tanks.sockmsg.kick 18
+  ..$iif(%tanks.color.19 isnum,%tanks.player.19):tanks.alias.quit tanks.sockmsg.kick 19
+  ..$iif(%tanks.color.20 isnum,%tanks.player.20):tanks.alias.quit tanks.sockmsg.kick 20
+  ..$iif(%tanks.color.21 isnum,%tanks.player.21):tanks.alias.quit tanks.sockmsg.kick 21
+  ..$iif(%tanks.color.22 isnum,%tanks.player.22):tanks.alias.quit tanks.sockmsg.kick 22
+  ..$iif(%tanks.color.23 isnum,%tanks.player.23):tanks.alias.quit tanks.sockmsg.kick 23
+  ..$iif(%tanks.color.24 isnum,%tanks.player.24):tanks.alias.quit tanks.sockmsg.kick 24
+  ..$iif(%tanks.color.25 isnum,%tanks.player.25):tanks.alias.quit tanks.sockmsg.kick 25
+  ..$iif(%tanks.color.26 isnum,%tanks.player.26):tanks.alias.quit tanks.sockmsg.kick 26
+  ..$iif(%tanks.color.27 isnum,%tanks.player.27):tanks.alias.quit tanks.sockmsg.kick 27
+  ..$iif(%tanks.color.28 isnum,%tanks.player.28):tanks.alias.quit tanks.sockmsg.kick 28
+  ..$iif(%tanks.color.29 isnum,%tanks.player.29):tanks.alias.quit tanks.sockmsg.kick 29
+  ..$iif(%tanks.color.30 isnum,%tanks.player.30):tanks.alias.quit tanks.sockmsg.kick 30
+  ..$iif(%tanks.color.31 isnum,%tanks.player.31):tanks.alias.quit tanks.sockmsg.kick 31
+  ..$iif(%tanks.color.32 isnum,%tanks.player.32):tanks.alias.quit tanks.sockmsg.kick 32
+  .$iif($sock(tanks.*,0),Edit &ban list):{
+    if ($dialog(tanksban)) dialog -ev tanksban
+    else dialog $iif(%tanksontop,-dmo,-dm) tanksban tanksban
+  }
+  Syst&em
+  .$tanks.alias.checkbox(-,%tanksforget) &Remember increment setting between rounds:%tanksforget = $iif(%tanksforget,0,1)
+  .-
+  .$tanks.alias.checkbox(-,%tanksnosound) &Play sounds:%tanksnosound = $iif(%tanksnosound,0,1)
+  .-
+  .$tanks.alias.checkbox(%tanks.fast) &Fast mode:%tanks.fast = $iif(%tanks.fast,0,1) | %tanksfast = %tanks.fast | .timertanks.tanks.alias.erase -e
+  .-
+  .$tanks.alias.checkbox(%tanksautoscroll,&Automatically scroll names list to active player):%tanksautoscroll = $iif(%tanksautoscroll,0,1)
+  .$tanks.alias.checkbox(%tankstahoma,Use the &Tahoma font):tanks.alias.setfont $iif(%tankstahoma,0,1)
+  .$iif($sock(tanks),$tanks.alias.checkbox(%tanksnochat,Disable &chat text && player names)):tanks.alias.togglechat $iif(%tanksnochat,0,1)
+  .$tanks.alias.checkbox(%tankslog) &Log chat to tanks.log:%tankslog = $iif(%tankslog,0,1)
+  .-
+  .$tanks.alias.checkbox(%tanksnoctcp,&Disable Tanks ctcp reply):%tanksnoctcp = $iif(%tanksnoctcp,0,1)
+  .$tanks.alias.checkbox(%tanksnolisten,&Ignore all Tanks requests):%tanksnolisten = $iif(%tanksnolisten,0,1)
+  .-
+  .$tanks.alias.checkbox(-,%tanksnomenu) Show Tanks &menu in query, nicklist, and menubar:%tanksnomenu = $iif(%tanksnomenu,0,1)
+  Win&dow
+  .$tanks.alias.checkbox($iif(%tankstitle & 1,1)) Show in titlebar $+ $chr(58)  &Round:%tankstitle = $iif(%tankstitle & 1,$bitoff(%tankstitle,1),$biton(%tankstitle,1)) | tanks.alias.titlebar
+  .$tanks.alias.checkbox($iif(%tankstitle & 2,1)) Show in titlebar $+ $chr(58)  &Frags:%tankstitle = $iif(%tankstitle & 2,$bitoff(%tankstitle,2),$biton(%tankstitle,2)) | tanks.alias.titlebar
+  .$tanks.alias.checkbox($iif(%tankstitle & 4,1)) Show in titlebar $+ $chr(58)  &Accuracy:%tankstitle = $iif(%tankstitle & 4,$bitoff(%tankstitle,3),$biton(%tankstitle,3)) | tanks.alias.titlebar
+  .$tanks.alias.checkbox($iif(%tankstitle & 8,1)) Show in titlebar $+ $chr(58)  &Server name:%tankstitle = $iif(%tankstitle & 8,$bitoff(%tankstitle,4),$biton(%tankstitle,4)) | tanks.alias.titlebar
+  .-
+  .$tanks.alias.checkbox(-,%tanksnopop) &Un-minimize on your turn:%tanksnopop = $iif(%tanksnopop,0,1)
+  .$tanks.alias.checkbox(%tanksontop) &Window on top:%tanksontop = $iif(%tanksontop,0,1) | tanks.alias.open @Tanks
+  .$tanks.alias.checkbox(-,%tanksnoxy) R&emember window position:%tanksnoxy = $iif(%tanksnoxy,0,1)
+  .-
+  .$iif($sock(tanks.*,0) && $version != 6.02,Hi&de this window):window -h @Tanks
+  -
+  Versio&n:abouttanks
+  &Readme:tanksreadme
+  -
+  Ser&ver list:tanklist
+}
+alias -l tanks.alias.repair {
+  if (%tanks.credits. [ $+ [ %tanks.turn ] ] >= 30) && (%tanks.shield. [ $+ [ %tanks.turn ] ] < 10) && (%tanks.mode !& 1) {
+    dec %tanks.credits. [ $+ [ %tanks.turn ] ] 30
+    inc %tanks.shield. [ $+ [ %tanks.turn ] ]
+    var %variable = $calc(%tanks.max. [ $+ [ %tanks.turn ] ] +10)
+    if (100 < %variable) %variable = $ifmatch
+    %tanks.max. [ $+ [ %tanks.turn ] ] = %variable
+    if ($tanks.alias.maxweapon < %tanks.item) %tanks.item = $ifmatch
+    tanks.alias.draw-buttons
+    tanks.alias.draw-shield
+    drawdot @Tanks
+  }
+}
+alias -l tanks.alias.vars {
+  if ($isid) {
+    if ($1) return %tanks.x. [ $+ [ $1 ] ] %tanks.y. [ $+ [ $1 ] ] %tanks.angle. [ $+ [ $1 ] ] %tanks.power. [ $+ [ $1 ] ] %tanks.max. [ $+ [ $1 ] ] %tanks.shield. [ $+ [ $1 ] ] %tanks.credits. [ $+ [ $1 ] ] %tanks.frags. [ $+ [ $1 ] ] %tanks.damage. [ $+ [ $1 ] ] %tanks.shot. [ $+ [ $1 ] ] %tanks.time. [ $+ [ $1 ] ]
+    return 0 0 0 0 0 0 0 0 0 0 0
+  }
+  %tanks.x. [ $+ [ $1 ] ] = $2
+  %tanks.y. [ $+ [ $1 ] ] = $3
+  %tanks.angle. [ $+ [ $1 ] ] = $4
+  %tanks.power. [ $+ [ $1 ] ] = $5
+  %tanks.max. [ $+ [ $1 ] ] = $6
+  %tanks.shield. [ $+ [ $1 ] ] = $7
+  %tanks.credits. [ $+ [ $1 ] ] = $8
+  %tanks.frags. [ $+ [ $1 ] ] = $9
+  %tanks.damage. [ $+ [ $1 ] ] = $10
+  %tanks.shot. [ $+ [ $1 ] ] = $11
+  %tanks.time. [ $+ [ $1 ] ] = $12
+}
+alias -l tanks.alias.fire {
+  if (* !iswm $window(@Tanks)) return
+  tanks.alias.titlebar Getting ready to fire...
+  tanks.alias.noletters
+  drawdot @Tanks
+  .timertanks.tanks.alias.timeout off
+  tanks.alias.fix 1
+  if (%tanks.ai. [ $+ [ %tanks.turn ] ] isnum 0-4) && (* !iswm $sock(tanks)) || (%tanks.turn == %tanks.me) && (* !iswm $1-) {
+    if ($sock(tanks)) tanks.alias.sendall tanks.sockmsg.ready
+  }
+  if ($sock(tanks)) {
+    if (* !iswm $1-) {
+      tanks.alias.sendall tanks.sockmsg.fire %tanks.item %tanks.angle. [ $+ [ %tanks.turn ] ] %tanks.power. [ $+ [ %tanks.turn ] ]
+      tanks.alias.titlebar Waiting for server reply...
+      %tanks.state = tanks.state.waiting
+      return
+    }
+    if (*\ %tanks.turn $tanks.alias.vars(%tanks.turn) !iswm $1-) {
+      var %variable = $sock(tanks).ip ; %tanks.me ; %tanks.order ; %tanks.ai. [ $+ [ %tanks.turn ] ] ; $ifmatch ; $1-
+      sockclose tanklist
+      tanks.alias.listact error= $+ $replace(%variable,$chr(32),$right(.%20,3))
+      tanks.alias.sendall tanks.sockmsg.quit Error
+    }
+  }
+  elseif (%tanks.turn == %tanks.me) {
+    var %variable = %tanks.idle. [ $+ [ %tanks.turn ] ] - 1
+    %tanks.idle. [ $+ [ %tanks.turn ] ] = $iif(%variable < 0,0,%variable)
+  }
+  var %a = $calc(%tanks.angle. [ $+ [ %tanks.turn ] ] *3.14159/180)
+  var %xx = $round($calc(%tanks.x. [ $+ [ %tanks.turn ] ] $iif(%tanks.angle. [ $+ [ %tanks.turn ] ] > $iif(%tanks.x. [ $+ [ %tanks.turn ] ] > $calc(%tankswidth /2),89,90),-1,+1)+$cos(%a)*10),0)
+  var %yy = $round($calc(%tanks.y. [ $+ [ %tanks.turn ] ] -$sin(%a)*9-7),0)
+  var %w = $calc($iif(%tanks.cwind,%tanks.wind,0) / 96), %s = %tanks.power. [ $+ [ %tanks.turn ] ] / 1.1, %c = %s * $cos(%a), %s = %s * $sin(%a)
+  $iif($0,tanks.alias.fire3,tanks.alias.fire2) %xx %yy %w %c %s -.1 0 0 $1-
+}
+alias -l tanks.alias.fire2 {
+  var %variable = $6, %c = 10
+  while (1) {
+    inc %variable .0935
+    var %xhit = $round($calc($1 +%variable *($4 +$3 *%variable)),0)
+    if (%xhit < 1) var %x = 1
+    elseif (%xhit > %tankswidth) var %x = %tankswidth
+    else var %x = %xhit
+    var %yhit = $round($calc($2 -%variable *($5 -4.915*%variable)),0)
+    if (%yhit < 0) %yhit = 0
+    elseif (%yhit > %tanks.bottom) %yhit = %tanks.bottom
+    if (%yhit >= %tanks.top) {
+      if (%yhit >= %tanks.bottom) break
+      if ($calc(1+%yhit) >= $line(@tanksland,%x)) break
+      var %i = 1
+      :615fix
+      var %p = $gettok(%tanks.order,%i,32)
+      if (%p) && (%tanks.shield. [ $+ [ %p ] ] > 0) {
+        if ($inrect(%x,%yhit,$calc(%tanks.x. [ $+ [ %p ] ] -7),$calc(%tanks.y. [ $+ [ %p ] ] -9),15,10)) goto 0
+        inc %i
+        goto 615fix
+      }
+    }
+    dec %c
+    if (%c < 1) {
+      .timertanks.tanks.alias.fire2 -o 1 0 tanks.alias.fire2 $1-5 %variable
+      return
+    }
+  }
+  :0
+  tanks.alias.fire3 $1-5 $calc(%variable -.0935) %xhit %yhit
+}
+alias -l tanks.alias.fire3 {
+  var %xx = $1, %yy = $2, %w = $3, %c = $4, %s = $5, %variable = $6, %xhit = $7, %yhit = $8
+  var %i = %tanks.turn $tanks.alias.vars(%tanks.turn)
+  if (%tanks.item > 1) dec %tanks.credits. [ $+ [ %tanks.turn ] ] $calc(25*%tanks.item)
+  tokenize 32 $9-
+  tanks.alias.draw-buttons 1
+  tanks.alias.draw-tanks
+  tanks.alias.titlebar
+  drawdot @Tanks
+  inc %tanks.time. [ $+ [ %tanks.turn ] ]
+  if (%tanks.fast != 1) tanks.alias.sound $iif(%tanks.turn != %tanks.me,g2,g1)
+  var %t0
+  if ($0) var %xx = $1, %yy = $2, %xhit = $3, %yhit = $4, %t1 = $5, %r = $6, %hit = $7-
+  else {
+    var %t0, %t1 = %variable, %r = 0, %hit = \, %x_ = 0, %n = %tanks.maxplayers
+    while (%n) {
+      if (%tanks.color. [ $+ [ %n ] ] isnum) {
+        if (%tanks.shield. [ $+ [ %n ] ] > 0) {
+          inc %x_
+          if ($sqrt($calc((%tanks.x. [ $+ [ %n ] ] $iif(%tanks.angle. [ $+ [ %n ] ] > $iif(%tanks.x. [ $+ [ %n ] ] > $calc(%tankswidth /2),89,90),+,-) .5-%xhit)^2*(.9875+.0025*%tanks.item)+(1.2228-.0286*%tanks.item)*(%tanks.y. [ $+ [ %n ] ] -4-%yhit)^2)) <= $calc(9.9375+5.0625*%tanks.item)) %hit = %n %hit
+        }
+      }
+      dec %n
+    }
+    if (%tanks.cwind > 1) {
+      %tanks.nwind = $calc($rand(0,40)-20+%tanks.wind)
+      if (-99 > %tanks.nwind) %tanks.nwind = $ifmatch
+      elseif (99 < %tanks.nwind) %tanks.nwind = $ifmatch
+      tanks.alias.sendall tanks.sockmsg.wind %tanks.nwind
+    }
+    %n = $numtok(%hit,32)
+    while (%n) {
+      if ($gettok(%hit,%n,32) != %tanks.turn) inc %r $calc(($iif(%tanks.credits. [ $+ [ %tanks.turn ] ] < 150,3,1)+%x_)*%tanks.item)
+      dec %n
+    }
+    var %m = %tanks.shield. [ $+ [ %tanks.turn ] ]
+    var %lo = 1, %hi = 1
+    %n = %tanks.maxplayers
+    while (%n) {
+      if (%tanks.color. [ $+ [ %n ] ] isnum) {
+        if (%tanks.shield. [ $+ [ %n ] ] < %m) %lo = 0
+        elseif (%tanks.shield. [ $+ [ %n ] ] > %m) %hi = 0
+      }
+      dec %n
+    }
+    if (%hi) inc %r $calc(6+%x_)
+    elseif (%lo) inc %r $calc(11+%x_)
+    else inc %r $calc(8+%x_)
+    if (%tanks.credits. [ $+ [ %tanks.turn ] ] >= 150) dec %r 6
+    tanks.alias.sendall tanks.sockmsg.fire %tanks.item %tanks.angle. [ $+ [ %tanks.turn ] ] %tanks.power. [ $+ [ %tanks.turn ] ] %xx %yy %xhit %yhit %t1 %r %hit %i
+  }
+  inc %tanks.credits. [ $+ [ %tanks.turn ] ] %r
+  dec %xx
+  var %x = %xx - 1, %y = %yy - 1
+  if (%tanks.fast != 1) {
+    %t0 = $ticks
+    while (1) {
+      drawrect -rfn @Tanks %tanks.sky 1 %x %y 3 3
+      %variable = $calc(($ticks -%t0)/85)
+      if (%variable > %t1) %variable = %t1
+      %x = $round($calc(%xx -1+%variable *(%c +%w *%variable)),5)
+      %y = $round($calc(%yy -1-%variable *(%s -4.9*%variable)),5)
+      if (%variable < %t1) {
+        drawpic -cnt @Tanks 16711935 %x %y 342 0 3 3 %tanksbmp
+        drawdot @Tanks
+      }
+      else break
+    }
+  }
+  if (%tanks.fast) tanks.alias.erase
+  %tanks.path = %xx %yy %c %s %w $calc(%tankswidth -1) %t1 %x %y
+  if (%tanks.fast) tanks.alias.path
+  tokenize 32 %tanks.item %xhit %yhit
+  var %x = $calc($2 -3-5*$1), %y = $calc($3 -2-5*$1)
+  tokenize 32 $gettok(347 0 15 15.120 122 25 25.312 10 35 35.312 45 45 45.312 90 55 55,$1,46)
+  var %h = $4
+  if ($calc(%y +%h) >= %tanks.bottom) %h = $calc(%tanks.bottom -%y)
+  drawpic -cnt @Tanks 16711935 %x %y $1-3 %h %tanksbmp
+  drawdot @Tanks
+  if (\* iswm %hit) tanks.alias.sound h1
+  else tanks.alias.sound h2
+  tanks.alias.dirt %xhit %yhit
+  if (%tanks.fast) tanks.alias.path
+  inc %tanks.shot. [ $+ [ %tanks.turn ] ] $iif(%tanks.mode & 1,1,%tanks.item)
+  tokenize 32 %hit
+  var %x, %y, %n
+  while ($1 isnum) {
+    if (%tanks.shield. [ $+ [ $1 ] ] == 11) inc %tanks.max. [ $+ [ $1 ] ] 5
+    dec %tanks.shield. [ $+ [ $1 ] ] %tanks.item
+    if (%tanks.mode & 1) %tanks.shield. [ $+ [ $1 ] ] = 0
+    var %p = $calc(%tanks.max. [ $+ [ $1 ] ] -5*%tanks.item)
+    if (%p < 50) %p = 50
+    %tanks.max. [ $+ [ $1 ] ] = %p
+    $iif($1 == %tanks.turn,dec,inc) %tanks.damage. [ $+ [ %tanks.turn ] ] $iif(%tanks.mode & 1,1,%tanks.item)
+    if (%tanks.shield. [ $+ [ $1 ] ] < 1) {
+      $iif($1 == %tanks.turn,dec,inc) %tanks.frags. [ $+ [ %tanks.turn ] ]
+      if (* !iswm $sock(tanks)) {
+        if ($1 == %tanks.turn) var %m = |   tried to put the pin back in|   decided it was all too much|   fell asleep on the controls|   pushed the self-destruct button|   disintegrated|   pushed the wrong button|   saw the light|   crumbled|
+        else var %m = |   pokes     with a stick|   showed     who's boss|   pounded     into the ground|   melted    |   blew     to bits|   recycles    |
+        %m = $gettok(%m,$rand(1,$numtok(%m,124)),124)
+        tanks.alias.sendall tanks.sockmsg.repecho %tanks.turn $1 %m
+        tanks.alias.echochat - tanks.echotype.repecho %tanks.turn $1 %m
+        if (%tanks.limitmode == 1) && (%tanks.frags. [ $+ [ %tanks.turn ] ] == %tanks.limit) && ($1 != %tanks.turn) {
+          var %variable = %tanks.turn %tanks.turn    hit the frag limit
+          tanks.alias.sendall tanks.sockmsg.repecho %variable
+          tanks.alias.echochat - tanks.echotype.repecho %variable
+        }
+      }
+      %p = -20
+      while (%p <= 20) {
+        %n = %tanks.x. [ $+ [ $1 ] ] + %p
+        if (%n > 0) && (%n <= %tankswidth) {
+          %x = %n - 1
+          %y = $line(@tanksland,%n)
+          drawline -rn @Tanks %tanks.ground 1 %x %y %x %tanks.bottom
+          if ($rand(0,1)) drawline -rn @Tanks %tanks.color. [ $+ [ $1 ] ] 1 %x $calc(%y -$rand(1,2)) %x %y
+        }
+        inc %p
+      }
+    }
+    tokenize 32 $2-
+  }
+  %tanks.prev. [ $+ [ %tanks.turn ] ] = %tanks.power. [ $+ [ %tanks.turn ] ]
+  %tanks.item = 1
+  tanks.alias.fix
+  tanks.alias.turn
+}
+alias -l tanks.alias.path {
+  tokenize 32 %tanks.path
+  var %p, %variable = -0.0065
+  while (* !iswm %p) || (%variable < $7) {
+    inc %variable .75
+    if (%variable > $7) %variable = $7
+    %p = %p $int($calc($1 +%variable *($3 +$5 *%variable))) $int($calc($2 -1-%variable *($4 -4.9*%variable)))
+  }
+  drawline -rn @Tanks %tanks.cpath 2 $1-2 %p
+  .timertanks.tanks.alias.erase -om 1 1900 tanks.alias.iftimer 4
+}
+alias -l tanks.alias.erase {
+  if ($window(@Tanks)) && (* iswm %tanks.cpath) && (* iswm %tanks.sky) {
+    drawfill -nrs @Tanks %tanks.cpath %tanks.sky 0 0
+    drawfill -nrs @Tanks %tanks.sky %tanks.cpath 0 0
+    drawfill -nrs @Tanks %tanks.cpath %tanks.sky 0 0
+    drawfill -nrs @Tanks %tanks.sky %tanks.cpath 0 0
+    if (%tanks.state isin tanks.state.waiting tanks.state.nextturn tanks.state.myturn) tanks.alias.draw-wind
+  }
+}
+alias -l tanks.alias.land {
+  var %x = $1 - 1
+  drawline -rn @Tanks %tanks.sky 1 %x %tanks.top %x $2
+  drawline -rn @Tanks %tanks.ground 1 %x $2 %x %tanks.bottom
+  rline @tanksland $1 $2
+}
+alias -l tanks.alias.dirt {
+  if (%tanks.ai. [ $+ [ %tanks.turn ] ] isnum 0-4) {
+    %tanks.aix. [ $+ [ %tanks.turn ] ] = $1 - %tanks.x. [ $+ [ %tanks.turn ] ]
+    %tanks.aiy. [ $+ [ %tanks.turn ] ] = $2 - %tanks.y. [ $+ [ %tanks.turn ] ]
+  }
+  if (%tanks.item == 1) var %variable = 7 7 6 6 5 4 2
+  elseif (%tanks.item == 2) var %variable = 12 12 12 11 11 10 10 9 8 7 5 3
+  elseif (%tanks.item == 3) var %variable = 17 17 17 17 16 16 15 15 14 14 13 12 11 10 8 6 4
+  elseif (%tanks.item == 4) var %variable = 22 22 22 22 21 21 21 20 20 20 19 18 18 17 16 15 14 13 11 10 7 4
+  else var %variable = 27 27 27 27 27 26 26 26 25 25 25 24 24 23 22 22 21 20 19 18 17 16 14 13 11 8 5
+  var %i = 1- $+ %tankswidth, %x_ = $numtok(%variable,32), %l, %xx, %y_, %yy, %ymax = %tanks.bottom - 1
+  while (%x_) {
+    %y_ = $gettok(%variable,%x_,32)
+    %xx = $1 + %x_
+    if (%xx isnum %i) {
+      %l = $line(@tanksland,%xx)
+      %yy = $2 + %y_
+      if (%l < $calc($2 -%y_)) {
+        if (%yy >= %ymax) %l = $calc(%ymax +%l +%y_ -$2)
+        else %l = $calc(%l +1+2*%y_)
+      }
+      elseif (%l <= %yy) %l = 1 + %yy
+      if (%l > %ymax) tanks.alias.land %xx %ymax
+      else tanks.alias.land %xx %l
+    }
+    %xx = $1 - %x_
+    if (%xx isnum %i) {
+      %l = $line(@tanksland,%xx)
+      %yy = $2 + %y_
+      if (%l < $calc($2 -%y_)) {
+        if (%yy >= %ymax) %l = $calc(%ymax +%l +%y_ -$2)
+        else %l = $calc(%l +1+2*%y_)
+      }
+      elseif (%l <= %yy) %l = 1 + %yy
+      if (%l > %ymax) tanks.alias.land %xx %ymax
+      else tanks.alias.land %xx %l
+    }
+    dec %x_
+  }
+  if ($1 isnum %i) {
+    %l = $line(@tanksland,$1)
+    %yy = $2 + %y_
+    if (%l < $calc($2 -%y_)) {
+      if (%yy >= %ymax) %l = $calc(%ymax +%l +%y_ -$2)
+      else %l = $calc(%l +1+2*%y_)
+    }
+    elseif (%l <= %yy) %l = 1 + %yy
+    if (%l > %ymax) tanks.alias.land $1 %ymax
+    else tanks.alias.land $1 %l
+  }
+  drawline -rn @Tanks %tanks.1 1 0 %tanks.bottom %tankswidth %tanks.bottom
+}
+alias -l tanks.alias.turn {
+  if (%tanks.state) tanks.alias.noletters
+  :0
+  var %p = %tanks.turn + 1, %l, %n
+  while (%p <= %tanks.maxplayers) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) %l = %l %p
+    inc %p
+  }
+  %p = 1
+  while (%p <= %tanks.maxplayers) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) %n = %n %p
+    inc %p
+  }
+  %l = %l %n %n
+  %n = 1
+  while (%n <= $numtok(%l,32)) {
+    %p = $gettok(%l,%n,32)
+    if (%tanks.shield. [ $+ [ %p ] ] > 0) && (%p != %tanks.turn) {
+      %tanks.turn = %p
+      break
+    }
+    if (%p == %tanks.turn) {
+      %tanks.turn = $gettok(%l,$calc(1+%n),32)
+      break
+    }
+    inc %n
+  }
+  var %s = tanks. $+ %tanks.turn
+  if (* !iswm $sock(%s)) && (* !iswm $sock(tanks)) && (%tanks.ai. [ $+ [ %tanks.turn ] ] == 5) %tanks.me = %tanks.turn
+  if (%tanks.cwind > 1) %tanks.wind = %tanks.nwind
+  tanks.alias.draw-all 1
+  tanks.alias.draw-arrow 1
+  tokenize 32 %tanks.order
+  var %n = 0
+  while ($1) {
+    if (%tanks.shield. [ $+ [ $1 ] ] > 0) inc %n
+    tokenize 32 $2-
+  }
+  if (%n > 1) tanks.alias.next
+  if (%n < 2) || ($tanks.alias.checkvotes) {
+    if ($tanks.alias.checkvotes > 1) {
+      tanks.alias.done
+      return
+    }
+    else {
+      tanks.alias.skip
+      return
+    }
+  }
+  if (%tankslvr) {
+    var %c = 0, %s = 0
+    tokenize 32 %tanks.order
+    while ($1) {
+      if (%tanks.shield. [ $+ [ $1 ] ] > 0) && ($1 != %tanks.turn) {
+        inc %s
+        if ($iif(%tanks.x. [ $+ [ $1 ] ] < $calc(%tankswidth /2),1,0) != $iif(%tanks.x. [ $+ [ %tanks.turn ] ] < $calc(%tankswidth /2),1,0)) inc %c
+      }
+      tokenize 32 $2-
+    }
+    if (%c == 0) && (%s) {
+      %c = 1
+      while (%c <= %tanks.maxplayers) {
+        if (%tanks.color. [ $+ [ %c ] ] isnum) && (%tanks.ai. [ $+ [ %c ] ] isnum 0-4) && (%tanks.shield. [ $+ [ %c ] ] > 0) && (%tanks.vote. [ $+ [ %c ] ] != 1) {
+          if ($tanks.alias.vote(%c,1)) return
+        }
+        inc %c
+      }
+      if ($timer(tanks.tanks.alias.think)) .timertanks.tanks.alias.think -om 1 $rand(10275,10400) tanks.alias.think
+    }
+  }
+}
+alias -l tanks.alias.next {
+  tanks.alias.draw-arrow
+  unset %tanks.state
+  drawdot @Tanks
+  var %p = %tanks.maxplayers, %n = 0, %h = 0
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) {
+      if (%tanks.ai. [ $+ [ %p ] ] !isnum 0-4) inc %h
+      inc %n
+    }
+    dec %p
+  }
+  if (* !iswm $1) && (%n > 1) {
+    if (%tanks.turn == %tanks.me) {
+      %tanks.state = tanks.state.nextturn
+      tanks.alias.timer tanks.alias.iftimer 3
+    }
+    elseif (%tanks.ai. [ $+ [ %tanks.turn ] ] isnum 0-4) && (* !iswm $sock(tanks)) {
+      %tanks.state = tanks.state.waiting
+      .timertanks.tanks.alias.think -om 1 $rand(275,400) tanks.alias.think
+    }
+    else %tanks.state = tanks.state.waiting
+  }
+  if (%tanks.turn == %tanks.me) {
+    if (%tanksnopop != 1) && ($window(@Tanks).state == minimized) window -a @Tanks
+    tanks.alias.blink 1
+  }
+  tanks.alias.timeout 0
+  if ($version != 6.02) {
+    window -h @tanksname
+    unset %tanks.showname
+  }
+  if (* !iswm $sock(tanks)) {
+    %p = 1
+    while (%p <= %tanks.maxplayers) {
+      var %s = tanks. $+ %p
+      if (* !iswm $sock(%s)) && (%tanks.ai. [ $+ [ %p ] ] !isnum) tanks.alias.quit %p (Connection lost)
+      inc %p
+    }
+  }
+}
+alias -l tanks.alias.think {
+  if (* !iswm $window(@Tanks)) || (%tanks.ai. [ $+ [ %tanks.turn ] ] !isnum 0-4) return
+  var %l, %c, %p = %tanks.prev. [ $+ [ %tanks.turn ] ] , %w = $iif(%tanks.cwind,%tanks.wind,0), %t0 = %tanks.target. [ $+ [ %tanks.turn ] ] , %t1, %a = %tanks.ai. [ $+ [ %tanks.turn ] ]
+  if (%tanks.color. [ $+ [ %t0 ] ] !isnum) || (%tanks.shield. [ $+ [ %t0 ] ] < 1) || (%p !isnum) {
+    var %variable = %tankslvr
+    :0
+    var %z
+    tokenize 32 %tanks.order
+    while ($1) {
+      if (%variable) && ($iif(%tanks.x. [ $+ [ $1 ] ] < $calc(%tankswidth /2),1,0) == $iif(%tanks.x. [ $+ [ %tanks.turn ] ] < $calc(%tankswidth /2),1,0)) { }
+      elseif (%tanks.shield. [ $+ [ $1 ] ] > 0) && ($1 != %tanks.turn) %z = %z $1
+      tokenize 32 $2-
+    }
+    if ($numtok(%z,32)) {
+      %t0 = $gettok(%z,$rand(1,$numtok(%z,32)),32)
+      %tanks.target. [ $+ [ %tanks.turn ] ] = %t0
+    }
+    elseif (%variable) {
+      %variable = 0
+      goto 0
+    }
+    %t1 = 1
+  }
+  if (%tanks.x. [ $+ [ %tanks.turn ] ] < %tanks.x. [ $+ [ %t0 ] ] ) var %l = 1
+  %c = $iif(%tanksmode & 1 && %a < 4 || %a == 0,$calc(53 + 9 * %a / 3),66)
+  %c = $iif(%l != 1,180-) %c + %w / 99 * $iif($iif(%l,$calc(0-%w),%w) > 0,17,14)
+  %tanks.angle. [ $+ [ %tanks.turn ] ] = $round($calc(%c),0)
+  var %x = %tanks.x. [ $+ [ %t0 ] ] - %tanks.x. [ $+ [ %tanks.turn ] ] , %y = %tanks.y. [ $+ [ %t0 ] ] - %tanks.y. [ $+ [ %tanks.turn ] ]
+  var %x_ = %tanks.aix. [ $+ [ %tanks.turn ] ] - %x, %y_ = %tanks.aiy. [ $+ [ %tanks.turn ] ] - %y
+  if (%p !isnum) || (%t1) || ($calc($iif(%l,0-) (%x_ + %x / 2)) > 0) {
+    %x_ = 0
+    %y_ = 0 - %y
+    %p = $round($calc($iif(%tanksmode & 1 || %a == 0,$calc(80 + 5 * %a),100) * $sqrt($abs($calc(%x / %tankswidth)))),0)
+    %t1 = 1
+  }
+  $iif(%l,dec,inc) %p $round($calc(%x_ / 8),0)
+  inc %p $round($calc(%y_ / 20),0)
+  if (%a == 0) inc %p $iif($iif(%l,$calc(0-%w),%w) > 0,$calc($rand(0,4) - 2),$calc($rand(0,6) - 3))
+  if (%p > 100) %p = 100
+  if (%p < 0) %p = 0
+  if (%t1 != 1) && (%x_ >= -40) && (%x_ <= 40) && (%y_ >= -38) && (%y_ <= 30) && (%p isnum) {
+    if (%a == 2) %tanks.item = $rand(1,3)
+    if (%a == 3) %tanks.item = $rand(2,5)
+    if (%a == 4) %tanks.item = 5
+    if (%tanks.item < 1) %tanks.item = 1
+    if ($tanks.alias.maxweapon < %tanks.item) %tanks.item = $ifmatch
+  }
+  tokenize 32 %tanks.order
+  %w = 1
+  while (%tanks.shield. [ $+ [ $1 ] ] > 0) {
+    if ($1 != %tanks.turn) if ($tanks.alias.maxweapon($1) > %w) %w = $ifmatch
+    tokenize 32 $2-
+  }
+  var %m = %tanks.max. [ $+ [ %tanks.turn ] ]
+  if (%tanks.mode & 1) %m = 100
+  while (%tanks.shield. [ $+ [ %tanks.turn ] ] <= %w) || (%p > %m) && (%tanks.credits. [ $+ [ %tanks.turn ] ] >= 30) && (%tanks.shield. [ $+ [ %tanks.turn ] ] < 10) {
+    tanks.alias.push tanks.button.repair
+    inc %m 10
+  }
+  %tanks.power. [ $+ [ %tanks.turn ] ] = %p
+  tanks.alias.fix 1
+  tanks.alias.draw-all
+  tanks.alias.fire
+}
+alias -l tanks.alias.blink {
+  if ($appactive) && ($active == @Tanks) return
+  if (%tanks.me) && (* !iswm $sock(tanks.0)) {
+    flash @Tanks
+    window $iif($1,-g1,-g3) @Tanks
+  }
+}
+alias -l tanks.alias.timeout {
+  if ($sock(tanks.*,0)) && (%tanks.ai. [ $+ [ %tanks.turn ] ] !isnum 0-4) {
+    var %s = tanks. $+ %tanks.turn
+    if ($1 == 0) && (* !iswm $sock(%s)) || ($1 !isnum) .timertanks.tanks.alias.timeout -o 1 $iif(%tanks.mode & 1,20,40) tanks.alias.timeout %tanks.turn
+    elseif ($1 == 0) {
+      %tanks.ready. [ $+ [ %tanks.turn ] ] = 0
+      tanks.alias.sendspecific %tanks.turn tanks.sockmsg.ready
+      .timertanks.tanks.alias.timeout -o 1 $iif($sock(%s),30,0) tanks.alias.timeout %tanks.turn 1
+    }
+    elseif ($1 == %tanks.turn) && (%tanks.state isin tanks.state.waiting tanks.state.myturn) && (%tanks.color. [ $+ [ $1 ] ] isnum) {
+      if ($2) {
+        tanks.alias.quit tanks.sockmsg.kick %tanks.turn (Ping timeout)
+        return
+      }
+      if (* !iswm $sock(%s)) {
+        var %i = 1, %c = 0
+        while ($gettok(%tanks.order,%i,32)) {
+          if (%tanks.ai. [ $+ [ $gettok(%tanks.order,%i,32) ] ] !isnum) inc %c
+          inc %i
+        }
+        if (%c == 0) return
+      }
+      elseif (%tanks.ready. [ $+ [ $1 ] ] != 1) {
+        .timertanks.tanks.alias.timeout -o 1 30 tanks.alias.timeout $1 1
+        return
+      }
+      inc %tanks.idle. [ $+ [ $1 ] ] 2
+      if (%tanks.idle. [ $+ [ $1 ] ] > 3) {
+        unset %tanks.idle. [ $+ [ $1 ] ]
+        tanks.alias.quit tanks.sockmsg.kick $1 (Idle three times)
+        return
+      }
+      var %variable = $1 $1 Server $iif($sock(%s),sent fire request to   ,forced    to fire) ( $+ $iif(%tanks.mode & 1,20,40) seconds idle)
+      tanks.alias.sendall tanks.sockmsg.repecho %variable
+      tanks.alias.echochat tanks.echotype.repecho %variable
+      if ($sock(%s)) {
+        tanks.alias.sendspecific $1 tanks.sockmsg.fire
+        .timertanks.tanks.alias.timeout -o 1 15 tanks.alias.timeout $1 1
+      }
+      else tanks.alias.fire
+    }
+  }
+}
+alias tanklist {
+  if ($dialog(tanklist)) dialog -x tanklist
+  dialog $iif(%tanksontop,-dmo,-dm) tanklist tanklist
+}
+alias tankslist tanklist
+alias -l tanks.alias.tanklistadd {
+  if (* !iswm $window(@Tanks)) return
+  var %variable, %p = %tanks.maxplayers, %n = 0, %s = 0
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) {
+      if (%tanks.ai. [ $+ [ %p ] ] == 5) %s = 1
+      inc %n
+      if ($len(%variable) < 800) {
+        var %i = $sock(tanks. [ $+ [ %p ] ] ).ip
+        %variable =   $iif(%i,%i,%tanks.ai. [ $+ [ %p ] ] ) $replace(%tanks.player. [ $+ [ %p ] ] ,%,$right(.%25,3),+,$right(.%2B,3),$chr(35),$right(.%23,3),&,$right(.%26,3)) %variable
+      }
+    }
+    dec %p
+  }
+  %variable = %tanks.player.0 %tanksport %s %n %tanksplayerlimit %tanks.mode %tanks.cwind %tanks.limitmode %tanks.limit %variable
+  tanks.alias.listact action=add&game= $+ $replace(%variable,$chr(32),$right(.%20,3))
+  if ($sock(tanks.0)) .timertanks.tanks.alias.tanklistadd -o 1 285 tanks.alias.tanklistadd
+}
+alias -l tanks.alias.tanklistremove tanks.alias.listact action=remove
+alias -l tanks.alias.listact {
+  var %w = 0
+  if ($1 isnum) {
+    %w = $1
+    tokenize 32 $2-
+    if (%w > 12500) sockclose tanklist
+  }
+  if (%tankspublic) && ($sock(tanks.0)) || (action=list* iswm $1) || ($1 == action=remove) || (error=* iswm $1) {
+    %tankslisting = $iif(action=list* iswm $1,1,0)
+    if ($sock(tanklist)) .timertanks.tanks.alias.listact -m 1 250 tanks.alias.listact $calc(250+%w) $1-
+    else {
+      if ($sock(tanks.0)) tokenize 32 $1- $+ &id= $+ %tanksid
+      %tankslistsend = $1- $+ &remove= $+ %tanksremove
+      if (%tanksbackup) {
+        socket tanklist tanks.mircscripts.org
+        socket tanklist2 tanks.ileet.net
+      }
+      else {
+        socket tanklist tanks.ileet.net
+        sockclose tanklist2
+      }
+    }
+  }
+}
+alias -l socket sockclose $1 | sockopen $1-2 80 | sockmark $1-2
+alias -l tanks.alias.listadd {
+  var %i = $1, %n = $2, %p = $3, %s = $4, %x = $5, %xmax = $6, %1 = $7, %w = $8, %m = $9, %l = $10, %x_ = $11-
+  if ($dialog(tanklist)) && (%x isnum) && (%p isnum) {
+    if (/*tanks * iswm $did(tanklist,9,$did(tanklist,9).lines)) did -az tanklist 1,9 $str(-,198)
+    did -az tanklist 1   $+ $iif(%s,       Temp server: ,Dedicated server: ) %n
+    did -a tanklist 9 /tanks %i %p
+    var %variable = did -az tanklist 1 $str( ,7) Settings/info: 
+    if (%1) %variable = %variable Instagib     
+    %variable = %variable $iif(%w,$iif(%w == 1,Constant wind,Changing wind),No wind)     
+    if (%m) %variable = %variable $iif(%m == 1,Frag limit:,Round limit:) %l     
+    else %variable = %variable No limit     
+    %variable IP: %i      Port: %p
+    did -a tanklist 9 /tanks %i %p
+    var %e = 0
+    tokenize 32 %x_
+    while (1) {
+      var %variable = 1
+      while (%variable == 1) || ($width($replace($ [ $+ 1- $+ [ %variable ] ] ,$chr(32),    ),Tahoma,$iif($version < 5.91,13,11),0,0) < 450) && (* iswm $ [ $+ [ %variable ] ] ) {
+        inc %variable
+      }
+      dec %variable
+      var %t0 = $ [ $+ 1- $+ [ %variable ] ]
+      if (%e) did -az tanklist 1 $str( ,30) $replace(%t0,$chr(32),    )
+      else did -az tanklist 1 $iif(?? iswm %x, ,   ) $+ $iif(?? iswm %xmax, ,   ) %x / %xmax  Players:  $replace(%t0,$chr(32),    )
+      did -a tanklist 9 /tanks %i %p
+      if (%variable) tokenize 32 $ [ $+ [ $calc(1+%variable) ] $+ ] -
+      inc %e
+      if ($0 !isnum 1-) break
+    }
+    inc %tankslistcount %x
+    %variable = ( $+ %tankslistcount players total)
+    dialog -t tanklist Tanks servers $iif(%tankslistcount,%variable)
+  }
+}
+alias -l tanklistmsg {
+  sockclose tanklist
+  if (* !iswm $dialog(tanklist)) return
+  did -rz tanklist 1,9,5
+  did -a tanklist 1  
+  did -a tanklist 1     $1-
+  did -a tanklist 1  
+  did -a tanklist 9 rem
+  did -a tanklist 9 rem
+  did -a tanklist 9 rem
+}
+on *:sockopen:tanklist*:{
+  if ($sockname !isin tanklist2) return
+  if ($sockerr) {
+    if (%tanksbackup) {
+      unset %tanksbackup
+      tanklistmsg Unable to connect.
+    }
+    else {
+      %tanksbackup = 1
+      socket tanklist2 tanks.ileet.net
+      socket tanklist tanks.mircscripts.org
+    }
+    return
+  }
+  if (* !iswm %tanksname) %tanksname = $tanks.alias.validname(%tanksname,0)
+  sockwrite -n $sockname GET /tanks.php?version= $+ $tanksversion(1) $+ &me= $+ $replace(%tanksname,%,$right(.%25,3),+,$right(.%2B,3),$chr(35),$right(.%23,3),&,$right(.%26,3),$chr(32),$right(.%20,3)) $+ &crc= $+ $crc($script) $+ & $+ %tankslistsend HTTP/1.0
+  sockwrite -n $sockname IP: $ip
+  sockwrite -n $sockname Tanks-server: %tanksserver
+  sockwrite -n $sockname Version: $version
+  sockwrite -n $sockname Accept: */*
+  sockwrite -n $sockname Host: $sock(tanklist).mark
+  sockwrite -n $sockname Connection: close
+  sockwrite -n $sockname Cache-Control: no-cache
+  sockwrite -n $sockname
+  sockmark $sockname wait
+  if ($sockname == tanklist) && (%tankslisting) && ($dialog(tanklist)) did -r tanklist 1,9,5
+}
+on *:sockread:tanklist*:{
+  if ($sockname !isin tanklist2) return
+  var %variable
+  if ($sockerr) return
+  while (1) {
+    sockread %variable
+    if ($sockbr !isnum 1-) return
+    tokenize 32 %variable
+    if ($sockname == tanklist) && (* !iswm $1-) {
+      sockmark $sockname
+      %tankslistcount = 0
+      if (%tankslisting) && ($dialog(tanklist)) did -r tanklist 1,9,5
+    }
+    if ($sock($sockname).mark != wait) {
+      if ($sockname == tanklist) {
+        if ($1- == v) {
+          abouttanks
+          tanklistmsg You need the newest version of Tanks.
+          return
+        }
+        if ($1- == vv) .downloadtanks
+      }
+      if (ip *.*.*.* iswm $1-2) && ($sock(tanks.*,0)) %tanksip = $2
+      elseif (%tankslisting) && ($dialog(tanklist)) {
+        if (<* iswm $1-) {
+          if ($sockname == tanklist) {
+            if (%tanksbackup) {
+              unset %tanksbackup
+              tanklistmsg Unable to connect.
+            }
+            else {
+              %tanksbackup = 1
+              socket tanklist2 tanks.ileet.net
+              socket tanklist tanks.mircscripts.org
+            }
+          }
+          else sockclose $sockname
+          return
+        }
+        elseif ($sockname == tanklist) {
+          if (rem ?* iswm $1-) {
+            did -az tanklist 1 $2-
+            did -a tanklist 9 rem
+          }
+          elseif (http://* ?* iswm $1-) {
+            did -az tanklist 1 $2-
+            did -a tanklist 9 $1
+          }
+          elseif (/*tanks* *?	?* iswm $1-) {
+            did -az tanklist 1 $deltok($2-,1,9)
+            did -a tanklist 9 $gettok($1-,1,9)
+          }
+          else tanks.alias.listadd $1-
+        }
+      }
+      elseif ($sockname == tanklist) && (b? ?* iswm $1-) && ($window(@tanksban)) {
+        aline @tanksban $mid($1-,2)
+        tanks.alias.ban
+        if ($1 == bm) dline @tanksban $line(@tanksban,0)
+      }
+    }
+  }
+}
+on *:dialog:tanklist:init,sclick,dclick:*:{
+  if ($devent == init) || ($did == 3) {
+    %tankslisting = 1
+    tanks.alias.listact action=list
+  }
+  elseif ($devent == dclick) && ($did == 1) || ($did == 2) {
+    tokenize 32 $did($dname,9,$did($dname,1).sel).text
+    if (http://* iswm $1) {
+      dialog -i $dname
+      run $1
+    }
+    elseif (/*tanks* iswm $1) {
+      dialog -i $dname
+      $right($1-,-1)
+    }
+    halt
+  }
+  elseif ($did == 1) {
+    tokenize 32 $did($dname,9,$did($dname,1,1).sel)
+    if (/*tanks* iswm $1) did -o $dname 5 1 $1-
+    elseif (http://* iswm $1) did -o $dname 5 1 $1
+    else did -r $dname 5
+  }
+}
+on *:dialog:tanksserver:init,sclick:*:{
+  if ($devent == init) tanks.alias.dialoginit
+  elseif ($did == 1) || ($did == 3) tanks.alias.dapply
+  elseif ($did == 5) did $iif($did(tanksserver,5).state,-e,-b) tanksserver 6,7
+  elseif ($did isnum 10-11) {
+    %tanksplayerlimit = $did(tanksserver,9)
+    if (%tanksplayerlimit !isnum) %tanksplayerlimit = 8
+    $iif($did == 10,dec,inc) %tanksplayerlimit
+    if (%tanksplayerlimit < 2) %tanksplayerlimit = 2
+    elseif (%tanksplayerlimit > 32) %tanksplayerlimit = 32
+    did -o tanksserver 9 1 %tanksplayerlimit
+  }
+}
+alias -l tanks.alias.dialoginit {
+  did $iif($sock(tanks),-b,-e) tanksserver 105,106,9,10,11,12
+  did $iif(%tanksmode & 1,-c,-u) tanksserver 4
+  did $iif(%tankslimitmode,-c,-u) tanksserver 5
+  did $iif($did(tanksserver,5).state,-e,-b) tanksserver 6,7
+  did -o tanksserver 6 1  frag limit
+  did -o tanksserver 6 2  round limit
+  did -c tanksserver 6 $iif(%tankslimitmode == 2,2,1)
+  did -o tanksserver 7 1 %tankslimit
+  did -o tanksserver 8 1  No wind
+  did -o tanksserver 8 2  Constant wind
+  did -o tanksserver 8 3  Changing wind
+  did -c tanksserver 8 $calc(1+%tankscwind)
+  did -o tanksserver 9 1 %tanksplayerlimit
+  did $iif(%tanksonecon,-u,-c) tanksserver 12
+}
+alias -l tanks.alias.dapply {
+  %tanksmode = $did(tanksserver,4).state
+  %tanks.mode = %tanksmode
+  %tankslimitmode = $did(tanksserver,5).state * $did(tanksserver,6,1).sel
+  %tanks.limitmode = %tankslimitmode
+  if ($int($did(tanksserver,7)) isnum 1-999) %tankslimit = $ifmatch
+  else %tankslimit = 10
+  %tanks.limit = %tankslimit
+  %tankscwind = $did(tanksserver,8,1).sel - 1
+  %tanks.cwind = %tankscwind
+  if ($int($did(tanksserver,9)) isnum 2-32) %tanksplayerlimit = $ifmatch
+  else %tanksplayerlimit = 8
+  %tanksonecon = 1 - $did(tanksserver,12).state
+  tanks.alias.dialoginit
+  if ($window(@Tanks)) {
+    tanks.alias.titlebar
+    tanks.alias.fix
+    tanks.alias.draw-wind
+    tanks.alias.draw-numbers
+    tanks.alias.draw-shield
+    tanks.alias.draw-buttons
+    drawdot @Tanks
+  }
+  tanks.alias.svars
+  tanks.alias.tanklistadd
+}
+menu @Tanks scores {
+  &Refresh:.timertanks.tanks.alias.scores -o 1 0 tanks.alias.scores
+}
+on *:keydown:@Tanks scores:*:if (* iswm $keychar) tanks.alias.scores
+alias -l tanks.alias.scores {
+  if ($version != 6.02) window -h @tanksname
+  var %0 = @tankscore, %1 = @Tanks scores, %n = $timer(tanks.tanks.alias.scores), %z = $window(%1).x $window(%1).y, %r = $numtok(%tanks.order,32)
+  close -@ %0
+  window -hls %0
+  var %p = %tanks.maxplayers
+  while (%p) {
+    if (%tanks.color. [ $+ [ %p ] ] isnum) {
+      var %a = $calc($round($calc(100*%tanks.damage. [ $+ [ %p ] ] /%tanks.shot. [ $+ [ %p ] ] ),0) +50000), %d = $calc(%tanks.damage. [ $+ [ %p ] ] +50000), %variable = $calc(%tanks.time. [ $+ [ %p ] ] +50000), %f = $calc(%tanks.frags. [ $+ [ %p ] ] +50000)
+      if (\ 50000 50000 50000 50000 \ != \ %a %d %variable %f \) %n = 1
+      if ($sock(tanks.*,0)) || ($sock(tanks)) && (%tanks.mode !& 1) && (%tanks.time. [ $+ [ %p ] ] < 5) %a = 50000 !
+      aline %0 $str(!,$calc(6-$len($gettok(%a,1,32)))) $+ %a $str(!,$calc(6-$len(%d))) $+ %d $str(!,$calc(6-$len(%f))) $+ %f $str(!,$calc(6-$len(%variable))) $+ %variable %p
+    }
+    dec %p
+  }
+  if ($line(%0,0)) && (%n) {
+    %r = 580 $calc(16 * $iif(%r < 8,8,%r) + 20)
+    if (* * iswm %z) {
+      window -fa %1 %z %r
+      filter -wwcx %1 %1
+    }
+    else window $iif(%tanksontop,-fzdok0,-fzdk0) %1 -1 -1 %r Fixedsys 15
+    while ($line(%0,0)) {
+      %variable = $line(%0,1)
+      tokenize 32 $remove(%variable,!)
+      if (* ! * iswm %variable) %a = [Wait]
+      else %a = $calc($1 -50000) $+ %
+      %variable = iline %1 1 Accuracy: %a $+ ; 
+      if (%tanks.mode !& 1) %variable = %variable Damage: $calc($2 -50000) $+ ; 
+      %variable Frags: $calc($3 -50000) $+ ;  Turns: $calc($4 -50000) $+ ;  %tanks.player. [ $+ [ $5 ] ]
+      dline %0 1
+    }
+    while (1) {
+      aline %1  
+      if ($line(%1,0) >= 9) break
+    }
+  }
+  else close -@ %1
+  close -@ %0
+}
+on *:close:@Tanks request:tanks.alias.notice decline
+on *:dialog:tankschat:init:0:{
+  if (%tanks.msg) {
+    unset %tanks.msg
+    var %n = %tanks.maxplayers
+    while (%n >= 0) {
+      var %s = tanks. $+ %n
+      if ($sock(tanks)) || ($sock(%s)) && (%n != %tanks.me) && (%tanks.color. [ $+ [ %n ] ] isnum) && (%tanks.ai. [ $+ [ %n ] ] !isnum 0-4) {
+        did -i $dname 1 1 $iif(%n == 0,(server)) %tanks.player. [ $+ [ %n ] ]
+        %tanks.msg = %n %tanks.msg
+        if ($istok(%tanks.msgn,%n,44)) did -ck $dname 1 1
+      }
+      dec %n
+    }
+    if ($did($dname,1,1).sel !isnum 1-99) did -c $dname 1 1
+  }
+  did -f $dname 2
+}
+on *:dialog:tankschat:dclick:1:dialog -k $dname
+on *:dialog:tankschat:sclick:*:{
+  if ($did == 1) did -f $dname 2
+  elseif ($did == 3) && (* iswm %tanks.msg) {
+    var %x, %n, %p, %z
+    while (1) {
+      %x = $did($dname,1,1).sel
+      if (%x) {
+        %p = $gettok(%tanks.msg,%x,32)
+        %n = $addtok(%n,%p,44)
+        did -uk $dname 1 %x
+      }
+      else break
+    }
+    %tanks.msgn = %n
+    unset %tanks.msg
+  }
+}
+on *:close:@tankscolors:tanks.alias.cancel
+on *:close:@tankschat:tanks.alias.cancel
+on *:close:@tanksban:tanks.alias.cancel
+on *:close:@tanksname:tanks.alias.cancel
+on *:close:@tanksland:tanks.alias.cancel
+on *:close:@Tanks:tanks.alias.cancel
+on *:connect:%tanksctime = $ctime
+ctcp *:tanks:if ($server) && (%tanksnoctcp != 1) && ($calc($ctime -%tanksctime) > 60) ctcpreply $nick Tanks $tanksversion(1)
+on *:active:*:{
+  if ($target == @Tanks) {
+    if ($lactive == @tanksname) return
+    close -@ @Tanks color @Tank info
+    if ($version != 6.02) tanks.alias.open @Tanks
+  }
+  elseif ($istok($target,@tanksban.@tankschat.@tanksland.@tankscolors.@tanksname,46)) {
+    if ($target == @tanksname) unset %tanks.showname
+    .timertankshide -o 1 0 window -h $target
+  }
+  elseif (%tanks.showname) && ($version != 6.02) {
+    unset %tanks.showname
+    window -h @tanksname
+  }
+}
+on *:appactive:{
+  if ($version != 6.02) && (%tanks.showname) {
+    unset %tanks.showname
+    window -h @tanksname
+  }
+}
+on *:keydown:@tanksban,@tankschat,@tanksland,@tanksname,@tankscolors:*:{
+  if ($target == @tanksname) unset %tanks.showname
+  window -h $target
+}
+on *:keydown:@Tank info:*:{
+  if ($keyval !isnum 16-17) window -c @Tank info
+}
+menu @tanksland {
+  mouse:window -h @tanksland
+  sclick:window -h @tanksland
+}
+menu @Tank info {
+  sclick:close -@ @Tank info
+}
+alias -l tanks.alias.de {
+  if ($dialog(abouttanks)) did -o abouttanks 2 1 $gettok($1-,1,124)
+  elseif ($deltok($1-,1,124)) tanks.alias./echo $ifmatch
+}
+alias tankscheck {
+  $tanks.alias.nodl
+  tanks.alias.de
+  if ($sock(tanksversion).name) return
+  tanks.alias.de Checking...
+  sockopen tanksversion pages.cthome.net 80
+}
+on *:sockopen:tanksversion:{
+  if ($sockerr) {
+    tanks.alias.de Connection error $sockerr
+    return
+  }
+  sockwrite -n $sockname GET /pdufilie/versions.txt HTTP/1.0
+  sockwrite -n $sockname Accept: */*
+  sockwrite -n $sockname Host: pages.cthome.net
+  sockwrite -n $sockname
+}
+on *:sockread:tanksversion:{
+  var %d, %variable, %m = $tanksversion(1)
+  if ($sockerr) {
+    tanks.alias.de Error $sockerr
+    return
+  }
+  while (1) {
+    sockread %d
+    if ($sockbr !isnum 1-) return
+    if (tanks * iswm %d) {
+      %variable = $gettok(%d,2,32)
+      %d = $gettok(%d,3,32)
+      if (%m != %variable) {
+        abouttanks
+        if (%d > $version) {
+          tanks.alias.de Newest requires mIRC %d
+          return
+        }
+        tanks.alias.de New: [ $+ %variable $+ ]|New version of Tanks found! Download it by typing $tanks.alias.hl(/downloadtanks)
+      }
+      else tanks.alias.de No new version
+    }
+  }
+}
+alias downloadtanks {
+  if ($show) tanks.alias.cancel
+  $tanks.alias.nodl
+  tanks.alias.de Downloading...
+  if ($show) window -BhaCdfopk0 +Ldf $tanks.alias.dlwin -1 -1 152 24
+  else window -h $tanks.alias.dlwin
+  tanks.alias.dlwin
+  sockopen downloadtanks pages.cthome.net 80
+}
+alias -l tanks.alias.nodl if ($sock(downloadtanks).name) || ($timer(installtanks)) return return
+alias -l tanks.alias.exe return " $+ $scriptdir $+ tanks.exe"
+on *:sockopen:downloadtanks:{
+  if ($sockerr) {
+    tanks.alias.de Connection error $sockerr |Connection error ( $+ $sockerr $+ ) when downloading Tanks
+    close -@ $tanks.alias.dlwin
+    return
+  }
+  write -c $tanks.alias.exe
+  sockmark $sockname 1 0
+  sockwrite -n $sockname GET /pdufilie/irc/tanks.exe HTTP/1.0
+  sockwrite -n $sockname Accept: */*
+  sockwrite -n $sockname Host: pages.cthome.net
+  sockwrite -n $sockname
+}
+on *:sockread:downloadtanks:{
+  while (1) {
+    if ($sockerr) {
+      tanks.alias.de Error $sockerr |Error $sockerr when downloading Tanks
+      return
+    }
+    tokenize 32 $sock($sockname).mark
+    if ($2 != 0) break
+    var %variable
+    sockread %variable
+    if ($sockbr) {
+      if (Content-Length: * iswm %variable) sockmark $sockname $gettok(%variable,2,32) $2
+      elseif (* !iswm %variable) {
+        sockmark $sockname $1 $rand(1,16777215)
+        break
+      }
+    }
+  }
+  while (1) {
+    if (* !iswm $sock($sockname)) return
+    sockread 4096 &b
+    if ($sockbr !isnum 1-) return
+    tanks.alias.dlwin
+    bwrite $tanks.alias.exe -1 -1 &b
+  }
+}
+alias -l tanks.alias.dlwin {
+  var %w = @Downloading Tanks
+  if ($isid) return %w
+  if (* !iswm $window(%w)) {
+    sockclose downloadtanks
+    return
+  }
+  tokenize 32 $sock(downloadtanks).mark
+  if ($window(%w).state != hidden) {
+    drawrect -frn %w 0 1 0 0 152 24
+    drawrect -rn %w $calc(+$2) 1 0 0 152 24
+    drawrect -frn %w 7368816 1 1 1 $calc(+$calc(150*$sock(downloadtanks).rcvd /$1)) 22
+    drawtext -rn %w 12632256 Fixedsys 15 8 4 Downloading Tanks
+    drawdot %w
+  }
+}
+on *:sockclose:downloadtanks:tanks.alias.install
+alias -l tanks.alias.install {
+  tanks.alias.timer close -@ $tanks.alias.dlwin
+  if ($isfile($remove($tanks.alias.exe,"))) {
+    tanks.alias.de Installing...
+    .timertankserror -o 1 0 tanks.alias./echo An error occurred while downloading Tanks.
+    run -n $tanks.alias.exe
+    .timertankserror off
+    tanks.alias.load 0 $window($tanks.alias.dlwin).state
+    :error
+  }
+}
+alias -l tanks.alias.load {
+  if ($isfile($remove($tanks.alias.exe,")) != $true) || ($1 > 20) {
+    if ($dialog(abouttanks)) dialog -c abouttanks
+    if ($dialog(tanks)) dialog -c tanks
+    if ($2 != hidden) .timer -o 1 0 tanks.init
+    .reload -rs " $+ $script $+ "
+  }
+  else .timertanks -om 1 200 tanks.alias.load $calc(1+$1) $2
+}
+alias -l tanks.alias.mdlwin {
+  if ($window($tanks.alias.dlwin)) {
+    window $tanks.alias.dlwin $calc($mouse.dx -$1) $calc($mouse.dy -$2)
+    if ($mouse.key & 1) .timertanks.tanks.alias.dlwin -o 1 0 tanks.alias.mdlwin $1-
+  }
+}
+menu @Downloading Tanks {
+  sclick:tanks.alias.mdlwin $calc($mouse.dx -$window($tanks.alias.dlwin).x) $calc($mouse.dy -$window($tanks.alias.dlwin).y)
+  &Cancel:{
+    close -@ $tanks.alias.dlwin
+    sockclose downloadtanks
+  }
+}
+alias -l menu_ if (%tanksnomenu) return | return 1
+menu query,nicklist,menubar {
+  -
+  $iif($menu_,Tanks)
+  .$iif($server,Play &Tanks with [ $iif($1,$1,someone) ] ):{
+    if ($1) tanks $1
+    else tanks $$?="Tanks: Enter a nickname or IP address and port"
+  }
+  .Pl&ay a private game (/tanks):tanks
+  .Start a t&emporary server (/tanks 0):tanks 0
+  .Start a &dedicated server (/tanksd):tanksd
+  .List Tanks &servers (/tanklist):tanklist
+  .-
+  .$tanks.alias.checkbox(%tanksnoctcp,Disable Tanks &ctcp reply):%tanksnoctcp = $iif(%tanksnoctcp,0,1)
+  .$tanks.alias.checkbox(%tanksnolisten,Ig&nore all Tanks requests):%tanksnolisten = $iif(%tanksnolisten,0,1)
+  .-
+  .&Version:abouttanks
+  .&Readme:tanksreadme
+  .-
+  .&Hide this menu:%tanksnomenu = 1
+  .&Uninstall Tanks:{
+    if ($?!="Are you sure you want to unload Tanks and clear all of its variables?") {
+      tanks.alias.cancel
+      unset %tanks*
+      unload -rs tanks.mrc
+    }
+  }
+}
+on *:unload:{
+  tanks.alias.cancel
+  unset %tanks*
+}
+alias tanksreadme {
+  var %f = $scriptdir $+ tanks.txt
+  if ($isfile(%f)) run " $+ %f $+ "
+  else run http://pages.cthome.net/pdufilie/irc/tanks.txt
+}
+alias abouttanks {
+  if ($dialog(abouttanks)) {
+    dialog -e abouttanks
+    return
+  }
+  dialog $iif(%tanksontop,-dmo,-dm) abouttanks abouttanks
+}
+on *:dialog:abouttanks:init,sclick:*:{
+  if ($devent == init) {
+    did -a abouttanks 1 $tanksversion $+ $crlf $+ by Andy Dufilie
+    tankscheck
+  }
+  if ($did == 3) tankscheck
+  if ($did == 4) downloadtanks
+  if ($did == 99) run http://pages.cthome.net/pdufilie/
+  if ($did == 97) tanksreadme
+}
+dialog abouttanks {
+  title "Tanks"
+  option dbu
+  size -1 -1 72 77
+  button "&Check for a new version"3,2 49 68 12
+  button "Install &newest version"4,2 63 68 12
+  edit ""1,2 2 68 17,centereadmulti
+  button "&Website"99,2 21 33 12
+  button "&Readme"97,37 21 33 12
+  button ""98,0 0 0 0,okcancelhidden
+  edit ""2,2 35 68 12,centeread
+}
+on *:dialog:tanksban:init,sclick,edit:*:{
+  var %d = $dname, %x = $did, %f, %s
+  if ($devent == init) {
+    var %p = %tanks.maxplayers
+    while (%p) {
+      if (%tanks.color. [ $+ [ %p ] ] isnum) {
+        if ($sock(tanks. [ $+ [ %p ] ] ).ip) {
+          did -i %d 1 1 %tanks.player. [ $+ [ %p ] ]
+          did -i %d 2 1 $ifmatch
+        }
+      }
+      dec %p
+    }
+    did -c %d 3
+    did -c %d 1 1
+    %x = 1
+    var %i = $line(@tanksban,0)
+    while (%i) {
+      var %variable = $line(@tanksban,%i)
+      if (? * !iswm %variable) did -a %d 8 %variable
+      dec %i
+    }
+  }
+  if (%x isnum 3-4) && ($did(%d,1,1).sel) {
+    %x = 1
+    %f = 1
+  }
+  if (%x isnum 1-2) {
+    var %l = $did(%d,%x,1).sel, %variable = 3 - %x
+    if (%l != $did(%d,%variable,1).sel) %f = 1
+  }
+  if (%f) {
+    did -c %d %variable %l
+    did -o %d 5 1 $did(%d,$iif($did(%d,3).state,2,1),%l)
+    did -o %d 6 1 $did(%d,1,%l) @ $did(%d,2,%l)
+  }
+  if (%x == 9) {
+    while ($did(%d,8,1).sel) {
+      did -d %d 8 $did(%d,8,1).sel
+    }
+    %s = 1
+  }
+  if (%x == 7) {
+    var %m = $iif($did(%d,3).state,IP: ,Name: ) $$deltok($replace($did(%d,5),$chr(32), ),0,160)   ( $+ $did(%d,6) $+ )
+    if ($didwm(%d,8,%m,1) == 0) did -a %d 8 %m
+    %s = 1
+  }
+  if (%s) {
+    filter -wwcx @tanksban @tanksban
+    %s = $did(%d,8).lines
+    while (%s) {
+      aline @tanksban $did(%d,8,%s)
+      dec %s
+    }
+    savebuf @tanksban " $+ $scriptdir $+ tanks.ban"
+    tanks.alias.ban
+  }
+  if (%x == 7) halt
+}
+alias -l tanks.alias.botbuttons {
+  if ($dialog(tanksbots)) {
+    did $iif($did(tanksbots,22,0).sel == 1,-e,-b) tanksbots 23
+    did $iif($did(tanksbots,22,0).sel,-e,-b) tanksbots 24,25
+  }
+}
+on *:dialog:tanksbots:init,sclick:*:{
+  if ($devent == init) {
+    did -o tanksbots 2 1 %tanksname
+    did $iif(%tanksstopbots,-u,-c) tanksbots 18
+    did $iif(%tankslvr,-c,-u) tanksbots 19
+    did -r tanksbots 22,20
+    var %i = 1
+    while (%i <= %tanks.maxplayers) {
+      if (%tanks.color. [ $+ [ %i ] ] isnum) && (%tanks.ai. [ $+ [ %i ] ] isnum) {
+        did -a tanksbots 20 %i
+        did -a tanksbots 22 %tanks.player. [ $+ [ %i ] ]
+      }
+      inc %i
+    }
+    tanks.alias.botbuttons
+  }
+  elseif ($did == 99) && ($dialog(tanksbots).focus == 2) || ($did == 3) {
+    tanks.alias.addplayer $did(tanksbots,2)
+    halt
+  }
+  elseif ($did isnum 12-17) tanks.alias.addbot $calc($did -12)
+  elseif ($did == 18) {
+    %tanksstopbots = 1 - $did(tanksbots,18).state
+    tanks.alias.draw-buttons
+  }
+  elseif ($did == 19) %tankslvr = $did(tanksbots,19).state
+  elseif ($did == 22) tanks.alias.botbuttons
+  elseif ($did == 23) {
+    if ($dialog(tankschat)) {
+      dialog -ev tankschat
+      return
+    }
+    var %n = $dialog(tankschat,tanksname,-4)
+    if ($did(tanksbots,22,1).sel) {
+      var %variable = $did(tanksbots,20,$ifmatch), %n = $tanks.alias.validname($left(%n,21),%variable)
+      if (* iswm %n) tanks.alias.name %variable %n
+    }
+  }
+  elseif ($did == 24) tanks.alias.newcolor 1
+  elseif ($did == 25) {
+    var %n = $did(tanksbots,22,0).sel
+    while ($did(tanksbots,22,%n).sel) {
+      var %s = $did(tanksbots,22,%n).sel
+      var %variable = $did(tanksbots,20,%s)
+      did -d tanksbots 20,22 %s
+      tanks.alias.quit %variable
+      dec %n
+    }
+    tanks.alias.botbuttons
+  }
+}
+dialog tanksban {
+  title "Tanks ban list"
+  option dbu
+  size -1 -1 319 127
+  box "Add a ban", 11, 4 2 133 121
+  text "Select a user to copy info to ban mask field", 12, 10 11 105 8
+  list 1, 10 20 68 56, size
+  list 2, 81 20 50 56, size
+  radio "Ban by IP address", 3, 74 79 56 10
+  radio "Ban by name", 4, 13 79 53 10
+  text "Ban mask:", 13, 10 94 26 8
+  edit "", 5, 38 92 61 12
+  text "Comment:", 14, 10 108 26 8
+  edit "", 6, 38 106 93 12
+  button "Add ban", 7, 102 92 29 12, default ok
+  box "Ban list", 15, 144 2 171 104
+  list 8, 150 12 159 74, sort size extsel hsbar vsbar
+  button "&Remove selected", 9, 255 89 54 12
+  text "Wildcards may be used where necessary.", 16, 154 113 114 8, center
+  button "Close", 10, 285 110 30 13, cancel
+}
+dialog tanksserver {
+  title "Tanks server settings"
+  size -1 -1 183 146
+  option dbu
+  button "&Ok" 1,75 130 32 12, default ok
+  button "&Cancel" 2,110 130 32 12, cancel
+  button "&Apply" 3,145 130 32 12
+  box "Game settings" 101,6 4 171 65, group
+  check "Instagib mode (One hit kills, no starting credits)" 4,14 15 124 11
+  check "Reset scores when a" 5,14 33 61 11
+  combo 6,76 33 40 50, drop
+  text "of" 102,119 35 6 8
+  edit "" 7,126 33 16 11, center
+  text "is reached" 103,145 35 26 8
+  text "Wind mode:" 104,14 53 30 8
+  combo 8,46 51 55 50, drop
+  box "Connections" 105,6 77 171 47, group
+  text "Limit the number of players to:" 106,14 91 76 8
+  edit "" 9,91 89 16 12, center
+  button "-" 10,110 89 14 12
+  button "+" 11,126 89 14 12
+  check "Allow multiple connections from the same IP address" 12,14 107 135 10
+}
+dialog tanksbots {
+  title "Tanks bots and local players"
+  size -1 -1 230 116
+  option dbu
+  box "Add local players", 1, 6 4 106 28
+  edit "", 2, 13 14 59 12
+  button "&Join", 3, 75 14 30 12
+  box "Bots", 11, 6 40 106 65
+  button "Skill 0", 12, 13 50 30 12
+  button "Skill 1", 13, 44 50 30 12
+  button "Skill 2", 14, 75 50 30 12
+  button "Skill 3", 15, 13 65 30 12
+  button "Skill 4", 16, 44 65 30 12
+  button "R&andom", 17, 75 65 30 12
+  check "Bots play on their own", 18, 13 80 66 10
+  check "Bots play ''Left vs Right''", 19, 13 91 70 10
+  box "Bots and local players", 21, 123 4 101 90
+  list 22, 130 14 54 74, size extsel vsbar
+  button "&Name...", 23, 187 14 30 12
+  button "&Color...", 24, 187 28 30 12
+  button "&Remove", 25, 187 42 30 12
+  list 20, 187 56 30 32, hide size
+  text "", 100, 0 0 0 0, hide
+  button "Ok", 99, 194 100 30 12, ok
+}
+dialog tanksname {
+  title "Tanks name"
+  option dbu
+  size -1 -1 120 28
+  text "Enter your new name:", 5, 4 3 54 7
+  edit "", 2, 4 13 56 11, autohs result
+  button "&Ok", 3, 63 13 25 11, ok default
+  button "&Cancel", 4, 91 13 25 11, cancel
+  list 1,0 0 0 0,disablehide
+}
+dialog tankschat {
+  title "Tanks - Enter a message."
+  option dbu
+  size -1 -1 160 20
+  edit "", 2, 4 5 122 11, autohs result limit 200
+  button "&Send", 3, 131 5 25 11, ok
+  list 1,0 0 0 0,hidedisable
+}
+dialog tanksmsg {
+  title "Tanks - Send a private message."
+  option dbu
+  size -1 -1 141 89
+  text "Send to:"4,4 20 25 7
+  list 1,27 19 88 66,hsbarvsbarsizextsel
+  edit ""2,4 4 104 11, autohs result limit 200
+  button "&Send" 3,112 4 25 11, ok
+}
+dialog tanklist {
+  title "Tanks servers"
+  option dbu
+  size -1 -1 316 222
+  list 1, 3 3 310 201, sizehsbarvsbar
+  button "&Go" 2, 196 207 37 12, ok
+  button "&Refresh" 3, 236 207 37 12
+  button "&Close" 4, 276 207 37 12, cancel
+  edit "" 5, 3 207 189 12, read
+  list 9, 0 0 0 0, disablehide
+}

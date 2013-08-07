@@ -1,0 +1,78 @@
+
+  -= Emulator Addons =-
+
+ Author: BC Crew 2011
+ Name: BC-MIRC Script v1.4
+ Date: 19-feb-2011
+
+ Script help: http://www.blackcats-games.net/forum/index.php?showtopic=49462
+
+ Thanks to: Camaro350(:p)
+  iamamitten(bsnes)
+
+ BC Emulator addons Notes: "these emulators include a small collection of the greatest hits to save space"
+
+ ~Integrated Emulators included:
+
+ Atari 2600------------------
+ * Stella 3.4.1_32-bit
+ * Stella 3.4.1_64-bit
+
+ Commadore 64------------------
+ * CCS64 V3.4 Offical
+
+ Dreamcast------------------
+ * ChankastAlpha025
+ * darkman_dinput40b
+
+ DS------------------
+ * desmume-0.9.7-win32
+ * no$gba-w.2.6a
+
+ GameCube------------------
+ * Dolwin010
+
+ Psp------------------
+ * pcsp v0.5.2
+
+ supernintendo------------------
+ * Bsnes 32bitwin 
+ * Bsnes 64bitwin 
+ * snes9x-1.53-win32
+ * snes9x-1.53-x64
+ * includes top 20 snes games
+
+ Nintendo------------------
+ * Jnes
+ * Nestopia140
+ * includes top 100 nes games
+
+ N64------------------
+ * Project64k 0.25
+ * includes top 10 N64 games
+
+ GBA------------------
+ * VisualBoyAdvance-1.8.0-beta3
+
+ Sega------------------
+ * gens-win32-bin-2.14
+ * Fusion364
+
+ Saturn------------------
+ * satourne_beta_3
+ * SSF_012_beta_R1
+
+ Ps1------------------
+ * epsxe v1.7.0
+
+ Ps2------------------
+ * pcsx2
+
+ Wii------------------
+ * dolphin-3.0-win32
+ * dolphin-3.0-win64
+ * ^install Needed to make work^- vcredist_x64
+ * ^install Needed to make work^- vcredist_x86
+
+ Xbox1------------------
+ * Xeon_10

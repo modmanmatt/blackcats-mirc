@@ -1,0 +1,131 @@
+
+
+----------( Acro & Nick Completor v 1.2 )----------
+
+Acro
+~~~~~
+
+On the Acro tab under Add/Edit/Delete
+there are two edit boxes. On the left add
+the acro and on the right add the what it
+becomes. For example:-
+
+ (left  =  right)
+  brb   =  [b]e [r]ight [b]ack
+
+then press "ADD" to add the acro to the 
+list box on the left.
+
+To delete a word in the acro list, just type the 
+word in the acro box on the left. The script will
+search for the word in the acrolist. Then it will
+fill up the box on the right. Then press "Delete"
+and it will delete it from the list. For example:-
+ 
+When you type "lol" in the leftbox
+the right box will show "[L]aughs [O]ut [L]oud"
+
+
+
+
+
+
+----------( Acro & Nick Completor v 1.2 )----------
+
+Font Settings
+~~~~~~~~~~~~~
+
+Acro settings allows users to make their acro
+more interesting.
+
+All u have to do is uncheck or check the
+"underline" and "bold" button  then choose the colors 
+you want to use. For example:-
+
+On this [b]e [r]ight [b]ack 
+if u check underline and choose a color
+The letters in [] will be underlined and colored.
+There are four colours you can choose for now
+
+Press the "Example" button to see how the output
+will look like
+
+
+
+
+
+----------( Acro & Nick Completor v 1.2 )----------
+
+Brackets
+~~~~~~~~
+
+This are the brackets for the Nick Completor.
+You can Change the Brackets as you like and 
+you can change the trigger. For example:-
+
+ <da-hype>: Testing  
+
+above is the output you get when you type:-
+
+da-: testing
+
+
+
+----------( Acro & Nick Completor v 1.2 )----------
+
+Nick List Colors
+~~~~~~~~~~~~~~~~
+
+All you have to do is select the color you like.
+you can change the color of the brackets,
+the nick in the brackets and trigger.
+
+
+
+
+
+
+----------( Acro & Nick Completor v 1.2 )----------
+
+Updates
+~~~~~~~
+
+For updates please go to 
+http://tpamirc.tripod.com
+or join #tpa 
+on hehe and ask there!
+
+
+----------( Acro & Nick Completor v 1.2 )----------
+
+Original Authors
+~~~~~~
+
+selampit
+~~~~~~~~
+From Malaysia (Ipoh), currently working in
+Ipoh as an Quality Control Manager 
+and System Administrator
+
+da-hype 
+~~~~~~~
+Form Malaysia (Kuala Lumpur), Currently a 
+student at Utah State University. Majoring
+in Computer Science and doing a minor in 
+Business Information Systems.
+
+
+
+
+
+
+----------( Acro & Nick Completor v 1.2 )----------
+
+Help
+~~~~
+
+Why Would you click This? This is the help tab!! 
+DUHHH!!
+
+
+

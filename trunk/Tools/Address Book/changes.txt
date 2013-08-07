@@ -1,0 +1,31 @@
+Changes 05.03.05
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+* fixed bug in the onload event
+
+Changes 20.10.04
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+* fixed bug with not removing contacts
+
+Changes 19.10.04
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+* fixed bug after languagechange
++ added language french (thx Nico)
+
+Changes 19.09.04
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+* fixed bug in date selection (setday)
++ added age to contact list 
+* fixed another bug in date selection
+* fixed bug with years
+
+Changes 18.09.04
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
++ birthday option
+- sclick in both lists loads selected user (speed improvement)
++ dclick in contact list and search loads selected infos
+* fixed not loading years *blame myself* :'(
+
+Changes 17.09.04
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
++ load and unload event
+* fixed a small bug during opening

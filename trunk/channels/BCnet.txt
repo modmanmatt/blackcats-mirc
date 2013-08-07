@@ -1,0 +1,12 @@
+bcg.net Sat Aug 27 13:27:37 2011
+#help 9 [+ntrG] 8Site is 9DOWN 8Tracker is 9DOWN. 4Ask your question & wait patiently for someone to respond. Click "recover password" on the login page to change your password if you have forgotten it. Use the e-mail you used to sign up with on BCG. 8Please don't idle in this channel. 6Do not PM staff.
+#admins 2 [+ntrk] 
+#opers 3 [+nt] 
+#pre 17 [+ntr] 7Welcome to BCnet's Games Pre 12PRE is 4DOWN 3Will be back soon...!
+#complaints 4 [+ntr] This room is for complaints only. Don't idle in here
+#pre.spam 1 [+ntr] ------::::: Pre announce is 3UP30 :::::-------
+#waitingroom 24 [+ntrG] If you are a member & require help please join #help.4 Invites are closed. Please don't PM anyone without asking.7 Please be respectful in this channel. 4Members: To join the main channel see here: http://bit.ly/drru8c http://cristgaming.com/pirate.swf
+#blackcatsstaff 9 [+ntrk] Welcome to the staff-room. What goes on in here stays in here. Staff meeting 28 Aug 20:00 uk time, be there or be square.
+#forum_mods 4 [+ntrk] Welcome you new fooooooooooooooools
+#invites 6 [+ntr] Invites are currently closed and will not be back up today. Please refrain from consistently joining the channel for the duration of the day. 4DO NOT PM staff unless asked too. 7No idling in this channel
+#blackcats 105 [+sntirVG] 8Site is 9DOWN 8Tracker is 4DOWN. 3irc port is 6697. 12Try "snarf help" to see what snarf can do. 9#pre is back! /join #pre bcgpre. Men in Black are a bunch of wussies. BCG Staff are way cooler

@@ -1,0 +1,19 @@
+Popups Help
+
+Nicklist Admin: If you right-click on a nick (or IP address) in the @GuildFTPD window you can
+       kick/ban/etc the user(s) with these options.
+
+Status Update: Refresh connections lists, etc
+
+Clear Window: Clears window
+
+Configure: This will bring up windows that allow you to configure GuildFTPD
+
+Help: The help menus
+
+Start GuildFTPD: This will launch the server daemon
+
+Unload Scripts: This will unload the GFTPDmircsripts from mIRC
+
+Select Reopen Lost @GuildFTPD window if mirc crashes or closes and the @GuildFTPD
+window is no longer present on reopening mirc.

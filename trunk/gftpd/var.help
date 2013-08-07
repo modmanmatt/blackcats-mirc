@@ -1,0 +1,55 @@
+Variable Help
+
+To use variables in your site messages, add these to your message in the ad
+box.
+
+***IF SOME OF YOUR VARIABLES ARE SHOWING UP AS "NA" YOU WILL NEED TO LOGIN TO THE FTP USING THE
+AFFECTED LOGIN AND/OR PERFORM A STATUS UPDATE TO GET THEM INITIALIZED***
+
+
+Use: $gc(account)
+-       to display # of users currently logged in where <account> is the same as the login.  
+
+Use: $gm(account)
+-       for the max available connections to each account.  
+
+Use $gp 
+-       for the current main system port and this update when you are using the port hopper.  
+
+Use $gp(account)
+-       to display the port of <account> when multiport is being used
+
+Use $ip
+-       for your ip address.
+
+Use $gpa(account)
+-       for the current password of <account> (Use these when using the password hopper)
+
+Use $gu *****
+-       to display Total Upload bandwidth in use
+
+Use $gd *****
+-       to display Total Download bandwidth in use
+
+Use $gb *****
+-       to display Total u & d bandwidth
+
+Use $gn
+-       Current nicks on server
+
+Use $gt
+-       Total # users on server (all accounts) 
+
+
+***** - These 3 stats variables will not be accurate if multiple connections from the same
+ ip are allowed.
+
+Sample message: (assumes a main login anonymous and and alternate login upload):
+-       The example assumes you are using password hopping for both logins and 
+-       multiport for the upload login.
+
+My FTP is up at $ip Port: $gp Login: anonymous Pass: $gpa(anonymous)
+There are currently $gc(anonymous) out of $gm(anonymous) ppl on anonymous account
+For uploads, use Login: upload Pass: $gpa(upload) on port $gp(upload)
+Total Download Bandwidth in use: $gd Total Upload Bandwidth in use: $gu
+Aggregate Bandwidth: $gb Total Users: $gt (/ctcp $me $GFTPDstats for stats)
