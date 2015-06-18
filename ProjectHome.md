@@ -1,0 +1,1 @@
+this is a project area for development of blackcats-games.net mirc package
